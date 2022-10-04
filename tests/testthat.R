@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(rpkgTemplate)
+library(mllrnrs)
 
-test_check("rpkgTemplate")
+test_check("mllrnrs")
