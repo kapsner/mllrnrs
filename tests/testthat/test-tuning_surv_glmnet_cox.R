@@ -2,7 +2,7 @@ dataset <- survival::colon |>
   data.table::as.data.table() |>
   na.omit()
 
-learner <- LearnerSurvGlmnetCox
+learner <- mllrnrs::LearnerSurvGlmnetCox
 seed <- 123
 surv_cols <- c("status", "time", "rx")
 
