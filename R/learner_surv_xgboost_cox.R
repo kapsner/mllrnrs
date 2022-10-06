@@ -37,6 +37,7 @@ surv_xgboost_cox_ce <- function() {
 surv_xgboost_cox_bsF <- function(...) { # nolint
 
   params <- list(...)
+
   params <- mlexperiments:::.method_params_refactor(params, method_helper)
 
   set.seed(seed)#, kind = "L'Ecuyer-CMRG")
