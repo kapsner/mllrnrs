@@ -34,8 +34,9 @@ surv_glmnet_cox_ce <- function() {
 }
 
 surv_glmnet_cox_bsF <- function(alpha) { # nolint
-  # call to surv_glmnet_cox_optimization here with ncores = 1, since the Bayesian search
-  # is parallelized already / "FUN is fitted n times in m threads"
+  # call to surv_glmnet_cox_optimization here with ncores = 1, since the
+  # Bayesian search is parallelized already / "FUN is fitted n times
+  # in m threads"
   set.seed(seed)#, kind = "L'Ecuyer-CMRG")
   bayes_opt_glmnet <- surv_glmnet_cox_optimization(
     x = x,
