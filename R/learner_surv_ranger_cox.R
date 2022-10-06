@@ -59,7 +59,14 @@ surv_ranger_cox_bsF <- function(...) { # nolint
 }
 
 # tune lambda
-surv_ranger_cox_optimization <- function(x, y, params, fold_list, ncores, seed) {
+surv_ranger_cox_optimization <- function(
+    x,
+    y,
+    params,
+    fold_list,
+    ncores,
+    seed
+  ) {
   stopifnot(
     inherits(x = y, what = "Surv"),
     is.list(params)
@@ -200,7 +207,8 @@ surv_ranger_cox_predict <- function(model, newdata, ncores, ...) {
   pred_probs <- rowSums(preds$chf)
 
   # The Integrated/Cumulative Harzard H(t) = -log(S(t))
-  # time_point <- which(preds$unique.death.times == max(preds$unique.death.times))
+  # time_point <-
+  #   which(preds$unique.death.times == max(preds$unique.death.times))
   # pred_probs <- -log(preds$survival[, time_point])
   return(pred_probs)
 }
