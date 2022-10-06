@@ -38,8 +38,6 @@ surv_ranger_cox_bsF <- function(...) { # nolint
 
   params <- list(...)
 
-  params <- mlexperiments:::.method_params_refactor(params, method_helper)
-
   set.seed(seed)#, kind = "L'Ecuyer-CMRG")
   bayes_opt_ranger <- surv_ranger_cox_optimization(
     x = x,

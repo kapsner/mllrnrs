@@ -87,7 +87,7 @@ test_that(
 
     tune_results <- surv_xgboost_cox_tuner$execute(k = 5)
     expect_type(tune_results, "list")
-    expect_equal(dim(tune_results), c(ncores + 10, 15))
+    expect_equal(dim(tune_results), c(ncores + 10, 17))
     expect_true(inherits(x = surv_xgboost_cox_tuner$results, what = "mlexTune"))
   }
 )
