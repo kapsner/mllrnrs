@@ -6,7 +6,7 @@ dataset <- DNA |>
 
 learner <- mllrnrs::LearnerXgboost
 seed <- 123
-feature_cols <- colnames(dataset)[1:180]
+feature_cols <- colnames(dataset)[160:180]
 
 param_list_xgboost <- expand.grid(
   objective = "multi:softprob",
@@ -51,18 +51,37 @@ options("mlexperiments.optim.xgb.nrounds" = 100L)
 options("mlexperiments.optim.xgb.early_stopping_rounds" = 10L)
 
 test_that(
-  desc = "test bayesian tuner, initGrid - xgboost",
+  desc = "test bayesian tuner, parameter_grid, multi:softprob - xgboost",
   code = {
 
+    xgboost_tuner <- mlexperiments::MLTuneParameters$new(
+      learner = learner,
+      strategy = "bayesian",
+      ncores = ncores,
+      seed = seed
+    )
+    xgboost_tuner$parameter_grid <- param_list_xgboost
+    xgboost_tuner$parameter_bounds <- xgboost_bounds
+    xgboost_tuner$learner_args <- list(verbose = FALSE, num_class = 3)
+    xgboost_tuner$optim_args <- optim_args
+
+    # set data
+    xgboost_tuner$set_data(
+      x = train_x,
+      y = train_y
+    )
+
+    tune_results <- xgboost_tuner$execute(k = 5)
+
     expect_type(tune_results, "list")
-    expect_equal(dim(tune_results), c(ncores + 10, 17))
+    expect_equal(dim(tune_results), c(ncores + 10, 19))
     expect_true(inherits(x = xgboost_tuner$results, what = "mlexTune"))
   }
 )
 
 
 test_that(
-  desc = "test grid tuner - xgboost",
+  desc = "test grid tuner, multi:softprob - xgboost",
   code = {
 
     xgboost_tuner <- mlexperiments::MLTuneParameters$new(
@@ -76,9 +95,6 @@ test_that(
     xgboost_tuner$parameter_grid <- param_list_xgboost[random_grid, ]
     xgboost_tuner$learner_args <- list(verbose = FALSE, num_class = 3)
 
-    # create split-strata from training dataset
-    xgboost_tuner$split_vector <- split_vector
-
     # set data
     xgboost_tuner$set_data(
       x = train_x,
@@ -87,7 +103,7 @@ test_that(
 
     tune_results <- xgboost_tuner$execute(k = 5)
     expect_type(tune_results, "list")
-    expect_equal(dim(tune_results), c(10, 10))
+    expect_equal(dim(tune_results), c(10, 12))
     expect_true(inherits(x = xgboost_tuner$results, what = "mlexTune"))
   }
 )
