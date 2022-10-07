@@ -11,7 +11,8 @@ mlexperiments_default_options <- list(
   ),
   mlexperiments.optim.xgb.nrounds = 5000L,
   mlexperiments.optim.xgb.early_stopping_rounds = 500L,
-  mlexperiments.xgb.print_every_n = 50L
+  mlexperiments.xgb.print_every_n = 50L,
+  mlexperiments.xgb.verbose = FALSE
 )
 
 

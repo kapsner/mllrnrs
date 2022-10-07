@@ -106,6 +106,7 @@ test_that(
     set.seed(seed)
     random_grid <- sample(seq_len(nrow(param_list_xgboost)), 10)
     surv_xgboost_cox_tuner$parameter_grid <- param_list_xgboost[random_grid, ]
+    surv_xgboost_cox_tuner$learner_args <- list(verbose = FALSE)
 
     # create split-strata from training dataset
     surv_xgboost_cox_tuner$split_vector <- split_vector

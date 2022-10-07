@@ -19,9 +19,9 @@ LearnerSurvXgboostCox <- R6::R6Class( # nolint
       self$environment <- "mllrnrs"
       self$cluster_export <- surv_xgboost_cox_ce()
       private$fun_optim_cv <- surv_xgboost_cox_optimization
-      private$fun_fit <- surv_xgboost_cox_fit
-      private$fun_predict <- surv_xgboost_cox_predict
-      private$fun_bayesian_scoring_function <- surv_xgboost_cox_bsF
+      private$fun_fit <- xgboost_fit
+      private$fun_predict <- xgboost_predict
+      private$fun_bayesian_scoring_function <- xgboost_bsF
       private$fun_performance_metric <- surv_xgboost_c_index
       self$metric_performance_name <- "C-index"
     }
@@ -30,30 +30,8 @@ LearnerSurvXgboostCox <- R6::R6Class( # nolint
 
 
 surv_xgboost_cox_ce <- function() {
-  c("surv_xgboost_cox_optimization", "surv_xgboost_cox_fit",
-    "setup_surv_xgb_dataset")
-}
-
-surv_xgboost_cox_bsF <- function(...) { # nolint
-
-  params <- list(...)
-
-  set.seed(seed)#, kind = "L'Ecuyer-CMRG")
-  bayes_opt_xgboost <- surv_xgboost_cox_optimization(
-    x = x,
-    y = y,
-    params = params,
-    fold_list = method_helper$fold_list,
-    ncores = 1L, # important, as bayesian search is already parallelized
-    seed = seed
-  )
-
-  ret <- c(
-    list("Score" = bayes_opt_xgboost$metric_optim_mean),
-    bayes_opt_xgboost
-  )
-
-  return(ret)
+  c("surv_xgboost_cox_optimization", "xgboost_optimization",
+    "setup_xgb_dataset", "setup_surv_xgb_dataset", "xgboost_fit")
 }
 
 # tune lambda
@@ -71,84 +49,7 @@ surv_xgboost_cox_optimization <- function(
     params$objective == "survival:cox"
   )
 
-  dtrain <- setup_surv_xgb_dataset(
-    x = x,
-    y = y,
-    objective = params$objective
-  )
-
-  # use the same folds for all algorithms
-  # folds: list provides a possibility to use a list of pre-defined CV
-  # folds (each element must be a vector of test fold's indices).
-  # When folds are supplied, the nfold and stratified parameters
-  # are ignored.
-  xgb_fids <- kdry::mlh_outsample_row_indices(
-    fold_list = fold_list,
-    training_data = nrow(x)
-  )
-
-  set.seed(seed)
-  # train the model for this cv-fold
-  cvfit <- xgboost::xgb.cv(
-    params = params,
-    data = dtrain,
-    nrounds = as.integer(options("mlexperiments.optim.xgb.nrounds")),
-    prediction = FALSE,
-    folds = xgb_fids,
-    verbose = FALSE,
-    print_every_n = as.integer(options("mlexperiments.xgb.print_every_n")),
-    early_stopping_rounds = as.integer(
-      options("mlexperiments.optim.xgb.early_stopping_rounds")
-    ),
-    nthread = ncores
-  )
-
-  # save the results / use xgboost's metric here for selecting the best model
-  # (cox-nloglik)
-  metric_col <- grep(
-    pattern = "^test(.*)mean$",
-    x = colnames(cvfit$evaluation_log),
-    value = TRUE
-  )
-  stopifnot(length(metric_col) == 1)
-
-  res <- list(
-    "metric_optim_mean" = cvfit$evaluation_log[
-      get("iter") == cvfit$best_iteration,
-      get(metric_col)
-    ],
-    "nrounds" = cvfit$best_iteration
-  )
-
-  return(res)
-}
-
-surv_xgboost_cox_fit <- function(x, y, nrounds, ncores, seed, ...) {
-  params <- list(...)
-  stopifnot("objective" %in% names(params))
-  # train final model with best nrounds
-  dtrain_full <- setup_surv_xgb_dataset(
-    x = x,
-    y = y,
-    objective = params$objective
-  )
-
-  # setup a watchlist (the training data here)
-  watchlist <- list(train = dtrain_full)
-
-  set.seed(seed)
-  # fit the model
-  bst <- xgboost::xgb.train(
-    data = dtrain_full,
-    params = params,
-    print_every_n = as.integer(options("mlexperiments.xgb.print_every_n")),
-    nthread = ncores,
-    nrounds = nrounds,
-    watchlist = watchlist,
-    maximize = NULL,
-    verbose = FALSE
-  )
-  return(bst)
+  return(xgboost_optimization(x, y, params, fold_list, ncores, seed))
 }
 
 # wrapper function for creating the input data for xgboost
@@ -174,8 +75,6 @@ setup_surv_xgb_dataset <- function(x, y, objective) {
     # the proportional hazard function h(t) = h0(t) * HR).
     label <- ifelse(y[, 2] == 1, y[, 1], -y[, 1])
     xgboost::setinfo(dtrain, "label", label)
-  } else {
-    stop(paste0("xgboost objective '", objective, " 'not implemented."))
   }
 
   return(dtrain)
@@ -186,7 +85,7 @@ surv_xgboost_cox_predict <- function(model, newdata, ncores, ...) {
   # Note that predictions are returned on the hazard ratio scale
   # (i.e., as HR = exp(marginal_prediction) in the proportional
   # hazard function h(t) = h0(t) * HR).
-  return(predict(object = model, newdata = newdata, ...))
+  return(xgboost_predict(model, newdata, ncores, ...))
 }
 
 surv_xgboost_c_index <- function(ground_truth, predictions) {

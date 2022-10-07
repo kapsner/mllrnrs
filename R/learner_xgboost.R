@@ -1,0 +1,174 @@
+#' @export
+LearnerXgboost <- R6::R6Class( # nolint
+  classname = "LearnerXgboost",
+  inherit = mlexperiments::MLLearnerBase,
+  public = list(
+    initialize = function() {
+      if (!requireNamespace("xgboost", quietly = TRUE)) {
+        stop(
+          paste0(
+            "Package \"xgboost\" must be installed to use ",
+            "'learner = \"LearnerXgboost\"'."
+          ),
+          call. = FALSE
+        )
+      }
+      super$initialize()
+      self$metric_optimization_higher_better <- FALSE
+      self$metric_performance_higher_better <- TRUE
+      self$environment <- "mllrnrs"
+      self$cluster_export <- xgboost_ce()
+      private$fun_optim_cv <- xgboost_optimization
+      private$fun_fit <- xgboost_fit
+      private$fun_predict <- xgboost_predict
+      private$fun_bayesian_scoring_function <- xgboost_bsF
+      private$fun_performance_metric <- mlexperiments:::.metric_accuracy
+      self$metric_performance_name <- "Accuracy"
+    }
+  )
+)
+
+
+xgboost_ce <- function() {
+  c("xgboost_optimization", "xgboost_fit",
+    "setup_xgb_dataset")
+}
+
+xgboost_bsF <- function(...) { # nolint
+
+  params <- list(...)
+
+  set.seed(seed)#, kind = "L'Ecuyer-CMRG")
+  bayes_opt_xgboost <- xgboost_optimization(
+    x = x,
+    y = y,
+    params = params,
+    fold_list = method_helper$fold_list,
+    ncores = 1L, # important, as bayesian search is already parallelized
+    seed = seed
+  )
+
+  ret <- c(
+    list("Score" = bayes_opt_xgboost$metric_optim_mean),
+    bayes_opt_xgboost
+  )
+
+  return(ret)
+}
+
+# tune lambda
+xgboost_optimization <- function(
+    x,
+    y,
+    params,
+    fold_list,
+    ncores,
+    seed
+  ) {
+  stopifnot(
+    is.list(params),
+    "objective" %in% names(params)
+  )
+
+  dtrain <- setup_xgb_dataset(
+    x = x,
+    y = y,
+    objective = params$objective
+  )
+
+  # use the same folds for all algorithms
+  # folds: list provides a possibility to use a list of pre-defined CV
+  # folds (each element must be a vector of test fold's indices).
+  # When folds are supplied, the nfold and stratified parameters
+  # are ignored.
+  xgb_fids <- kdry::mlh_outsample_row_indices(
+    fold_list = fold_list,
+    training_data = nrow(x)
+  )
+
+  fit_args <- list(
+    params = params,
+    data = dtrain,
+    nrounds = as.integer(options("mlexperiments.optim.xgb.nrounds")),
+    folds = xgb_fids,
+    print_every_n = as.integer(options("mlexperiments.xgb.print_every_n")),
+    early_stopping_rounds = as.integer(
+      options("mlexperiments.optim.xgb.early_stopping_rounds")
+    ),
+    verbose = as.logical(options("mlexperiments.xgb.verbose")),
+    nthread = ncores
+  )
+
+  set.seed(seed)
+  # train the model for this cv-fold
+  cvfit <- do.call(xgboost::xgb.cv, fit_args)
+
+  # save the results / use xgboost's metric here for selecting the best model
+  # (cox-nloglik)
+  metric_col <- grep(
+    pattern = "^test(.*)mean$",
+    x = colnames(cvfit$evaluation_log),
+    value = TRUE
+  )
+  stopifnot(length(metric_col) == 1)
+
+  res <- list(
+    "metric_optim_mean" = cvfit$evaluation_log[
+      get("iter") == cvfit$best_iteration,
+      get(metric_col)
+    ],
+    "nrounds" = cvfit$best_iteration
+  )
+
+  return(res)
+}
+
+xgboost_fit <- function(x, y, nrounds, ncores, seed, ...) {
+  params <- list(...)
+  stopifnot("objective" %in% names(params))
+  # train final model with best nrounds
+  dtrain_full <- setup_xgb_dataset(
+    x = x,
+    y = y,
+    objective = params$objective
+  )
+
+  fit_args <- list(
+    data = dtrain_full,
+    params = params,
+    print_every_n = as.integer(options("mlexperiments.xgb.print_every_n")),
+    nthread = ncores,
+    nrounds = nrounds,
+    watchlist = list(
+      train = dtrain_full  # setup a watchlist (the training data here)
+    ),
+    verbose = as.logical(options("mlexperiments.xgb.verbose"))
+  )
+
+  set.seed(seed)
+  # fit the model
+  bst <- do.call(xgboost::xgb.train, fit_args)
+  return(bst)
+}
+
+# wrapper function for creating the input data for xgboost
+setup_xgb_dataset <- function(x, y, objective) {
+  if (objective %in% c("survival:aft", "survival:cox")) {
+    return(setup_surv_xgb_dataset(x, y, objective))
+  } else {
+    stopifnot(is.atomic(y))
+    # create a xgb.DMatrix
+    dtrain <- xgboost::xgb.DMatrix(x)
+    label <- y
+    xgboost::setinfo(dtrain, "label", label)
+    return(dtrain)
+  }
+}
+
+xgboost_predict <- function(model, newdata, ncores, ...) {
+  return(predict(object = model, newdata = newdata, ...))
+}
+
+surv_xgboost_c_index <- function(ground_truth, predictions) {
+  return(glmnet::Cindex(pred = predictions, y = ground_truth))
+}
