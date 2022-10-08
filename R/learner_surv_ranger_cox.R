@@ -15,15 +15,12 @@ LearnerSurvRangerCox <- R6::R6Class( # nolint
       }
       super$initialize()
       self$metric_optimization_higher_better <- FALSE
-      self$metric_performance_higher_better <- TRUE
       self$environment <- "mllrnrs"
       self$cluster_export <- surv_ranger_cox_ce()
       private$fun_optim_cv <- surv_ranger_cox_optimization
       private$fun_fit <- surv_ranger_cox_fit
       private$fun_predict <- surv_ranger_cox_predict
       private$fun_bayesian_scoring_function <- surv_ranger_cox_bsF
-      private$fun_performance_metric <- surv_ranger_c_index
-      self$metric_performance_name <- "C-index"
     }
   )
 )
@@ -31,7 +28,7 @@ LearnerSurvRangerCox <- R6::R6Class( # nolint
 
 surv_ranger_cox_ce <- function() {
   c("surv_ranger_cox_optimization", "surv_ranger_cox_fit", "surv_ranger_cox_predict",
-    "surv_ranger_c_index")
+    "c_index")
 }
 
 surv_ranger_cox_bsF <- function(...) { # nolint
@@ -48,7 +45,7 @@ surv_ranger_cox_bsF <- function(...) { # nolint
     seed = seed
   )
 
-  ret <- c(
+  ret <- kdry::list.append(
     list("Score" = bayes_opt_ranger$metric_optim_mean),
     bayes_opt_ranger
   )
@@ -88,13 +85,14 @@ surv_ranger_cox_optimization <- function(
     ranger_train_idx <- fold_list[[fold]]
 
     # train the model for this cv-fold
-    args <- c(list(
-      x = x[ranger_train_idx, ],
-      y = y[ranger_train_idx, ],
-      ncores = ncores,
-      seed = seed
-    ),
-    params
+    args <- kdry::list.append(
+      list(
+        x = x[ranger_train_idx, ],
+        y = y[ranger_train_idx, ],
+        ncores = ncores,
+        seed = seed
+      ),
+      params
     )
     set.seed(seed)
     cvfit <- do.call(surv_ranger_cox_fit, args)
@@ -108,7 +106,7 @@ surv_ranger_cox_optimization <- function(
     )
 
     # calculate Harrell's c-index using the `glmnet::Cindex`-implementation
-    c_index <- surv_ranger_c_index(
+    perf <- c_index(
       predictions = preds,
       ground_truth = y[-ranger_train_idx, ]
     )
@@ -124,7 +122,7 @@ surv_ranger_cox_optimization <- function(
         list(
           "fold" = fold,
           "oob_metric" = 1 - cvfit$prediction.error,
-          "validation_metric" = c_index
+          "validation_metric" = perf
         )
       ),
       fill = TRUE
@@ -152,13 +150,14 @@ surv_ranger_cox_fit <- function(x, y, ncores, seed, ...) {
 
   x <- kdry::dtr_matrix2df(matrix = x, cat_vars = cat_vars)
 
-  args <- c(list(
-    x = x,
-    y = y,
-    num.threads = ncores,
-    oob.error = TRUE
-  ),
-  ranger_params
+  args <- kdry::list.append(
+    list(
+      x = x,
+      y = y,
+      num.threads = ncores,
+      oob.error = TRUE
+    ),
+    ranger_params
   )
 
   set.seed(seed)
@@ -179,17 +178,15 @@ surv_ranger_cox_predict <- function(model, newdata, ncores, ...) {
     ranger_params <- params
   }
 
-  newdata <- kdry::dtr_matrix2df(matrix = newdata, cat_vars = cat_vars)
-
-  predict_args <- list(
-    object = model,
-    data = newdata,
-    num.threads = ncores,
-    type = "response"
+  predict_args <- kdry::list.append(
+    list(
+      object = model,
+      data = kdry::dtr_matrix2df(matrix = newdata, cat_vars = cat_vars),
+      num.threads = ncores,
+      type = "response"
+    ),
+    ranger_params
   )
-  if (length(ranger_params) > 0) {
-    predict_args <- c(predict_args, ranger_params)
-  }
 
   # From the docs:
   # For type = 'response' (the default), the [...] survival probabilities
@@ -209,8 +206,4 @@ surv_ranger_cox_predict <- function(model, newdata, ncores, ...) {
   #   which(preds$unique.death.times == max(preds$unique.death.times))
   # pred_probs <- -log(preds$survival[, time_point])
   return(pred_probs)
-}
-
-surv_ranger_c_index <- function(ground_truth, predictions) {
-  return(glmnet::Cindex(pred = predictions, y = ground_truth))
 }

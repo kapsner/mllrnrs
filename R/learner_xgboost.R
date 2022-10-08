@@ -15,15 +15,12 @@ LearnerXgboost <- R6::R6Class( # nolint
       }
       super$initialize()
       self$metric_optimization_higher_better <- FALSE
-      self$metric_performance_higher_better <- TRUE
       self$environment <- "mllrnrs"
       self$cluster_export <- xgboost_ce()
       private$fun_optim_cv <- xgboost_optimization
       private$fun_fit <- xgboost_fit
       private$fun_predict <- xgboost_predict
       private$fun_bayesian_scoring_function <- xgboost_bsF
-      private$fun_performance_metric <- mlexperiments:::.metric_accuracy
-      self$metric_performance_name <- "Accuracy"
     }
   )
 )
@@ -48,7 +45,7 @@ xgboost_bsF <- function(...) { # nolint
     seed = seed
   )
 
-  ret <- c(
+  ret <- kdry::list.append(
     list("Score" = bayes_opt_xgboost$metric_optim_mean),
     bayes_opt_xgboost
   )
@@ -166,9 +163,21 @@ setup_xgb_dataset <- function(x, y, objective) {
 }
 
 xgboost_predict <- function(model, newdata, ncores, ...) {
-  return(predict(object = model, newdata = newdata, ...))
-}
-
-surv_xgboost_c_index <- function(ground_truth, predictions) {
-  return(glmnet::Cindex(pred = predictions, y = ground_truth))
+  kwargs <- list(...)
+  args <- kdry::list.append(
+    list(
+      object = model,
+      newdata = newdata
+    ),
+    kwargs
+  )
+  preds <- do.call(predict, args)
+  if (!is.null(kwargs$reshape)) {
+    if (isTRUE(kwargs$reshape)) {
+      preds <- data.table::as.data.table(preds)[
+        , which.max(.SD) - 1L, by = seq_len(nrow(preds))
+      ][, get("V1")]
+    }
+  }
+  return(preds)
 }

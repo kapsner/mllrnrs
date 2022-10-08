@@ -2,7 +2,6 @@ dataset <- survival::colon |>
   data.table::as.data.table() |>
   na.omit()
 
-learner <- mllrnrs::LearnerSurvGlmnetCox
 seed <- 123
 surv_cols <- c("status", "time", "rx")
 
@@ -51,7 +50,7 @@ test_that(
   code = {
 
     surv_glmnet_cox_tuner <- mlexperiments::MLTuneParameters$new(
-      learner = learner,
+      learner = mllrnrs::LearnerSurvGlmnetCox$new(),
       strategy = "bayesian",
       ncores = ncores,
       seed = seed
@@ -69,7 +68,7 @@ test_that(
       y = train_y
     )
 
-    tune_results <- surv_glmnet_cox_tuner$execute(k = 5)
+    tune_results <- surv_glmnet_cox_tuner$execute(k = 3)
     expect_type(tune_results, "list")
     expect_equal(dim(tune_results), c(ncores + nrow(param_list_glmnet), 11))
     expect_true(inherits(x = surv_glmnet_cox_tuner$results, what = "mlexTune"))
@@ -82,7 +81,7 @@ test_that(
   code = {
 
     surv_glmnet_cox_tuner <- mlexperiments::MLTuneParameters$new(
-      learner = learner,
+      learner = mllrnrs::LearnerSurvGlmnetCox$new(),
       strategy = "bayesian",
       ncores = ncores,
       seed = seed
@@ -99,7 +98,7 @@ test_that(
       y = train_y
     )
 
-    tune_results <- surv_glmnet_cox_tuner$execute(k = 5)
+    tune_results <- surv_glmnet_cox_tuner$execute(k = 3)
     expect_type(tune_results, "list")
     expect_equal(dim(tune_results), c(ncores + nrow(param_list_glmnet), 11))
     expect_true(inherits(x = surv_glmnet_cox_tuner$results, what = "mlexTune"))
@@ -112,7 +111,7 @@ test_that(
   code = {
 
     surv_glmnet_cox_tuner <- mlexperiments::MLTuneParameters$new(
-      learner = learner,
+      learner = mllrnrs::LearnerSurvGlmnetCox$new(),
       strategy = "grid",
       ncores = ncores,
       seed = seed
@@ -128,7 +127,7 @@ test_that(
       y = train_y
     )
 
-    tune_results <- surv_glmnet_cox_tuner$execute(k = 5)
+    tune_results <- surv_glmnet_cox_tuner$execute(k = 3)
     expect_type(tune_results, "list")
     expect_equal(dim(tune_results), c(nrow(param_list_glmnet), 4))
     expect_true(inherits(x = surv_glmnet_cox_tuner$results, what = "mlexTune"))

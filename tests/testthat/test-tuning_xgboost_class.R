@@ -4,7 +4,6 @@ dataset <- DNA |>
   data.table::as.data.table() |>
   na.omit()
 
-learner <- mllrnrs::LearnerXgboost
 seed <- 123
 feature_cols <- colnames(dataset)[160:180]
 
@@ -55,7 +54,7 @@ test_that(
   code = {
 
     xgboost_tuner <- mlexperiments::MLTuneParameters$new(
-      learner = learner,
+      learner = mllrnrs::LearnerXgboost$new(),
       strategy = "bayesian",
       ncores = ncores,
       seed = seed
@@ -71,7 +70,7 @@ test_that(
       y = train_y
     )
 
-    tune_results <- xgboost_tuner$execute(k = 5)
+    tune_results <- xgboost_tuner$execute(k = 3)
 
     expect_type(tune_results, "list")
     expect_equal(dim(tune_results), c(ncores + 10, 19))
@@ -85,7 +84,7 @@ test_that(
   code = {
 
     xgboost_tuner <- mlexperiments::MLTuneParameters$new(
-      learner = learner,
+      learner = mllrnrs::LearnerXgboost$new(),
       strategy = "grid",
       ncores = ncores,
       seed = seed
@@ -101,7 +100,7 @@ test_that(
       y = train_y
     )
 
-    tune_results <- xgboost_tuner$execute(k = 5)
+    tune_results <- xgboost_tuner$execute(k = 3)
     expect_type(tune_results, "list")
     expect_equal(dim(tune_results), c(10, 12))
     expect_true(inherits(x = xgboost_tuner$results, what = "mlexTune"))

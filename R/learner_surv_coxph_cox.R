@@ -14,12 +14,9 @@ LearnerSurvCoxPHCox <- R6::R6Class( # nolint
         )
       }
       super$initialize()
-      self$metric_performance_higher_better <- TRUE
       self$environment <- "mllrnrs"
       private$fun_fit <- surv_coxph_cox_fit
       private$fun_predict <- surv_coxph_cox_predict
-      private$fun_performance_metric <- surv_coxph_c_index
-      self$metric_performance_name <- "C-index"
 
       # there is no optimization step here, so all related functions / fields
       # are set to NULL
@@ -74,8 +71,4 @@ surv_coxph_cox_predict <- function(model, newdata, ncores, ...) {
   # predictor ("terms"). The survival probability for a subject is equal
   # to exp(-expected).
   return(predict(model, newdata = newdata, type = "risk"))
-}
-
-surv_coxph_c_index <- function(ground_truth, predictions) {
-  return(glmnet::Cindex(pred = predictions, y = ground_truth))
 }

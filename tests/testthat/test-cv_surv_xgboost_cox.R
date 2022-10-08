@@ -2,7 +2,6 @@ dataset <- survival::colon |>
   data.table::as.data.table() |>
   na.omit()
 
-learner <- mllrnrs::LearnerSurvXgboostCox
 seed <- 123
 surv_cols <- c("status", "time", "rx")
 
@@ -53,7 +52,7 @@ options("mlexperiments.optim.xgb.early_stopping_rounds" = 10L)
 
 fold_list <- splitTools::create_folds(
   y = split_vector,
-  k = 10,
+  k = 3,
   type = "stratified",
   seed = seed
 )
@@ -63,7 +62,7 @@ test_that(
   code = {
 
     surv_xgboost_cox_optimization <- mlexperiments::MLCrossValidation$new(
-      learner = learner,
+      learner = mllrnrs::LearnerSurvXgboostCox$new(),
       fold_list = fold_list,
       ncores = ncores,
       seed = seed
@@ -73,6 +72,8 @@ test_that(
     ),
     nrounds = 45L
     )
+    surv_xgboost_cox_optimization$performance_metric <- c_index
+    surv_xgboost_cox_optimization$performance_metric_name <- "C-index"
 
     # set data
     surv_xgboost_cox_optimization$set_data(
@@ -82,7 +83,7 @@ test_that(
 
     cv_results <- surv_xgboost_cox_optimization$execute()
     expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(10, 9))
+    expect_equal(dim(cv_results), c(3, 9))
     expect_true(inherits(
       x = surv_xgboost_cox_optimization$results,
       what = "mlexCV"

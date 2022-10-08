@@ -2,7 +2,6 @@ dataset <- survival::colon |>
   data.table::as.data.table() |>
   na.omit()
 
-learner <- mllrnrs::LearnerSurvXgboostCox
 seed <- 123
 surv_cols <- c("status", "time", "rx")
 
@@ -67,7 +66,7 @@ test_that(
   code = {
 
     surv_xgboost_cox_tuner <- mlexperiments::MLTuneParameters$new(
-      learner = learner,
+      learner = mllrnrs::LearnerSurvXgboostCox$new(),
       strategy = "bayesian",
       ncores = ncores,
       seed = seed
@@ -85,7 +84,7 @@ test_that(
       y = train_y
     )
 
-    tune_results <- surv_xgboost_cox_tuner$execute(k = 5)
+    tune_results <- surv_xgboost_cox_tuner$execute(k = 3)
     expect_type(tune_results, "list")
     expect_equal(dim(tune_results), c(ncores + 10, 17))
     expect_true(inherits(x = surv_xgboost_cox_tuner$results, what = "mlexTune"))
@@ -98,7 +97,7 @@ test_that(
   code = {
 
     surv_xgboost_cox_tuner <- mlexperiments::MLTuneParameters$new(
-      learner = learner,
+      learner = mllrnrs::LearnerSurvXgboostCox$new(),
       strategy = "grid",
       ncores = ncores,
       seed = seed
@@ -117,9 +116,9 @@ test_that(
       y = train_y
     )
 
-    tune_results <- surv_xgboost_cox_tuner$execute(k = 5)
+    tune_results <- surv_xgboost_cox_tuner$execute(k = 3)
     expect_type(tune_results, "list")
-    expect_equal(dim(tune_results), c(10, 10))
+    expect_equal(dim(tune_results), c(10, 11))
     expect_true(inherits(x = surv_xgboost_cox_tuner$results, what = "mlexTune"))
   }
 )

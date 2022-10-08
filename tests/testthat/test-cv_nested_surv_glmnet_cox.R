@@ -2,7 +2,6 @@ dataset <- survival::colon |>
   data.table::as.data.table() |>
   na.omit()
 
-learner <- mllrnrs::LearnerSurvGlmnetCox
 seed <- 123
 surv_cols <- c("status", "time", "rx")
 
@@ -50,7 +49,7 @@ train_y <- survival::Surv(
 
 fold_list <- splitTools::create_folds(
   y = split_vector,
-  k = 5,
+  k = 3,
   type = "stratified",
   seed = seed
 )
@@ -61,7 +60,7 @@ test_that(
   code = {
 
     surv_glmnet_cox_optimization <- mlexperiments::MLNestedCV$new(
-      learner = learner,
+      learner = mllrnrs::LearnerSurvGlmnetCox$new(),
       strategy = "bayesian",
       fold_list = fold_list,
       k_tuning = 3L,
@@ -75,6 +74,9 @@ test_that(
     surv_glmnet_cox_optimization$split_vector <- split_vector
     surv_glmnet_cox_optimization$optim_args <- optim_args
 
+    surv_glmnet_cox_optimization$performance_metric <- c_index
+    surv_glmnet_cox_optimization$performance_metric_name <- "C-index"
+
     # set data
     surv_glmnet_cox_optimization$set_data(
       x = train_x,
@@ -83,7 +85,7 @@ test_that(
 
     cv_results <- surv_glmnet_cox_optimization$execute()
     expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(5, 3))
+    expect_equal(dim(cv_results), c(3, 3))
     expect_true(inherits(
       x = surv_glmnet_cox_optimization$results,
       what = "mlexCV"
@@ -97,7 +99,7 @@ test_that(
   code = {
 
     surv_glmnet_cox_optimization <- mlexperiments::MLNestedCV$new(
-      learner = learner,
+      learner = mllrnrs::LearnerSurvGlmnetCox$new(),
       strategy = "grid",
       fold_list = fold_list,
       k_tuning = 3L,
@@ -110,6 +112,9 @@ test_that(
     surv_glmnet_cox_optimization$split_vector <- split_vector
     surv_glmnet_cox_optimization$optim_args <- optim_args
 
+    surv_glmnet_cox_optimization$performance_metric <- c_index
+    surv_glmnet_cox_optimization$performance_metric_name <- "C-index"
+
     # set data
     surv_glmnet_cox_optimization$set_data(
       x = train_x,
@@ -118,7 +123,7 @@ test_that(
 
     cv_results <- surv_glmnet_cox_optimization$execute()
     expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(5, 3))
+    expect_equal(dim(cv_results), c(3, 3))
     expect_true(inherits(
       x = surv_glmnet_cox_optimization$results,
       what = "mlexCV"

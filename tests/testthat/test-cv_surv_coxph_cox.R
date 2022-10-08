@@ -2,7 +2,6 @@ dataset <- survival::colon |>
   data.table::as.data.table() |>
   na.omit()
 
-learner <- mllrnrs::LearnerSurvCoxPHCox
 seed <- 123
 surv_cols <- c("status", "time", "rx")
 
@@ -28,7 +27,7 @@ train_y <- survival::Surv(
 
 fold_list <- splitTools::create_folds(
   y = split_vector,
-  k = 10,
+  k = 3,
   type = "stratified",
   seed = seed
 )
@@ -38,11 +37,13 @@ test_that(
   code = {
 
     surv_coxph_cox_optimization <- mlexperiments::MLCrossValidation$new(
-      learner = learner,
+      learner = mllrnrs::LearnerSurvCoxPHCox$new(),
       fold_list = fold_list,
       ncores = -1L,
       seed = seed
     )
+    surv_coxph_cox_optimization$performance_metric <- c_index
+    surv_coxph_cox_optimization$performance_metric_name <- "C-index"
 
     # set data
     surv_coxph_cox_optimization$set_data(
@@ -52,7 +53,7 @@ test_that(
 
     cv_results <- surv_coxph_cox_optimization$execute()
     expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(10, 1))
+    expect_equal(dim(cv_results), c(3, 1))
     expect_true(inherits(
       x = surv_coxph_cox_optimization$results,
       what = "mlexCV"

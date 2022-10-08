@@ -15,15 +15,12 @@ LearnerSurvGlmnetCox <- R6::R6Class( # nolint
       }
       super$initialize()
       self$metric_optimization_higher_better <- TRUE
-      self$metric_performance_higher_better <- TRUE
       self$environment <- "mllrnrs"
       self$cluster_export <- surv_glmnet_cox_ce()
       private$fun_optim_cv <- surv_glmnet_cox_optimization
       private$fun_fit <- surv_glmnet_cox_fit
       private$fun_predict <- surv_glmnet_cox_predict
       private$fun_bayesian_scoring_function <- surv_glmnet_cox_bsF
-      private$fun_performance_metric <- surv_glmnet_c_index
-      self$metric_performance_name <- "C-index"
     }
   )
 )
@@ -47,7 +44,7 @@ surv_glmnet_cox_bsF <- function(alpha) { # nolint
     seed = seed
   )
 
-  ret <- c(
+  ret <- kdry::list.append(
     list("Score" = bayes_opt_glmnet$metric_optim_mean),
     bayes_opt_glmnet
   )
@@ -127,12 +124,9 @@ surv_glmnet_cox_fit <- function(x, y, ncores, seed, ...) {
   return(fit)
 }
 
-surv_glmnet_cox_predict <- function(model, newdata, ncores) {
+surv_glmnet_cox_predict <- function(model, newdata, ncores, ...) {
+  kwargs <- list(...)
   # From the docs:
   # Type "response" gives [...] the fitted relative-risk for "cox".
   return(predict(model, newx = newdata, type = "response")[, 1])
-}
-
-surv_glmnet_c_index <- function(ground_truth, predictions) {
-  return(glmnet::Cindex(pred = predictions, y = ground_truth))
 }
