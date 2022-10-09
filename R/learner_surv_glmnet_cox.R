@@ -52,7 +52,14 @@ surv_glmnet_cox_bsF <- function(alpha) { # nolint
 }
 
 # tune lambda
-surv_glmnet_cox_optimization <- function(x, y, params, fold_list, ncores, seed) {
+surv_glmnet_cox_optimization <- function(
+    x,
+    y,
+    params,
+    fold_list,
+    ncores,
+    seed
+  ) {
   stopifnot(
     inherits(x = y, what = "Surv"),
     is.list(params),

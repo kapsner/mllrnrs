@@ -19,5 +19,7 @@ Currently implemented are:
 | LearnerSurvRangerCox | ranger::ranger | Random Survival Forest for right-censored data |
 
 TODO:
-- add lightgbm
-- add xgboost
+- add lightgbm (multiclass, binary, regression)
+- add xgboost (multiclass (done), binary (done), regression)
+- add ranger (multiclass, binary, regression)
+- add glmnet (binary, regression)
