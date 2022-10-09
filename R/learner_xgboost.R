@@ -3,7 +3,7 @@ LearnerXgboost <- R6::R6Class( # nolint
   classname = "LearnerXgboost",
   inherit = mlexperiments::MLLearnerBase,
   public = list(
-    initialize = function() {
+    initialize = function(metric_optimization_higher_better) { # nolint
       if (!requireNamespace("xgboost", quietly = TRUE)) {
         stop(
           paste0(
@@ -13,8 +13,8 @@ LearnerXgboost <- R6::R6Class( # nolint
           call. = FALSE
         )
       }
-      super$initialize()
-      self$metric_optimization_higher_better <- FALSE
+      super$initialize(metric_optimization_higher_better =
+                         metric_optimization_higher_better)
       self$environment <- "mllrnrs"
       self$cluster_export <- xgboost_ce()
       private$fun_optim_cv <- xgboost_optimization

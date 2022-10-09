@@ -13,8 +13,7 @@ LearnerSurvGlmnetCox <- R6::R6Class( # nolint
           call. = FALSE
         )
       }
-      super$initialize()
-      self$metric_optimization_higher_better <- TRUE
+      super$initialize(metric_optimization_higher_better = TRUE)
       self$environment <- "mllrnrs"
       self$cluster_export <- surv_glmnet_cox_ce()
       private$fun_optim_cv <- surv_glmnet_cox_optimization

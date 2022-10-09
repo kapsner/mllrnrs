@@ -13,7 +13,7 @@ LearnerSurvCoxPHCox <- R6::R6Class( # nolint
           call. = FALSE
         )
       }
-      super$initialize()
+      super$initialize(metric_optimization_higher_better = NULL)
       self$environment <- "mllrnrs"
       private$fun_fit <- surv_coxph_cox_fit
       private$fun_predict <- surv_coxph_cox_predict
@@ -21,7 +21,6 @@ LearnerSurvCoxPHCox <- R6::R6Class( # nolint
       # there is no optimization step here, so all related functions / fields
       # are set to NULL
       self$cluster_export <- NULL
-      self$metric_optimization_higher_better <- NULL
       private$fun_optim_cv <- NULL
       private$fun_bayesian_scoring_function <- NULL
     }

@@ -14,13 +14,6 @@ param_list_ranger <- expand.grid(
   num.trees = c(5L, 10L),
   max.depth = seq(1, 5, 4)
 )
-ranger_bounds <- list(
-  sample.fraction = c(0.2, 1),
-  min.node.size = c(1L, 10L),
-  mtry = c(2L, 10L),
-  num.trees = c(1L, 10L),
-  max.depth =  c(1L, 10L)
-)
 
 ncores <- ifelse(
   test = parallel::detectCores() > 4,
@@ -30,11 +23,6 @@ ncores <- ifelse(
     yes = 1L,
     no = parallel::detectCores()
   )
-)
-optim_args <- list(
-  iters.n = ncores,
-  kappa = 3.5,
-  acq = "ucb"
 )
 
 split_vector <- splitTools::multi_strata(
@@ -63,6 +51,126 @@ fold_list <- splitTools::create_folds(
   type = "stratified",
   seed = seed
 )
+
+
+# ###########################################################################
+# %% CV
+# ###########################################################################
+
+test_that(
+  desc = "test cv - surv_ranger_cox",
+  code = {
+
+    surv_ranger_cox_optimization <- mlexperiments::MLCrossValidation$new(
+      learner = mllrnrs::LearnerSurvRangerCox$new(),
+      fold_list = fold_list,
+      ncores = ncores,
+      seed = seed
+    )
+    surv_ranger_cox_optimization$learner_args <- as.list(
+      data.table::data.table(param_list_ranger[1, ], stringsAsFactors = FALSE)
+    )
+    surv_ranger_cox_optimization$performance_metric <- c_index
+    surv_ranger_cox_optimization$performance_metric_name <- "C-index"
+
+
+    # set data
+    surv_ranger_cox_optimization$set_data(
+      x = train_x,
+      y = train_y
+    )
+
+    cv_results <- surv_ranger_cox_optimization$execute()
+    expect_type(cv_results, "list")
+    expect_equal(dim(cv_results), c(3, 6))
+    expect_true(inherits(
+      x = surv_ranger_cox_optimization$results,
+      what = "mlexCV"
+    ))
+  }
+)
+
+# ###########################################################################
+# %% TUNING
+# ###########################################################################
+
+ranger_bounds <- list(
+  sample.fraction = c(0.2, 1),
+  min.node.size = c(1L, 10L),
+  mtry = c(2L, 10L),
+  num.trees = c(1L, 10L),
+  max.depth =  c(1L, 10L)
+)
+optim_args <- list(
+  iters.n = ncores,
+  kappa = 3.5,
+  acq = "ucb"
+)
+
+test_that(
+  desc = "test bayesian tuner, initGrid - surv_ranger_cox",
+  code = {
+
+    surv_ranger_cox_tuner <- mlexperiments::MLTuneParameters$new(
+      learner = mllrnrs::LearnerSurvRangerCox$new(),
+      strategy = "bayesian",
+      ncores = ncores,
+      seed = seed
+    )
+    surv_ranger_cox_tuner$parameter_bounds <- ranger_bounds
+    surv_ranger_cox_tuner$parameter_grid <- param_list_ranger
+    surv_ranger_cox_tuner$optim_args <- optim_args
+
+    # create split-strata from training dataset
+    surv_ranger_cox_tuner$split_vector <- split_vector
+
+    # set data
+    surv_ranger_cox_tuner$set_data(
+      x = train_x,
+      y = train_y
+    )
+
+    tune_results <- surv_ranger_cox_tuner$execute(k = 3)
+    expect_type(tune_results, "list")
+    expect_equal(dim(tune_results), c(ncores + 10, 14))
+    expect_true(inherits(x = surv_ranger_cox_tuner$results, what = "mlexTune"))
+  }
+)
+
+
+test_that(
+  desc = "test grid tuner - surv_ranger_cox",
+  code = {
+
+    surv_ranger_cox_tuner <- mlexperiments::MLTuneParameters$new(
+      learner = mllrnrs::LearnerSurvRangerCox$new(),
+      strategy = "grid",
+      ncores = ncores,
+      seed = seed
+    )
+    set.seed(seed)
+    random_grid <- sample(seq_len(nrow(param_list_ranger)), 10)
+    surv_ranger_cox_tuner$parameter_grid <- param_list_ranger[random_grid, ]
+
+    # create split-strata from training dataset
+    surv_ranger_cox_tuner$split_vector <- split_vector
+
+    # set data
+    surv_ranger_cox_tuner$set_data(
+      x = train_x,
+      y = train_y
+    )
+
+    tune_results <- surv_ranger_cox_tuner$execute(k = 3)
+    expect_type(tune_results, "list")
+    expect_equal(dim(tune_results), c(10, 7))
+    expect_true(inherits(x = surv_ranger_cox_tuner$results, what = "mlexTune"))
+  }
+)
+
+# ###########################################################################
+# %% NESTED CV
+# ###########################################################################
 
 test_that(
   desc = "test nested cv, bayesian - surv_ranger_cox",

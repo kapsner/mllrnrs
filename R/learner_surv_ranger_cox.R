@@ -13,8 +13,7 @@ LearnerSurvRangerCox <- R6::R6Class( # nolint
           call. = FALSE
         )
       }
-      super$initialize()
-      self$metric_optimization_higher_better <- FALSE
+      super$initialize(metric_optimization_higher_better = TRUE)
       self$environment <- "mllrnrs"
       self$cluster_export <- surv_ranger_cox_ce()
       private$fun_optim_cv <- surv_ranger_cox_optimization
@@ -27,8 +26,8 @@ LearnerSurvRangerCox <- R6::R6Class( # nolint
 
 
 surv_ranger_cox_ce <- function() {
-  c("surv_ranger_cox_optimization", "surv_ranger_cox_fit", "surv_ranger_cox_predict",
-    "c_index")
+  c("surv_ranger_cox_optimization", "surv_ranger_cox_fit",
+    "surv_ranger_cox_predict", "c_index")
 }
 
 surv_ranger_cox_bsF <- function(...) { # nolint

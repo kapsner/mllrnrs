@@ -3,8 +3,9 @@ LearnerSurvXgboostCox <- R6::R6Class( # nolint
   classname = "LearnerSurvXgboostCox",
   inherit = mllrnrs::LearnerXgboost,
   public = list(
-    initialize = function() {
-      super$initialize()
+    initialize = function(metric_optimization_higher_better) { # nolint
+      super$initialize(metric_optimization_higher_better =
+                         metric_optimization_higher_better)
       self$cluster_export <- surv_xgboost_cox_ce()
       private$fun_optim_cv <- surv_xgboost_cox_optimization
     }
