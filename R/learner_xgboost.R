@@ -171,7 +171,7 @@ xgboost_predict <- function(model, newdata, ncores, ...) {
     ),
     kwargs
   )
-  preds <- do.call(predict, args)
+  preds <- do.call(stats::predict, args)
   if (!is.null(kwargs$reshape)) {
     if (isTRUE(kwargs$reshape)) {
       preds <- data.table::as.data.table(preds)[

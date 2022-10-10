@@ -1,11 +1,12 @@
 dataset <- survival::colon |>
   data.table::as.data.table() |>
   na.omit()
+dataset <- dataset[get("etype") == 2, ]
 
 seed <- 123
 surv_cols <- c("status", "time", "rx")
 
-feature_cols <- colnames(dataset)[3:ncol(dataset)]
+feature_cols <- colnames(dataset)[3:(ncol(dataset) - 1)]
 
 split_vector <- splitTools::multi_strata(
   df = dataset[, .SD, .SDcols = surv_cols],
@@ -15,7 +16,7 @@ split_vector <- splitTools::multi_strata(
 
 train_x <- model.matrix(
   ~ -1 + .,
-  dataset[, .SD, .SDcols = setdiff(colnames(dataset), surv_cols[1:2])]
+  dataset[, .SD, .SDcols = setdiff(feature_cols, surv_cols[1:2])]
 )
 train_y <- survival::Surv(
   event = (dataset[, get("status")] |>
@@ -36,26 +37,26 @@ test_that(
   desc = "test cv - surv_coxph_cox",
   code = {
 
-    surv_coxph_cox_optimization <- mlexperiments::MLCrossValidation$new(
+    surv_coxph_cox_optimizer <- mlexperiments::MLCrossValidation$new(
       learner = mllrnrs::LearnerSurvCoxPHCox$new(),
       fold_list = fold_list,
       ncores = -1L,
       seed = seed
     )
-    surv_coxph_cox_optimization$performance_metric <- c_index
-    surv_coxph_cox_optimization$performance_metric_name <- "C-index"
+    surv_coxph_cox_optimizer$performance_metric <- c_index
+    surv_coxph_cox_optimizer$performance_metric_name <- "C-index"
 
     # set data
-    surv_coxph_cox_optimization$set_data(
+    surv_coxph_cox_optimizer$set_data(
       x = train_x,
       y = train_y
     )
 
-    cv_results <- surv_coxph_cox_optimization$execute()
+    cv_results <- surv_coxph_cox_optimizer$execute()
     expect_type(cv_results, "list")
     expect_equal(dim(cv_results), c(3, 1))
     expect_true(inherits(
-      x = surv_coxph_cox_optimization$results,
+      x = surv_coxph_cox_optimizer$results,
       what = "mlexCV"
     ))
   }

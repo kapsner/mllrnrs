@@ -1,11 +1,11 @@
 library(mlbench)
-data("PimaIndiansDiabetes2")
-dataset <- PimaIndiansDiabetes2 |>
+data("BostonHousing")
+dataset <- BostonHousing |>
   data.table::as.data.table() |>
   na.omit()
 
 seed <- 123
-feature_cols <- colnames(dataset)[1:8]
+feature_cols <- colnames(dataset)[1:13]
 
 param_list_xgboost <- expand.grid(
   subsample = seq(0.6, 1, .2),
@@ -34,7 +34,7 @@ train_x <- model.matrix(
   ~ -1 + .,
   dataset[, .SD, .SDcols = feature_cols]
 )
-train_y <- as.integer(dataset[, get("diabetes")]) - 1L
+train_y <- dataset[, get("medv")]
 
 options("mlexperiments.bayesian.max_init" = 10L)
 options("mlexperiments.optim.xgb.nrounds" = 100L)
@@ -53,7 +53,7 @@ fold_list <- splitTools::create_folds(
 # ###########################################################################
 
 test_that(
-  desc = "test cv, binary:logistic - xgboost",
+  desc = "test cv, reg:squarederror - xgboost",
   code = {
 
     xgboost_optimizer <- mlexperiments::MLCrossValidation$new(
@@ -72,14 +72,14 @@ test_that(
         ),
       ),
       list(
-        objective = "binary:logistic",
-        eval_metric = "logloss"
+        objective = "reg:squarederror",
+        eval_metric = "rmse"
       ),
       nrounds = 45L
     )
     xgboost_optimizer$performance_metric_args <- list(positive = "1")
-    xgboost_optimizer$performance_metric <- mlexperiments::metric("auc")
-    xgboost_optimizer$performance_metric_name <- "AUC"
+    xgboost_optimizer$performance_metric <- mlexperiments::metric("msle")
+    xgboost_optimizer$performance_metric_name <- "Mean squared error loss"
 
     # set data
     xgboost_optimizer$set_data(
@@ -116,7 +116,7 @@ optim_args <- list(
 )
 
 test_that(
-  desc = "test bayesian tuner, parameter_grid, binary:logistic - xgboost",
+  desc = "test bayesian tuner, parameter_grid, reg:squarederror - xgboost",
   code = {
 
     xgboost_tuner <- mlexperiments::MLTuneParameters$new(
@@ -130,8 +130,8 @@ test_that(
     xgboost_tuner$parameter_grid <- param_list_xgboost
     xgboost_tuner$parameter_bounds <- xgboost_bounds
     xgboost_tuner$learner_args <- list(
-      objective = "binary:logistic",
-      eval_metric = "logloss",
+      objective = "reg:squarederror",
+      eval_metric = "rmse",
       verbose = FALSE
     )
     xgboost_tuner$optim_args <- optim_args
@@ -151,7 +151,7 @@ test_that(
 
 
 test_that(
-  desc = "test grid tuner, binary:logistic - xgboost",
+  desc = "test grid tuner, reg:squarederror - xgboost",
   code = {
 
     xgboost_tuner <- mlexperiments::MLTuneParameters$new(
@@ -166,8 +166,8 @@ test_that(
     random_grid <- sample(seq_len(nrow(param_list_xgboost)), 10)
     xgboost_tuner$parameter_grid <- param_list_xgboost[random_grid, ]
     xgboost_tuner$learner_args <- list(
-      objective = "binary:logistic",
-      eval_metric = "logloss",
+      objective = "reg:squarederror",
+      eval_metric = "rmse",
       verbose = FALSE
     )
 
@@ -189,7 +189,7 @@ test_that(
 # ###########################################################################
 
 test_that(
-  desc = "test nested cv, bayesian, binary:logistic - xgboost",
+  desc = "test nested cv, bayesian, reg:squarederror - xgboost",
   code = {
 
     xgboost_optimizer <- mlexperiments::MLNestedCV$new(
@@ -209,12 +209,12 @@ test_that(
     xgboost_optimizer$optim_args <- optim_args
 
     xgboost_optimizer$learner_args <- list(
-      objective = "binary:logistic",
-      eval_metric = "logloss"
+      objective = "reg:squarederror",
+      eval_metric = "rmse"
     )
     xgboost_optimizer$performance_metric_args <- list(positive = "1")
-    xgboost_optimizer$performance_metric <- mlexperiments::metric("auc")
-    xgboost_optimizer$performance_metric_name <- "AUC"
+    xgboost_optimizer$performance_metric <- mlexperiments::metric("msle")
+    xgboost_optimizer$performance_metric_name <- "Mean squared error loss"
 
     # set data
     xgboost_optimizer$set_data(
@@ -254,12 +254,12 @@ test_that(
     xgboost_optimizer$split_type <- "stratified"
 
     xgboost_optimizer$learner_args <- list(
-      objective = "binary:logistic",
-      eval_metric = "logloss"
+      objective = "reg:squarederror",
+      eval_metric = "rmse"
     )
     xgboost_optimizer$performance_metric_args <- list(positive = "1")
-    xgboost_optimizer$performance_metric <- mlexperiments::metric("auc")
-    xgboost_optimizer$performance_metric_name <- "AUC"
+    xgboost_optimizer$performance_metric <- mlexperiments::metric("msle")
+    xgboost_optimizer$performance_metric_name <- "Mean squared error loss"
 
     # set data
     xgboost_optimizer$set_data(

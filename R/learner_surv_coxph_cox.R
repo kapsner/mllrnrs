@@ -40,7 +40,7 @@ surv_coxph_cox_fit <- function(x, y, ncores, seed, ...) {
 
   x <- kdry::dtr_matrix2df(matrix = x, cat_vars = cat_vars)
 
-  cox_formula <- as.formula(object = "y ~ .")
+  cox_formula <- stats::as.formula(object = "y ~ .")
 
   args <- list(
     formula = cox_formula,
@@ -69,5 +69,5 @@ surv_coxph_cox_predict <- function(model, newdata, ncores, ...) {
   # covariates and follow-up time ("expected"), and the terms of the linear
   # predictor ("terms"). The survival probability for a subject is equal
   # to exp(-expected).
-  return(predict(model, newdata = newdata, type = "risk"))
+  return(stats::predict(model, newdata = newdata, type = "risk"))
 }

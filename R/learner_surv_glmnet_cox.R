@@ -134,5 +134,5 @@ surv_glmnet_cox_predict <- function(model, newdata, ncores, ...) {
   kwargs <- list(...)
   # From the docs:
   # Type "response" gives [...] the fitted relative-risk for "cox".
-  return(predict(model, newx = newdata, type = "response")[, 1])
+  return(stats::predict(model, newx = newdata, type = "response")[, 1])
 }

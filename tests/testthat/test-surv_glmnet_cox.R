@@ -1,25 +1,31 @@
 dataset <- survival::colon |>
   data.table::as.data.table() |>
   na.omit()
+dataset <- dataset[get("etype") == 2, ]
 
 seed <- 123
 surv_cols <- c("status", "time", "rx")
 
-feature_cols <- colnames(dataset)[3:ncol(dataset)]
+feature_cols <- colnames(dataset)[3:(ncol(dataset) - 1)]
 
 param_list_glmnet <- expand.grid(
   alpha = seq(0, 1, .2)
 )
 
-ncores <- ifelse(
-  test = parallel::detectCores() > 4,
-  yes = 4L,
-  no = ifelse(
-    test = parallel::detectCores() < 2L,
-    yes = 1L,
-    no = parallel::detectCores()
+if (isTRUE(as.logical(Sys.getenv("_R_CHECK_LIMIT_CORES_")))) {
+  # on cran
+  ncores <- 2L
+} else {
+  ncores <- ifelse(
+    test = parallel::detectCores() > 4,
+    yes = 4L,
+    no = ifelse(
+      test = parallel::detectCores() < 2L,
+      yes = 1L,
+      no = parallel::detectCores()
+    )
   )
-)
+}
 
 split_vector <- splitTools::multi_strata(
   df = dataset[, .SD, .SDcols = surv_cols],
@@ -29,7 +35,7 @@ split_vector <- splitTools::multi_strata(
 
 train_x <- model.matrix(
   ~ -1 + .,
-  dataset[, .SD, .SDcols = setdiff(colnames(dataset), surv_cols[1:2])]
+  dataset[, .SD, .SDcols = setdiff(feature_cols, surv_cols[1:2])]
 )
 train_y <- survival::Surv(
   event = (dataset[, get("status")] |>
@@ -57,30 +63,30 @@ test_that(
   desc = "test cv - surv_glmnet_cox",
   code = {
 
-    surv_glmnet_cox_optimization <- mlexperiments::MLCrossValidation$new(
+    surv_glmnet_cox_optimizer <- mlexperiments::MLCrossValidation$new(
       learner = mllrnrs::LearnerSurvGlmnetCox$new(),
       fold_list = fold_list,
       ncores = ncores,
       seed = seed
     )
-    surv_glmnet_cox_optimization$learner_args <- list(
+    surv_glmnet_cox_optimizer$learner_args <- list(
       alpha = 0.8,
       lambda = 0.002
     )
-    surv_glmnet_cox_optimization$performance_metric <- c_index
-    surv_glmnet_cox_optimization$performance_metric_name <- "C-index"
+    surv_glmnet_cox_optimizer$performance_metric <- c_index
+    surv_glmnet_cox_optimizer$performance_metric_name <- "C-index"
 
     # set data
-    surv_glmnet_cox_optimization$set_data(
+    surv_glmnet_cox_optimizer$set_data(
       x = train_x,
       y = train_y
     )
 
-    cv_results <- surv_glmnet_cox_optimization$execute()
+    cv_results <- surv_glmnet_cox_optimizer$execute()
     expect_type(cv_results, "list")
     expect_equal(dim(cv_results), c(3, 3))
     expect_true(inherits(
-      x = surv_glmnet_cox_optimization$results,
+      x = surv_glmnet_cox_optimizer$results,
       what = "mlexCV"
     ))
   }
@@ -122,7 +128,6 @@ test_that(
 
     tune_results <- surv_glmnet_cox_tuner$execute(k = 3)
     expect_type(tune_results, "list")
-    expect_equal(dim(tune_results), c(ncores + nrow(param_list_glmnet), 11))
     expect_true(inherits(x = surv_glmnet_cox_tuner$results, what = "mlexTune"))
   }
 )
@@ -152,7 +157,6 @@ test_that(
 
     tune_results <- surv_glmnet_cox_tuner$execute(k = 3)
     expect_type(tune_results, "list")
-    expect_equal(dim(tune_results), c(ncores + nrow(param_list_glmnet), 11))
     expect_true(inherits(x = surv_glmnet_cox_tuner$results, what = "mlexTune"))
   }
 )
@@ -194,7 +198,7 @@ test_that(
   desc = "test nested cv, bayesian - surv_glmnet_cox",
   code = {
 
-    surv_glmnet_cox_optimization <- mlexperiments::MLNestedCV$new(
+    surv_glmnet_cox_optimizer <- mlexperiments::MLNestedCV$new(
       learner = mllrnrs::LearnerSurvGlmnetCox$new(),
       strategy = "bayesian",
       fold_list = fold_list,
@@ -203,26 +207,26 @@ test_that(
       seed = seed
     )
 
-    surv_glmnet_cox_optimization$parameter_bounds <- glmnet_bounds
-    surv_glmnet_cox_optimization$parameter_grid <- param_list_glmnet
-    surv_glmnet_cox_optimization$split_type <- "stratified"
-    surv_glmnet_cox_optimization$split_vector <- split_vector
-    surv_glmnet_cox_optimization$optim_args <- optim_args
+    surv_glmnet_cox_optimizer$parameter_bounds <- glmnet_bounds
+    surv_glmnet_cox_optimizer$parameter_grid <- param_list_glmnet
+    surv_glmnet_cox_optimizer$split_type <- "stratified"
+    surv_glmnet_cox_optimizer$split_vector <- split_vector
+    surv_glmnet_cox_optimizer$optim_args <- optim_args
 
-    surv_glmnet_cox_optimization$performance_metric <- c_index
-    surv_glmnet_cox_optimization$performance_metric_name <- "C-index"
+    surv_glmnet_cox_optimizer$performance_metric <- c_index
+    surv_glmnet_cox_optimizer$performance_metric_name <- "C-index"
 
     # set data
-    surv_glmnet_cox_optimization$set_data(
+    surv_glmnet_cox_optimizer$set_data(
       x = train_x,
       y = train_y
     )
 
-    cv_results <- surv_glmnet_cox_optimization$execute()
+    cv_results <- surv_glmnet_cox_optimizer$execute()
     expect_type(cv_results, "list")
     expect_equal(dim(cv_results), c(3, 3))
     expect_true(inherits(
-      x = surv_glmnet_cox_optimization$results,
+      x = surv_glmnet_cox_optimizer$results,
       what = "mlexCV"
     ))
   }
@@ -233,7 +237,7 @@ test_that(
   desc = "test nested cv, grid - surv_glmnet_cox",
   code = {
 
-    surv_glmnet_cox_optimization <- mlexperiments::MLNestedCV$new(
+    surv_glmnet_cox_optimizer <- mlexperiments::MLNestedCV$new(
       learner = mllrnrs::LearnerSurvGlmnetCox$new(),
       strategy = "grid",
       fold_list = fold_list,
@@ -242,25 +246,25 @@ test_that(
       seed = seed
     )
 
-    surv_glmnet_cox_optimization$parameter_grid <- param_list_glmnet
-    surv_glmnet_cox_optimization$split_type <- "stratified"
-    surv_glmnet_cox_optimization$split_vector <- split_vector
-    surv_glmnet_cox_optimization$optim_args <- optim_args
+    surv_glmnet_cox_optimizer$parameter_grid <- param_list_glmnet
+    surv_glmnet_cox_optimizer$split_type <- "stratified"
+    surv_glmnet_cox_optimizer$split_vector <- split_vector
+    surv_glmnet_cox_optimizer$optim_args <- optim_args
 
-    surv_glmnet_cox_optimization$performance_metric <- c_index
-    surv_glmnet_cox_optimization$performance_metric_name <- "C-index"
+    surv_glmnet_cox_optimizer$performance_metric <- c_index
+    surv_glmnet_cox_optimizer$performance_metric_name <- "C-index"
 
     # set data
-    surv_glmnet_cox_optimization$set_data(
+    surv_glmnet_cox_optimizer$set_data(
       x = train_x,
       y = train_y
     )
 
-    cv_results <- surv_glmnet_cox_optimization$execute()
+    cv_results <- surv_glmnet_cox_optimizer$execute()
     expect_type(cv_results, "list")
     expect_equal(dim(cv_results), c(3, 3))
     expect_true(inherits(
-      x = surv_glmnet_cox_optimization$results,
+      x = surv_glmnet_cox_optimizer$results,
       what = "mlexCV"
     ))
   }

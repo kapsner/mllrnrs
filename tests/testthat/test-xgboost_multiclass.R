@@ -15,15 +15,20 @@ param_list_xgboost <- expand.grid(
   max_depth = seq(1, 5, 4)
 )
 
-ncores <- ifelse(
-  test = parallel::detectCores() > 4,
-  yes = 4L,
-  no = ifelse(
-    test = parallel::detectCores() < 2L,
-    yes = 1L,
-    no = parallel::detectCores()
+if (isTRUE(as.logical(Sys.getenv("_R_CHECK_LIMIT_CORES_")))) {
+  # on cran
+  ncores <- 2L
+} else {
+  ncores <- ifelse(
+    test = parallel::detectCores() > 4,
+    yes = 4L,
+    no = ifelse(
+      test = parallel::detectCores() < 2L,
+      yes = 1L,
+      no = parallel::detectCores()
+    )
   )
-)
+}
 
 train_x <- model.matrix(
   ~ -1 + .,
@@ -51,7 +56,7 @@ test_that(
   desc = "test cv, multi:softprob - xgboost",
   code = {
 
-    xgboost_optimization <- mlexperiments::MLCrossValidation$new(
+    xgboost_optimizer <- mlexperiments::MLCrossValidation$new(
       learner = mllrnrs::LearnerXgboost$new(
         metric_optimization_higher_better = FALSE
       ),
@@ -59,7 +64,7 @@ test_that(
       ncores = ncores,
       seed = seed
     )
-    xgboost_optimization$learner_args <- c(
+    xgboost_optimizer$learner_args <- c(
       as.list(
         data.table::data.table(
           param_list_xgboost[37, ],
@@ -73,21 +78,21 @@ test_that(
       ),
       nrounds = 45L
     )
-    xgboost_optimization$predict_args <- list(reshape = TRUE)
-    xgboost_optimization$performance_metric <- mlexperiments::metric("bacc")
-    xgboost_optimization$performance_metric_name <- "Balanced accuracy"
+    xgboost_optimizer$predict_args <- list(reshape = TRUE)
+    xgboost_optimizer$performance_metric <- mlexperiments::metric("bacc")
+    xgboost_optimizer$performance_metric_name <- "Balanced accuracy"
 
     # set data
-    xgboost_optimization$set_data(
+    xgboost_optimizer$set_data(
       x = train_x,
       y = train_y
     )
 
-    cv_results <- xgboost_optimization$execute()
+    cv_results <- xgboost_optimizer$execute()
     expect_type(cv_results, "list")
     expect_equal(dim(cv_results), c(3, 10))
     expect_true(inherits(
-      x = xgboost_optimization$results,
+      x = xgboost_optimizer$results,
       what = "mlexCV"
     ))
   }
@@ -142,7 +147,6 @@ test_that(
     tune_results <- xgboost_tuner$execute(k = 3)
 
     expect_type(tune_results, "list")
-    expect_equal(dim(tune_results), c(ncores + 10, 19))
     expect_true(inherits(x = xgboost_tuner$results, what = "mlexTune"))
   }
 )
@@ -191,7 +195,7 @@ test_that(
   desc = "test nested cv, bayesian, multi:softprob - xgboost",
   code = {
 
-    xgboost_optimization <- mlexperiments::MLNestedCV$new(
+    xgboost_optimizer <- mlexperiments::MLNestedCV$new(
       learner = mllrnrs::LearnerXgboost$new(
         metric_optimization_higher_better = FALSE
       ),
@@ -202,31 +206,31 @@ test_that(
       seed = seed
     )
 
-    xgboost_optimization$parameter_bounds <- xgboost_bounds
-    xgboost_optimization$parameter_grid <- param_list_xgboost
-    xgboost_optimization$split_type <- "stratified"
-    xgboost_optimization$optim_args <- optim_args
+    xgboost_optimizer$parameter_bounds <- xgboost_bounds
+    xgboost_optimizer$parameter_grid <- param_list_xgboost
+    xgboost_optimizer$split_type <- "stratified"
+    xgboost_optimizer$optim_args <- optim_args
 
-    xgboost_optimization$learner_args <- list(
+    xgboost_optimizer$learner_args <- list(
       objective = "multi:softprob",
       eval_metric = "mlogloss",
       num_class = 3
     )
-    xgboost_optimization$predict_args <- list(reshape = TRUE)
-    xgboost_optimization$performance_metric <- mlexperiments::metric("bacc")
-    xgboost_optimization$performance_metric_name <- "Balanced accuracy"
+    xgboost_optimizer$predict_args <- list(reshape = TRUE)
+    xgboost_optimizer$performance_metric <- mlexperiments::metric("bacc")
+    xgboost_optimizer$performance_metric_name <- "Balanced accuracy"
 
     # set data
-    xgboost_optimization$set_data(
+    xgboost_optimizer$set_data(
       x = train_x,
       y = train_y
     )
 
-    cv_results <- xgboost_optimization$execute()
+    cv_results <- xgboost_optimizer$execute()
     expect_type(cv_results, "list")
     expect_equal(dim(cv_results), c(3, 10))
     expect_true(inherits(
-      x = xgboost_optimization$results,
+      x = xgboost_optimizer$results,
       what = "mlexCV"
     ))
   }
@@ -237,7 +241,7 @@ test_that(
   desc = "test nested cv, grid - xgboost",
   code = {
 
-    xgboost_optimization <- mlexperiments::MLNestedCV$new(
+    xgboost_optimizer <- mlexperiments::MLNestedCV$new(
       learner = mllrnrs::LearnerXgboost$new(
         metric_optimization_higher_better = FALSE
       ),
@@ -249,30 +253,30 @@ test_that(
     )
     set.seed(seed)
     random_grid <- sample(seq_len(nrow(param_list_xgboost)), 10)
-    xgboost_optimization$parameter_grid <-
+    xgboost_optimizer$parameter_grid <-
       param_list_xgboost[random_grid, ]
-    xgboost_optimization$split_type <- "stratified"
+    xgboost_optimizer$split_type <- "stratified"
 
-    xgboost_optimization$learner_args <- list(
+    xgboost_optimizer$learner_args <- list(
       objective = "multi:softprob",
       eval_metric = "mlogloss",
       num_class = 3
     )
-    xgboost_optimization$predict_args <- list(reshape = TRUE)
-    xgboost_optimization$performance_metric <- mlexperiments::metric("bacc")
-    xgboost_optimization$performance_metric_name <- "Balanced accuracy"
+    xgboost_optimizer$predict_args <- list(reshape = TRUE)
+    xgboost_optimizer$performance_metric <- mlexperiments::metric("bacc")
+    xgboost_optimizer$performance_metric_name <- "Balanced accuracy"
 
     # set data
-    xgboost_optimization$set_data(
+    xgboost_optimizer$set_data(
       x = train_x,
       y = train_y
     )
 
-    cv_results <- xgboost_optimization$execute()
+    cv_results <- xgboost_optimizer$execute()
     expect_type(cv_results, "list")
     expect_equal(dim(cv_results), c(3, 10))
     expect_true(inherits(
-      x = xgboost_optimization$results,
+      x = xgboost_optimizer$results,
       what = "mlexCV"
     ))
   }

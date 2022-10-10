@@ -34,7 +34,11 @@ my_desc$set("BugReports",
             "https://github.com/kapsner/mllrnrs/issues")
 
 # Vignette Builder
-#my_desc$set("VignetteBuilder" = "knitr")
+my_desc$set("VignetteBuilder" = "knitr")
+
+# Testthat stuff
+my_desc$set("Config/testthat/parallel" = "false")
+my_desc$set("Config/testthat/edition" = "3")
 
 # License
 my_desc$set("License", "GPL-3")
@@ -50,8 +54,10 @@ usethis::use_package("R", min_version = "2.10", type = "Depends")
 # Imports
 # https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
 usethis::use_package("R6", type = "Imports")
+usethis::use_package("data.table", type = "Imports")
 usethis::use_package("mlexperiments", type = "Imports")
 usethis::use_package("kdry", type = "Imports")
+usethis::use_package("stats", type = "Imports")
 
 # Suggests
 usethis::use_package("testthat", type = "Suggests", min_version = "3.0.1")
@@ -59,8 +65,11 @@ usethis::use_package("lintr", type = "Suggests")
 usethis::use_package("knitr", type = "Suggests")
 usethis::use_package("glmnet", type = "Suggests")
 usethis::use_package("xgboost", type = "Suggests")
+usethis::use_package("lightgbm", type = "Suggests")
 usethis::use_package("ranger", type = "Suggests")
 usethis::use_package("survival", type = "Suggests")
+usethis::use_package("splitTools", type = "Suggests")
+usethis::use_package("mlbench", type = "Suggests")
 
 
 # define remotes

@@ -193,7 +193,7 @@ surv_ranger_cox_predict <- function(model, newdata, ncores, ...) {
 
   # ranger returns the survival probability S(t), which is the conditional
   # probability that a subject survives >= t, given that is has survived until t
-  preds <- do.call(predict, predict_args)
+  preds <- do.call(stats::predict, predict_args)
 
   # https://github.com/imbs-hl/ranger/issues/617#issuecomment-1144443486
   # Internally, ranger uses the sum of chf over time to calculate the c-index,
