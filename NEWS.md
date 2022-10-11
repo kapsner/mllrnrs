@@ -1,9 +1,11 @@
 # mllrnrs NEWS
 
-## Unreleased (2022-10-09)
+## Unreleased (2022-10-11)
 
 #### New features
 
+-   added lgb
+    ([3b777b4](https://github.com/kapsner/mllrnrs/tree/3b777b4d2f7ecaf7d90c80bbc7a3a9a7f2c3bfe6))
 -   xgboost multiclass
     ([e72ce46](https://github.com/kapsner/mllrnrs/tree/e72ce46d870d73bf5aa43d12c7270074f8697700))
 -   working on adding xgboost
@@ -23,6 +25,8 @@
 
 #### CI
 
+-   adapted tests to upstream changes
+    ([66d7534](https://github.com/kapsner/mllrnrs/tree/66d75346960ed9df07dbf88743bf9f6e9952a777))
 -   fixed linting errors
     ([e6d411e](https://github.com/kapsner/mllrnrs/tree/e6d411edcc1f280759f29b157fe476162a74c94a))
 -   refactored tests; finalized xgboost:binary
@@ -38,4 +42,4 @@
     ([1f4a6b5](https://github.com/kapsner/mllrnrs/tree/1f4a6b52c1f9a64eb7143e99843618329182ca08))
 
 Full set of changes:
-[`ceea1ce...1f4a6b5`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...1f4a6b5)
+[`ceea1ce...66d7534`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...66d7534)

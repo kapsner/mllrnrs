@@ -35,6 +35,6 @@ Remotes:
     github::kapsner/mlexperiments@main
 Config/testthat/edition: 3
 Config/testthat/parallel: false
-Date/Publication: 2022-10-10 12:21:30 UTC
+Date/Publication: 2022-10-11 13:10:14 UTC
 Encoding: UTF-8
 RoxygenNote: 7.2.1
