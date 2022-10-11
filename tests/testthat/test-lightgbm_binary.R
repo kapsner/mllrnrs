@@ -90,7 +90,7 @@ test_that(
 
     cv_results <- lightgbm_optimizer$execute()
     expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 10))
+    expect_equal(dim(cv_results), c(3, 11))
     expect_true(inherits(
       x = lightgbm_optimizer$results,
       what = "mlexCV"
@@ -225,7 +225,7 @@ test_that(
 
     cv_results <- lightgbm_optimizer$execute()
     expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 10))
+    expect_equal(dim(cv_results), c(3, 11))
     expect_true(inherits(
       x = lightgbm_optimizer$results,
       what = "mlexCV"
@@ -270,7 +270,7 @@ test_that(
 
     cv_results <- lightgbm_optimizer$execute()
     expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 10))
+    expect_equal(dim(cv_results), c(3, 11))
     expect_true(inherits(
       x = lightgbm_optimizer$results,
       what = "mlexCV"

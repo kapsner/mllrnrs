@@ -54,7 +54,7 @@ test_that(
 
     cv_results <- surv_coxph_cox_optimizer$execute()
     expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 1))
+    expect_equal(dim(cv_results), c(3, 2))
     expect_true(inherits(
       x = surv_coxph_cox_optimizer$results,
       what = "mlexCV"
