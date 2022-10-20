@@ -1,8 +1,18 @@
+#' @title R6 Class to construct a Ranger survival learner for Cox regression
 #' @export
 LearnerSurvRangerCox <- R6::R6Class( # nolint
   classname = "LearnerSurvRangerCox",
   inherit = mlexperiments::MLLearnerBase,
   public = list(
+
+    #' @description
+    #' Create a new `LearnerSurvRangerCox` object.
+    #'
+    #' @return A new `LearnerSurvRangerCox` R6 object.
+    #'
+    #' @examples
+    #' LearnerSurvRangerCox$new()
+    #'
     initialize = function() {
       if (!requireNamespace("ranger", quietly = TRUE)) {
         stop(
@@ -201,8 +211,8 @@ surv_ranger_cox_predict <- function(model, newdata, ncores, ...) {
   pred_probs <- rowSums(preds$chf)
 
   # The Integrated/Cumulative Harzard H(t) = -log(S(t))
-  # time_point <-
-  #   which(preds$unique.death.times == max(preds$unique.death.times))
-  # pred_probs <- -log(preds$survival[, time_point])
+  #% time_point <-
+  #%   which(preds$unique.death.times == max(preds$unique.death.times))
+  #% pred_probs <- -log(preds$survival[, time_point])
   return(pred_probs)
 }

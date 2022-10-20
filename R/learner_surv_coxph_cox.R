@@ -1,8 +1,18 @@
+#' @title R6 Class to construct a Cox proportional hazards survival learner
 #' @export
 LearnerSurvCoxPHCox <- R6::R6Class( # nolint
   classname = "LearnerSurvCoxPHCox",
   inherit = mlexperiments::MLLearnerBase,
   public = list(
+
+    #' @description
+    #' Create a new `LearnerSurvCoxPHCox` object.
+    #'
+    #' @return A new `LearnerSurvCoxPHCox` R6 object.
+    #'
+    #' @examples
+    #' LearnerSurvCoxPHCox$new()
+    #'
     initialize = function() {
       if (!requireNamespace("survival", quietly = TRUE)) {
         stop(

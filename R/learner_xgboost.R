@@ -1,8 +1,93 @@
+#' @title R6 Class to construct a Xgboost learner
+#'
+#' @description
+#' The `LearnerXgboost` class is the interface to the `xgboost` R package for
+#'   use with the `mlexperiments` package.
+#'
+#' @examples
+#' # binary classification
+#'
+#' library(mlbench)
+#' data("PimaIndiansDiabetes2")
+#' dataset <- PimaIndiansDiabetes2 |>
+#'   data.table::as.data.table() |>
+#'   na.omit()
+#'
+#' seed <- 123
+#' feature_cols <- colnames(dataset)[1:8]
+#'
+#' param_list_xgboost <- expand.grid(
+#'    subsample = seq(0.6, 1, .2),
+#'    colsample_bytree = seq(0.6, 1, .2),
+#'    min_child_weight = seq(1, 5, 4),
+#'    learning_rate = seq(0.1, 0.2, 0.1),
+#'    max_depth = seq(1, 5, 4)
+#' )
+#'
+#' train_x <- model.matrix(
+#'   ~ -1 + .,
+#'   dataset[, .SD, .SDcols = feature_cols]
+#' )
+#' train_y <- as.integer(dataset[, get("diabetes")]) - 1L
+#'
+#' fold_list <- splitTools::create_folds(
+#'   y = train_y,
+#'   k = 3,
+#'   type = "stratified",
+#'   seed = seed
+#' )
+#' xgboost_cv <- mlexperiments::MLCrossValidation$new(
+#'   learner = mllrnrs::LearnerXgboost$new(
+#'     metric_optimization_higher_better = FALSE
+#'   ),
+#'   fold_list = fold_list,
+#'   ncores = 2,
+#'   seed = 123
+#' )
+#' xgboost_cv$learner_args <- c(
+#'   as.list(
+#'     data.table::data.table(
+#'       param_list_xgboost[37, ],
+#'       stringsAsFactors = FALSE
+#'     ),
+#'   ),
+#'   list(
+#'     objective = "binary:logistic",
+#'     eval_metric = "logloss"
+#'   ),
+#'   nrounds = 45L
+#' )
+#' xgboost_cv$performance_metric_args <- list(positive = "1")
+#' xgboost_cv$performance_metric <- mlexperiments::metric("auc")
+#' xgboost_cv$performance_metric_name <- "AUC"
+#'
+#' # set data
+#' xgboost_cv$set_data(
+#'   x = train_x,
+#'   y = train_y
+#' )
+#'
+#' xgboost_cv$execute()
+#'
 #' @export
+#'
 LearnerXgboost <- R6::R6Class( # nolint
   classname = "LearnerXgboost",
   inherit = mlexperiments::MLLearnerBase,
   public = list(
+
+    #' @description
+    #' Create a new `LearnerXgboost` object.
+    #'
+    #' @param metric_optimization_higher_better A logical. Defines the direction
+    #'  of the optimization metric used throughout the hyperparameter
+    #'  optimization.
+    #'
+    #' @return A new `LearnerXgboost` R6 object.
+    #'
+    #' @examples
+    #' LearnerXgboost$new(metric_optimization_higher_better = FALSE)
+    #'
     initialize = function(metric_optimization_higher_better) { # nolint
       if (!requireNamespace("xgboost", quietly = TRUE)) {
         stop(
@@ -80,7 +165,7 @@ xgboost_optimization <- function(
   # are ignored.
   xgb_fids <- kdry::mlh_outsample_row_indices(
     fold_list = fold_list,
-    training_data = nrow(x)
+    dataset_nrows = nrow(x)
   )
 
   fit_args <- list(

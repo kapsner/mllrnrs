@@ -1,8 +1,18 @@
+#' @title R6 Class to construct a Glmnet survival learner for Cox regression
 #' @export
 LearnerSurvGlmnetCox <- R6::R6Class( # nolint
   classname = "LearnerSurvGlmnetCox",
   inherit = mlexperiments::MLLearnerBase,
   public = list(
+
+    #' @description
+    #' Create a new `LearnerSurvGlmnetCox` object.
+    #'
+    #' @return A new `LearnerSurvGlmnetCox` R6 object.
+    #'
+    #' @examples
+    #' LearnerSurvGlmnetCox$new()
+    #'
     initialize = function() {
       if (!requireNamespace("glmnet", quietly = TRUE)) {
         stop(
@@ -74,7 +84,7 @@ surv_glmnet_cox_optimization <- function(
   # of alpha.
   glmnet_fids <- kdry::mlh_outsample_row_indices(
     fold_list = fold_list,
-    training_data = nrow(x),
+    dataset_nrows = nrow(x),
     type = "glmnet"
   )
 
@@ -131,7 +141,7 @@ surv_glmnet_cox_fit <- function(x, y, ncores, seed, ...) {
 }
 
 surv_glmnet_cox_predict <- function(model, newdata, ncores, ...) {
-  kwargs <- list(...)
+  kwargs <- list(...) # nolint
   # From the docs:
   # Type "response" gives [...] the fitted relative-risk for "cox".
   return(stats::predict(model, newx = newdata, type = "response")[, 1])

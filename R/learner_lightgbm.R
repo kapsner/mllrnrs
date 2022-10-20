@@ -1,8 +1,94 @@
+#' @title R6 Class to construct a LightGBM learner
+#'
+#' @description
+#' The `LearnerLightgbm` class is the interface to the `lightgbm` R package for
+#'   use with the `mlexperiments` package.
+#'
+#' @examples
+#' # binary classification
+#'
+#' library(mlbench)
+#' data("PimaIndiansDiabetes2")
+#' dataset <- PimaIndiansDiabetes2 |>
+#'   data.table::as.data.table() |>
+#'   na.omit()
+#'
+#' seed <- 123
+#' feature_cols <- colnames(dataset)[1:8]
+#'
+#' param_list_lightgbm <- expand.grid(
+#'   bagging_fraction = seq(0.6, 1, .2),
+#'   feature_fraction = seq(0.6, 1, .2),
+#'   min_data_in_leaf = seq(10, 50, 10),
+#'   learning_rate = seq(0.1, 0.2, 0.1),
+#'   num_leaves = seq(10, 50, 10),
+#'   max_depth = -1L
+#' )
+#'
+#' train_x <- model.matrix(
+#'   ~ -1 + .,
+#'   dataset[, .SD, .SDcols = feature_cols]
+#' )
+#' train_y <- as.integer(dataset[, get("diabetes")]) - 1L
+#'
+#' fold_list <- splitTools::create_folds(
+#'   y = train_y,
+#'   k = 3,
+#'   type = "stratified",
+#'   seed = seed
+#' )
+#' lightgbm_cv <- mlexperiments::MLCrossValidation$new(
+#'   learner = mllrnrs::LearnerLightgbm$new(
+#'     metric_optimization_higher_better = FALSE
+#'   ),
+#'   fold_list = fold_list,
+#'   ncores = 2,
+#'   seed = 123
+#' )
+#' lightgbm_cv$learner_args <- c(
+#'   as.list(
+#'     data.table::data.table(
+#'       param_list_lightgbm[37, ],
+#'       stringsAsFactors = FALSE
+#'     ),
+#'   ),
+#'   list(
+#'     objective = "binary",
+#'     metric = "binary_logloss"
+#'   ),
+#'   nrounds = 45L
+#' )
+#' lightgbm_cv$performance_metric_args <- list(positive = "1")
+#' lightgbm_cv$performance_metric <- mlexperiments::metric("auc")
+#' lightgbm_cv$performance_metric_name <- "AUC"
+#'
+#' # set data
+#' lightgbm_cv$set_data(
+#'   x = train_x,
+#'   y = train_y
+#' )
+#'
+#' lightgbm_cv$execute()
+#'
 #' @export
+#'
 LearnerLightgbm <- R6::R6Class( # nolint
   classname = "LearnerLightgbm",
   inherit = mlexperiments::MLLearnerBase,
   public = list(
+
+    #' @description
+    #' Create a new `LearnerLightgbm` object.
+    #'
+    #' @param metric_optimization_higher_better A logical. Defines the direction
+    #'  of the optimization metric used throughout the hyperparameter
+    #'  optimization.
+    #'
+    #' @return A new `LearnerLightgbm` R6 object.
+    #'
+    #' @examples
+    #' LearnerLightgbm$new(metric_optimization_higher_better = FALSE)
+    #'
     initialize = function(metric_optimization_higher_better) { # nolint
       if (!requireNamespace("lightgbm", quietly = TRUE)) {
         stop(
@@ -89,7 +175,7 @@ lightgbm_optimization <- function(
   # are ignored.
   lgb_fids <- kdry::mlh_outsample_row_indices(
     fold_list = fold_list,
-    training_data = nrow(x)
+    dataset_nrows = nrow(x)
   )
 
   params$num_threads <- ncores
