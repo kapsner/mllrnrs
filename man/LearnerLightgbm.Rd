@@ -7,6 +7,12 @@
 The `LearnerLightgbm` class is the interface to the `lightgbm` R package for
   use with the `mlexperiments` package.
 }
+\details{
+Can be used with
+* mlexperiments::MLTuneParameters
+* mlexperiments::MLCrossValidation
+* mlexperiments::MLNestedCVs
+}
 \examples{
 # binary classification
 
@@ -80,6 +86,9 @@ lightgbm_cv$execute()
 
 LearnerLightgbm$new(metric_optimization_higher_better = FALSE)
 
+}
+\seealso{
+[lightgbm::lgb.train()], [lightgbm::lgb.cv()]
 }
 \section{Super class}{
 \code{\link[mlexperiments:MLLearnerBase]{mlexperiments::MLLearnerBase}} -> \code{LearnerLightgbm}

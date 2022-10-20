@@ -8,6 +8,12 @@ The `LearnerSurvXgboostCox` class is the interface to perform a Cox
   regression with the `xgboost` R package for use with the `mlexperiments`
   package.
 }
+\details{
+Can be used with
+* mlexperiments::MLTuneParameters
+* mlexperiments::MLCrossValidation
+* mlexperiments::MLNestedCVs
+}
 \examples{
 # survival analysis
 
@@ -87,6 +93,9 @@ surv_xgboost_cox_optimizer$execute()
 
 LearnerSurvXgboostCox$new(metric_optimization_higher_better = FALSE)
 
+}
+\seealso{
+[xgboost::xgb.train()], [xgboost::xgb.cv()]
 }
 \section{Super classes}{
 \code{\link[mlexperiments:MLLearnerBase]{mlexperiments::MLLearnerBase}} -> \code{\link[mllrnrs:LearnerXgboost]{mllrnrs::LearnerXgboost}} -> \code{LearnerSurvXgboostCox}

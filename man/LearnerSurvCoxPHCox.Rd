@@ -4,11 +4,70 @@
 \alias{LearnerSurvCoxPHCox}
 \title{R6 Class to construct a Cox proportional hazards survival learner}
 \description{
-R6 Class to construct a Cox proportional hazards survival learner
-
-R6 Class to construct a Cox proportional hazards survival learner
+The `LearnerSurvXgboostCox` class is the interface to perform a Cox
+  regression with the `survival` R package for use with the `mlexperiments`
+  package.
+}
+\details{
+Can be used with
+* mlexperiments::MLCrossValidation
 }
 \examples{
+# survival analysis
+
+dataset <- survival::colon |>
+  data.table::as.data.table() |>
+  na.omit()
+dataset <- dataset[get("etype") == 2, ]
+
+seed <- 123
+surv_cols <- c("status", "time", "rx")
+
+feature_cols <- colnames(dataset)[3:(ncol(dataset) - 1)]
+
+split_vector <- splitTools::multi_strata(
+  df = dataset[, .SD, .SDcols = surv_cols],
+  strategy = "kmeans",
+  k = 4
+)
+
+train_x <- model.matrix(
+  ~ -1 + .,
+  dataset[, .SD, .SDcols = setdiff(feature_cols, surv_cols[1:2])]
+)
+train_y <- survival::Surv(
+  event = (dataset[, get("status")] |>
+             as.character() |>
+             as.integer()),
+  time = dataset[, get("time")],
+  type = "right"
+)
+
+fold_list <- splitTools::create_folds(
+  y = split_vector,
+  k = 3,
+  type = "stratified",
+  seed = seed
+)
+
+
+surv_coxph_cox_optimizer <- mlexperiments::MLCrossValidation$new(
+  learner = mllrnrs::LearnerSurvCoxPHCox$new(),
+  fold_list = fold_list,
+  ncores = -1L,
+  seed = seed
+)
+surv_coxph_cox_optimizer$performance_metric <- c_index
+surv_coxph_cox_optimizer$performance_metric_name <- "C-index"
+
+# set data
+surv_coxph_cox_optimizer$set_data(
+  x = train_x,
+  y = train_y
+)
+
+surv_coxph_cox_optimizer$execute()
+
 
 ## ------------------------------------------------
 ## Method `LearnerSurvCoxPHCox$new`
@@ -16,6 +75,9 @@ R6 Class to construct a Cox proportional hazards survival learner
 
 LearnerSurvCoxPHCox$new()
 
+}
+\seealso{
+[survival::coxph()]
 }
 \section{Super class}{
 \code{\link[mlexperiments:MLLearnerBase]{mlexperiments::MLLearnerBase}} -> \code{LearnerSurvCoxPHCox}

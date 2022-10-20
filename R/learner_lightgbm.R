@@ -4,6 +4,14 @@
 #' The `LearnerLightgbm` class is the interface to the `lightgbm` R package for
 #'   use with the `mlexperiments` package.
 #'
+#' @details
+#' Can be used with
+#' * mlexperiments::MLTuneParameters
+#' * mlexperiments::MLCrossValidation
+#' * mlexperiments::MLNestedCVs
+#'
+#' @seealso [lightgbm::lgb.train()], [lightgbm::lgb.cv()]
+#'
 #' @examples
 #' # binary classification
 #'

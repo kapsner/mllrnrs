@@ -7,6 +7,12 @@
 The `LearnerXgboost` class is the interface to the `xgboost` R package for
   use with the `mlexperiments` package.
 }
+\details{
+Can be used with
+* mlexperiments::MLTuneParameters
+* mlexperiments::MLCrossValidation
+* mlexperiments::MLNestedCVs
+}
 \examples{
 # binary classification
 
@@ -79,6 +85,9 @@ xgboost_cv$execute()
 
 LearnerXgboost$new(metric_optimization_higher_better = FALSE)
 
+}
+\seealso{
+[xgboost::xgb.train()], [xgboost::xgb.cv()]
 }
 \section{Super class}{
 \code{\link[mlexperiments:MLLearnerBase]{mlexperiments::MLLearnerBase}} -> \code{LearnerXgboost}

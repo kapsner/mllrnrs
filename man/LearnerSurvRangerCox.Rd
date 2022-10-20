@@ -4,11 +4,84 @@
 \alias{LearnerSurvRangerCox}
 \title{R6 Class to construct a Ranger survival learner for Cox regression}
 \description{
-R6 Class to construct a Ranger survival learner for Cox regression
-
-R6 Class to construct a Ranger survival learner for Cox regression
+The `LearnerSurvRangerCox` class is the interface to perform a Cox
+  regression with the `ranger` R package for use with the `mlexperiments`
+  package.
+}
+\details{
+Can be used with
+* mlexperiments::MLTuneParameters
+* mlexperiments::MLCrossValidation
+* mlexperiments::MLNestedCVs
 }
 \examples{
+# survival analysis
+
+dataset <- survival::colon |>
+  data.table::as.data.table() |>
+  na.omit()
+dataset <- dataset[get("etype") == 2, ]
+
+seed <- 123
+surv_cols <- c("status", "time", "rx")
+
+feature_cols <- colnames(dataset)[3:(ncol(dataset) - 1)]
+
+param_list_ranger <- expand.grid(
+  sample.fraction = seq(0.6, 1, .2),
+  min.node.size = seq(1, 5, 4),
+  mtry = seq(2, 6, 2),
+  num.trees = c(5L, 10L),
+  max.depth = seq(1, 5, 4)
+)
+
+ncores <- 2L
+
+split_vector <- splitTools::multi_strata(
+  df = dataset[, .SD, .SDcols = surv_cols],
+  strategy = "kmeans",
+  k = 4
+)
+
+train_x <- model.matrix(
+  ~ -1 + .,
+  dataset[, .SD, .SDcols = setdiff(feature_cols, surv_cols[1:2])]
+)
+train_y <- survival::Surv(
+  event = (dataset[, get("status")] |>
+             as.character() |>
+             as.integer()),
+  time = dataset[, get("time")],
+  type = "right"
+)
+
+fold_list <- splitTools::create_folds(
+  y = split_vector,
+  k = 3,
+  type = "stratified",
+  seed = seed
+)
+
+surv_ranger_cox_optimizer <- mlexperiments::MLCrossValidation$new(
+  learner = mllrnrs::LearnerSurvRangerCox$new(),
+  fold_list = fold_list,
+  ncores = ncores,
+  seed = seed
+)
+surv_ranger_cox_optimizer$learner_args <- as.list(
+  data.table::data.table(param_list_ranger[1, ], stringsAsFactors = FALSE)
+)
+surv_ranger_cox_optimizer$performance_metric <- c_index
+surv_ranger_cox_optimizer$performance_metric_name <- "C-index"
+
+# set data
+surv_ranger_cox_optimizer$set_data(
+  x = train_x,
+  y = train_y
+)
+
+surv_ranger_cox_optimizer$execute()
+
 
 ## ------------------------------------------------
 ## Method `LearnerSurvRangerCox$new`
@@ -16,6 +89,9 @@ R6 Class to construct a Ranger survival learner for Cox regression
 
 LearnerSurvRangerCox$new()
 
+}
+\seealso{
+[ranger::ranger()]
 }
 \section{Super class}{
 \code{\link[mlexperiments:MLLearnerBase]{mlexperiments::MLLearnerBase}} -> \code{LearnerSurvRangerCox}

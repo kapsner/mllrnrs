@@ -5,6 +5,14 @@
 #'   regression with the `xgboost` R package for use with the `mlexperiments`
 #'   package.
 #'
+#' @details
+#' Can be used with
+#' * mlexperiments::MLTuneParameters
+#' * mlexperiments::MLCrossValidation
+#' * mlexperiments::MLNestedCVs
+#'
+#' @seealso [xgboost::xgb.train()], [xgboost::xgb.cv()]
+#'
 #' @examples
 #' # survival analysis
 #'
