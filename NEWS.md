@@ -1,6 +1,6 @@
 # mllrnrs NEWS
 
-## Unreleased (2022-10-11)
+## Unreleased (2022-10-20)
 
 #### New features
 
@@ -36,10 +36,21 @@
 -   added package name to functions
     ([9622cfe](https://github.com/kapsner/mllrnrs/tree/9622cfeac556a3e8341078e138974a42b81b8c90))
 
+#### Docs
+
+-   working on documentation
+    ([36dc09e](https://github.com/kapsner/mllrnrs/tree/36dc09ed9a3964172320151ad9351df764de9c6d))
+-   started working on documentation
+    ([beaba4b](https://github.com/kapsner/mllrnrs/tree/beaba4bf2bf78dd39c1f0b4114ee98e8fc1a718e))
+
 #### Other changes
 
+-   updated readme, added lifecycle badge
+    ([5dd1d33](https://github.com/kapsner/mllrnrs/tree/5dd1d330f44fc4a25e4c6de63bd288d57576b846))
+-   updated news.md
+    ([03bbf65](https://github.com/kapsner/mllrnrs/tree/03bbf65aff08304f9bcaa6f22ea554a5bed39358))
 -   updated todos
     ([1f4a6b5](https://github.com/kapsner/mllrnrs/tree/1f4a6b52c1f9a64eb7143e99843618329182ca08))
 
 Full set of changes:
-[`ceea1ce...66d7534`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...66d7534)
+[`ceea1ce...36dc09e`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...36dc09e)

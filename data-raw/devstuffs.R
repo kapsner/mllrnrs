@@ -24,7 +24,7 @@ my_desc$set_version("0.0.0.9001")
 my_desc$set(Title = "R6-Based ML Learners for 'mlexperiments'")
 # The description of your package
 my_desc$set(Description = paste0(
-  "A set of ML learner to be used with the R package 'mlexperiments'."
+  "A set of ML learners to be used with the R package 'mlexperiments'."
 ))
 # The description of your package
 my_desc$set("Date/Publication" = paste(as.character(Sys.time()), "UTC"))
@@ -55,9 +55,11 @@ usethis::use_package("R", min_version = "2.10", type = "Depends")
 # https://cran.r-project.org/web/packages/data.table/vignettes/datatable-importing.html
 usethis::use_package("R6", type = "Imports")
 usethis::use_package("data.table", type = "Imports")
-usethis::use_package("mlexperiments", type = "Imports")
 usethis::use_package("kdry", type = "Imports")
 usethis::use_package("stats", type = "Imports")
+
+# Enhances
+usethis::use_package("mlexperiments", type = "Enhances")
 
 # Suggests
 usethis::use_package("testthat", type = "Suggests", min_version = "3.0.1")

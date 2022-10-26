@@ -4,7 +4,7 @@ Version: 0.0.0.9001
 Authors@R: 
     person("Lorenz A.", "Kapsner", , "lorenz.kapsner@gmail.com", role = c("cre", "aut", "cph"),
            comment = c(ORCID = "0000-0003-1866-860X"))
-Description: A set of ML learner to be used with the R package
+Description: A set of ML learners to be used with the R package
     'mlexperiments'.
 License: GPL (>= 3)
 URL: https://github.com/kapsner/mllrnrs
@@ -14,7 +14,6 @@ Depends:
 Imports: 
     data.table,
     kdry,
-    mlexperiments,
     R6,
     stats
 Suggests: 
@@ -28,6 +27,8 @@ Suggests:
     survival,
     testthat (>= 3.0.1),
     xgboost
+Enhances: 
+    mlexperiments
 VignetteBuilder: 
     knitr
 Remotes: 
@@ -35,6 +36,6 @@ Remotes:
     github::kapsner/mlexperiments@main
 Config/testthat/edition: 3
 Config/testthat/parallel: false
-Date/Publication: 2022-10-11 13:10:14 UTC
+Date/Publication: 2022-10-26 07:21:39 UTC
 Encoding: UTF-8
 RoxygenNote: 7.2.1
