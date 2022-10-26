@@ -8,7 +8,7 @@
 [![codecov](https://codecov.io/gh/kapsner/mllrnrs/branch/main/graph/badge.svg?branch=main)](https://app.codecov.io/gh/kapsner/mllrnrs)
 <!-- badges: end -->
 
-The goal of mllrnrs is to provide a set of R6-based learners that can be used with the [`mlexperiments`](https://github.com/kapsner/mlexperiments) R package.
+The goal of `mllrnrs` is to enhance the [`mlexperiments`](https://github.com/kapsner/mlexperiments) R package with learners. 
 
 Currently implemented are:
 
