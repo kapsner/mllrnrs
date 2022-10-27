@@ -109,7 +109,7 @@ LearnerSurvRangerCox <- R6::R6Class( # nolint
       self$environment <- "mllrnrs"
       self$cluster_export <- surv_ranger_cox_ce()
       private$fun_optim_cv <- surv_ranger_cox_optimization
-      private$fun_fit <- surv_ranger_cox_fit
+      private$fun_fit <- ranger_fit
       private$fun_predict <- surv_ranger_cox_predict
       private$fun_bayesian_scoring_function <- surv_ranger_cox_bsF
     }
@@ -118,8 +118,8 @@ LearnerSurvRangerCox <- R6::R6Class( # nolint
 
 
 surv_ranger_cox_ce <- function() {
-  c("surv_ranger_cox_optimization", "surv_ranger_cox_fit",
-    "surv_ranger_cox_predict", "c_index")
+  c("surv_ranger_cox_optimization", "ranger_fit",
+    "surv_ranger_cox_predict", "ranger_predict_base", "ranger_cv", "c_index")
 }
 
 surv_ranger_cox_bsF <- function(...) { # nolint
@@ -144,7 +144,6 @@ surv_ranger_cox_bsF <- function(...) { # nolint
   return(ret)
 }
 
-# tune lambda
 surv_ranger_cox_optimization <- function(
     x,
     y,
@@ -152,16 +151,21 @@ surv_ranger_cox_optimization <- function(
     fold_list,
     ncores,
     seed
-  ) {
-  stopifnot(
-    inherits(x = y, what = "Surv"),
-    is.list(params)
-  )
+) {
 
   # initialize a dataframe to store the results
   results_df <- data.table::data.table(
     "fold" = character(0),
     "metric" = numeric(0)
+  )
+
+  cvfit_list <- ranger_cv(
+    x = x,
+    y = y,
+    params = params,
+    fold_list = fold_list,
+    ncores = ncores,
+    seed = seed
   )
 
   # currently, there is no cross validation implemented in the ranger package.
@@ -170,28 +174,16 @@ surv_ranger_cox_optimization <- function(
   # from the parmeter grid-search.
 
   # loop over the folds
-  for (fold in names(fold_list)) {
+  for (fold in names(cvfit_list)) {
 
     # get row-ids of the current fold
-    ranger_train_idx <- fold_list[[fold]]
-
-    # train the model for this cv-fold
-    args <- kdry::list.append(
-      list(
-        x = x[ranger_train_idx, ],
-        y = y[ranger_train_idx, ],
-        ncores = ncores,
-        seed = seed
-      ),
-      params
-    )
-    set.seed(seed)
-    cvfit <- do.call(surv_ranger_cox_fit, args)
+    cvfit <- cvfit_list[[fold]][["cvfit"]]
+    ranger_train_idx <- cvfit_list[[fold]][["train_idx"]]
 
     # create predictions for calculating the c-index
     preds <- surv_ranger_cox_predict(
       model = cvfit,
-      newdata = x[-ranger_train_idx, ],
+      newdata = kdry::mlh_format_xy(x, -ranger_train_idx),
       cat_vars = params[["cat_vars"]],
       ncores = ncores
     )
@@ -199,7 +191,7 @@ surv_ranger_cox_optimization <- function(
     # calculate Harrell's c-index using the `glmnet::Cindex`-implementation
     perf <- c_index(
       predictions = preds,
-      ground_truth = y[-ranger_train_idx, ]
+      ground_truth = kdry::mlh_format_xy(y, -ranger_train_idx)
     )
 
 
@@ -227,57 +219,8 @@ surv_ranger_cox_optimization <- function(
   return(res)
 }
 
-# pass parameters as ...
-surv_ranger_cox_fit <- function(x, y, ncores, seed, ...) {
-  params <- list(...)
-
-  if ("cat_vars" %in% names(params)) {
-    cat_vars <- params[["cat_vars"]]
-    ranger_params <- params[names(params) != "cat_vars"]
-  } else {
-    cat_vars <- NULL
-    ranger_params <- params
-  }
-
-  x <- kdry::dtr_matrix2df(matrix = x, cat_vars = cat_vars)
-
-  args <- kdry::list.append(
-    list(
-      x = x,
-      y = y,
-      num.threads = ncores,
-      oob.error = TRUE
-    ),
-    ranger_params
-  )
-
-  set.seed(seed)
-  # fit the model
-  bst <- do.call(ranger::ranger, args)
-  return(bst)
-}
-
 surv_ranger_cox_predict <- function(model, newdata, ncores, ...) {
-
-  params <- list(...)
-
-  if ("cat_vars" %in% names(params)) {
-    cat_vars <- params[["cat_vars"]]
-    ranger_params <- params[names(params) != "cat_vars"]
-  } else {
-    cat_vars <- NULL
-    ranger_params <- params
-  }
-
-  predict_args <- kdry::list.append(
-    list(
-      object = model,
-      data = kdry::dtr_matrix2df(matrix = newdata, cat_vars = cat_vars),
-      num.threads = ncores,
-      type = "response"
-    ),
-    ranger_params
-  )
+  preds <- ranger_predict_base(model, newdata, ncores, ...)
 
   # From the docs:
   # For type = 'response' (the default), the [...] survival probabilities
@@ -285,7 +228,6 @@ surv_ranger_cox_predict <- function(model, newdata, ncores, ...) {
 
   # ranger returns the survival probability S(t), which is the conditional
   # probability that a subject survives >= t, given that is has survived until t
-  preds <- do.call(stats::predict, predict_args)
 
   # https://github.com/imbs-hl/ranger/issues/617#issuecomment-1144443486
   # Internally, ranger uses the sum of chf over time to calculate the c-index,
