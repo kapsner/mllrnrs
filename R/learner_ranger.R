@@ -5,6 +5,9 @@
 #'   with the `mlexperiments` package.
 #'
 #' @details
+#' Optimization metric:
+#' * classification: classification error rate
+#' * regression: mean squared error
 #' Can be used with
 #' * mlexperiments::MLTuneParameters
 #' * mlexperiments::MLCrossValidation
