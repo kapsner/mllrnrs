@@ -6,6 +6,7 @@
 #'   package.
 #'
 #' @details
+#' Optimization metric: C-index
 #' Can be used with
 #' * mlexperiments::MLTuneParameters
 #' * mlexperiments::MLCrossValidation
