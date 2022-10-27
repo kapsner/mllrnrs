@@ -6,6 +6,8 @@
 #'   package.
 #'
 #' @details
+#' Optimization metric: needs to be specified with the learner parameter
+#'   `eval_metric`.
 #' Can be used with
 #' * mlexperiments::MLTuneParameters
 #' * mlexperiments::MLCrossValidation
