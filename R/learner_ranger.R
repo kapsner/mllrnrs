@@ -241,7 +241,7 @@ ranger_optimization <- function(
       predictions = preds,
       ground_truth = kdry::mlh_subset(y, -ranger_train_idx)
     )
-    perf <- kdry::mlh_fix_performance_types(
+    perf <- mlexperiments::metric_types_helper(
       FUN = FUN,
       y = y,
       perf_args = perf_args
