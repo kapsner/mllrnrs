@@ -66,8 +66,11 @@ test_that(
           param_list_ranger[37, ],
           stringsAsFactors = FALSE
         )
-      )
+      ),
+      list(probability = TRUE)
     )
+    ranger_optimizer$predict_args <- list(prob = TRUE, positive = "1")
+
     ranger_optimizer$performance_metric_args <- list(positive = "1")
     ranger_optimizer$performance_metric <- mlexperiments::metric("auc")
     ranger_optimizer$performance_metric_name <- "AUC"
@@ -80,7 +83,7 @@ test_that(
 
     cv_results <- ranger_optimizer$execute()
     expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 7))
+    expect_equal(dim(cv_results), c(3, 8))
     expect_true(inherits(
       x = ranger_optimizer$results,
       what = "mlexCV"
@@ -183,6 +186,9 @@ test_that(
     ranger_optimizer$split_type <- "stratified"
     ranger_optimizer$optim_args <- optim_args
 
+    ranger_optimizer$learner_args <- list(probability = TRUE)
+    ranger_optimizer$predict_args <- list(prob = TRUE, positive = "1")
+
     ranger_optimizer$performance_metric_args <- list(positive = "1")
     ranger_optimizer$performance_metric <- mlexperiments::metric("auc")
     ranger_optimizer$performance_metric_name <- "AUC"
@@ -221,6 +227,9 @@ test_that(
     ranger_optimizer$parameter_grid <-
       param_list_ranger[random_grid, ]
     ranger_optimizer$split_type <- "stratified"
+
+    ranger_optimizer$learner_args <- list(probability = TRUE)
+    ranger_optimizer$predict_args <- list(prob = TRUE, positive = "1")
 
     ranger_optimizer$performance_metric_args <- list(positive = "1")
     ranger_optimizer$performance_metric <- mlexperiments::metric("auc")

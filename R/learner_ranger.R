@@ -328,6 +328,21 @@ ranger_predict_base <- function(model, newdata, ncores, ...) {
 }
 
 ranger_predict <- function(model, newdata, ncores, ...) {
-  preds <- ranger_predict_base(model, newdata, ncores, ...)
-  return(preds$predictions)
+  preds_obj <- ranger_predict_base(model, newdata, ncores, ...)
+  preds <- preds_obj$predictions
+  kwargs <- list(...)
+  if (!is.null(kwargs$reshape)) {
+    if (isTRUE(kwargs$reshape)) {
+      preds <- data.table::as.data.table(preds)[
+        , which.max(.SD) - 1L, by = seq_len(nrow(preds))
+      ][, get("V1")]
+    }
+  }
+  if (!is.null(kwargs$prob)) {
+    stopifnot(!is.null(kwargs$positive))
+    if (isTRUE(kwargs$prob)) {
+      preds <- data.table::as.data.table(preds)[, get(kwargs$positive)]
+    }
+  }
+  return(preds)
 }
