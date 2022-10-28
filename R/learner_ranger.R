@@ -212,10 +212,10 @@ ranger_optimization <- function(
   # check, if this is a classification context and select metric accordingly
   if (is.factor(y) || isTRUE(params$classification)) {
     msg <- "Classification: using 'classification error rate'"
-    FUN <- mlexperiments::metric("ce")
+    FUN <- mlexperiments::metric("ce") # nolint
   } else {
     msg <- "Regression: using 'mean squared error'"
-    FUN <- mlexperiments::metric("mse")
+    FUN <- mlexperiments::metric("mse") # nolint
   }
   message(paste(msg, "as optimization metric."))
 
