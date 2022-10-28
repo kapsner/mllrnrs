@@ -211,12 +211,13 @@ ranger_optimization <- function(
 
   # check, if this is a classification context and select metric accordingly
   if (is.factor(y) || isTRUE(params$classification)) {
-    message("Classification: using 'classification error rate' as metric")
+    msg <- "Classification: using 'classification error rate'"
     FUN <- mlexperiments::metric("ce")
   } else {
-    message("Regression: using 'mean squared error' as metric")
+    msg <- "Regression: using 'mean squared error'"
     FUN <- mlexperiments::metric("mse")
   }
+  message(paste(msg, "as optimization metric."))
 
   # currently, there is no cross validation implemented in the ranger package.
   # as the code has already been written for xgboost, I just adapt it here
@@ -230,12 +231,23 @@ ranger_optimization <- function(
     cvfit <- cvfit_list[[fold]][["cvfit"]]
     ranger_train_idx <- cvfit_list[[fold]][["train_idx"]]
 
-    preds <- ranger_predict(
+    pred_args <- list(
       model = cvfit,
       newdata = kdry::mlh_subset(x, -ranger_train_idx),
       cat_vars = params[["cat_vars"]],
       ncores = ncores
     )
+
+    # if probability = TRUE (in case of classification),
+    # we need to transform back to classes in order to be able to calculate
+    # the classification error metric
+    if (isTRUE(params$probability)) {
+      pred_args <- kdry::list.append(
+        pred_args, list(reshape = TRUE)
+      )
+    }
+
+    preds <- do.call(ranger_predict, pred_args)
 
     perf_args <- list(
       predictions = preds,
