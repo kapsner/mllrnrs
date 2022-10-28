@@ -9,9 +9,9 @@
 #' * classification: classification error rate
 #' * regression: mean squared error
 #' Can be used with
-#' * mlexperiments::MLTuneParameters
-#' * mlexperiments::MLCrossValidation
-#' * mlexperiments::MLNestedCVs
+#' * [mlexperiments::MLTuneParameters]
+#' * [mlexperiments::MLCrossValidation]
+#' * [mlexperiments::MLNestedCVs]
 #'
 #' @seealso [ranger::ranger()]
 #'
@@ -167,8 +167,8 @@ ranger_cv <- function(
     # train the model for this cv-fold
     args <- kdry::list.append(
       list(
-        x = kdry::mlh_format_xy(x, ranger_train_idx),
-        y = kdry::mlh_format_xy(y, ranger_train_idx),
+        x = kdry::mlh_subset(x, ranger_train_idx),
+        y = kdry::mlh_subset(y, ranger_train_idx),
         ncores = ncores,
         seed = seed
       ),
@@ -232,14 +232,19 @@ ranger_optimization <- function(
 
     preds <- ranger_predict(
       model = cvfit,
-      newdata = kdry::mlh_format_xy(x, -ranger_train_idx),
+      newdata = kdry::mlh_subset(x, -ranger_train_idx),
       cat_vars = params[["cat_vars"]],
       ncores = ncores
     )
 
-    perf <- FUN(
+    perf_args <- list(
       predictions = preds,
-      ground_truth = kdry::mlh_format_xy(y, -ranger_train_idx)
+      ground_truth = kdry::mlh_subset(y, -ranger_train_idx)
+    )
+    perf <- kdry::mlh_fix_performance_types(
+      FUN = FUN,
+      y = y,
+      perf_args = perf_args
     )
 
 

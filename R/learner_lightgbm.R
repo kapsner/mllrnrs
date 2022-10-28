@@ -8,9 +8,9 @@
 #' Optimization metric: needs to be specified with the learner parameter
 #'   `metric`.
 #' Can be used with
-#' * mlexperiments::MLTuneParameters
-#' * mlexperiments::MLCrossValidation
-#' * mlexperiments::MLNestedCVs
+#' * [mlexperiments::MLTuneParameters]
+#' * [mlexperiments::MLCrossValidation]
+#' * [mlexperiments::MLNestedCVs]
 #'
 #' @seealso [lightgbm::lgb.train()], [lightgbm::lgb.cv()]
 #'

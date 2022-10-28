@@ -10,7 +10,7 @@ The `LearnerSurvXgboostCox` class is the interface to perform a Cox
 }
 \details{
 Can be used with
-* mlexperiments::MLCrossValidation
+* [mlexperiments::MLCrossValidation]
 }
 \examples{
 # survival analysis

@@ -8,10 +8,12 @@ The `LearnerLightgbm` class is the interface to the `lightgbm` R package for
   use with the `mlexperiments` package.
 }
 \details{
+Optimization metric: needs to be specified with the learner parameter
+  `metric`.
 Can be used with
-* mlexperiments::MLTuneParameters
-* mlexperiments::MLCrossValidation
-* mlexperiments::MLNestedCVs
+* [mlexperiments::MLTuneParameters]
+* [mlexperiments::MLCrossValidation]
+* [mlexperiments::MLNestedCVs]
 }
 \examples{
 # binary classification

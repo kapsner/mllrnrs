@@ -8,10 +8,13 @@ The `LearnerRanger` class is the interface to the `ranger` R package for use
   with the `mlexperiments` package.
 }
 \details{
+Optimization metric:
+* classification: classification error rate
+* regression: mean squared error
 Can be used with
-* mlexperiments::MLTuneParameters
-* mlexperiments::MLCrossValidation
-* mlexperiments::MLNestedCVs
+* [mlexperiments::MLTuneParameters]
+* [mlexperiments::MLCrossValidation]
+* [mlexperiments::MLNestedCVs]
 }
 \examples{
 # binary classification

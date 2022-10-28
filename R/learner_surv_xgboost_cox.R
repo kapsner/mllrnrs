@@ -9,9 +9,9 @@
 #' Optimization metric: needs to be specified with the learner parameter
 #'   `eval_metric`.
 #' Can be used with
-#' * mlexperiments::MLTuneParameters
-#' * mlexperiments::MLCrossValidation
-#' * mlexperiments::MLNestedCVs
+#' * [mlexperiments::MLTuneParameters]
+#' * [mlexperiments::MLCrossValidation]
+#' * [mlexperiments::MLNestedCVs]
 #'
 #' @seealso [xgboost::xgb.train()], [xgboost::xgb.cv()]
 #'

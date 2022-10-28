@@ -8,9 +8,9 @@
 #' @details
 #' Optimization metric: C-index
 #' Can be used with
-#' * mlexperiments::MLTuneParameters
-#' * mlexperiments::MLCrossValidation
-#' * mlexperiments::MLNestedCVs
+#' * [mlexperiments::MLTuneParameters]
+#' * [mlexperiments::MLCrossValidation]
+#' * [mlexperiments::MLNestedCVs]
 #'
 #' @seealso [ranger::ranger()]
 #'
@@ -184,7 +184,7 @@ surv_ranger_cox_optimization <- function(
     # create predictions for calculating the c-index
     preds <- surv_ranger_cox_predict(
       model = cvfit,
-      newdata = kdry::mlh_format_xy(x, -ranger_train_idx),
+      newdata = kdry::mlh_subset(x, -ranger_train_idx),
       cat_vars = params[["cat_vars"]],
       ncores = ncores
     )
@@ -192,7 +192,7 @@ surv_ranger_cox_optimization <- function(
     # calculate Harrell's c-index using the `glmnet::Cindex`-implementation
     perf <- c_index(
       predictions = preds,
-      ground_truth = kdry::mlh_format_xy(y, -ranger_train_idx)
+      ground_truth = kdry::mlh_subset(y, -ranger_train_idx)
     )
 
 

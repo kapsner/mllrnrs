@@ -9,10 +9,11 @@ The `LearnerSurvRangerCox` class is the interface to perform a Cox
   package.
 }
 \details{
+Optimization metric: C-index
 Can be used with
-* mlexperiments::MLTuneParameters
-* mlexperiments::MLCrossValidation
-* mlexperiments::MLNestedCVs
+* [mlexperiments::MLTuneParameters]
+* [mlexperiments::MLCrossValidation]
+* [mlexperiments::MLNestedCVs]
 }
 \examples{
 # survival analysis

@@ -8,10 +8,12 @@ The `LearnerXgboost` class is the interface to the `xgboost` R package for
   use with the `mlexperiments` package.
 }
 \details{
+Optimization metric: needs to be specified with the learner parameter
+  `eval_metric`.
 Can be used with
-* mlexperiments::MLTuneParameters
-* mlexperiments::MLCrossValidation
-* mlexperiments::MLNestedCVs
+* [mlexperiments::MLTuneParameters]
+* [mlexperiments::MLCrossValidation]
+* [mlexperiments::MLNestedCVs]
 }
 \examples{
 # binary classification

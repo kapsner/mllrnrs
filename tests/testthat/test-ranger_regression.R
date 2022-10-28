@@ -1,11 +1,11 @@
 library(mlbench)
-data("PimaIndiansDiabetes2")
-dataset <- PimaIndiansDiabetes2 |>
+data("BostonHousing")
+dataset <- BostonHousing |>
   data.table::as.data.table() |>
   na.omit()
 
 seed <- 123
-feature_cols <- colnames(dataset)[1:8]
+feature_cols <- colnames(dataset)[1:13]
 
 param_list_ranger <- expand.grid(
   num.trees = seq(500, 1000, 500),
@@ -34,7 +34,7 @@ train_x <- model.matrix(
   ~ -1 + .,
   dataset[, .SD, .SDcols = feature_cols]
 )
-train_y <- factor(as.integer(dataset[, get("diabetes")]) - 1L)
+train_y <- dataset[, get("medv")]
 
 options("mlexperiments.bayesian.max_init" = 10L)
 
@@ -51,7 +51,7 @@ fold_list <- splitTools::create_folds(
 # ###########################################################################
 
 test_that(
-  desc = "test cv, binary - ranger",
+  desc = "test cv, regression - ranger",
   code = {
 
     ranger_optimizer <- mlexperiments::MLCrossValidation$new(
@@ -68,9 +68,8 @@ test_that(
         )
       )
     )
-    ranger_optimizer$performance_metric_args <- list(positive = "1")
-    ranger_optimizer$performance_metric <- mlexperiments::metric("auc")
-    ranger_optimizer$performance_metric_name <- "AUC"
+    ranger_optimizer$performance_metric <- mlexperiments::metric("msle")
+    ranger_optimizer$performance_metric_name <- "Mean squared error loss"
 
     # set data
     ranger_optimizer$set_data(
@@ -107,7 +106,7 @@ optim_args <- list(
 )
 
 test_that(
-  desc = "test bayesian tuner, parameter_grid, binary - ranger",
+  desc = "test bayesian tuner, parameter_grid, regression - ranger",
   code = {
 
     ranger_tuner <- mlexperiments::MLTuneParameters$new(
@@ -135,7 +134,7 @@ test_that(
 
 
 test_that(
-  desc = "test grid tuner, binary - ranger",
+  desc = "test grid tuner, regression - ranger",
   code = {
 
     ranger_tuner <- mlexperiments::MLTuneParameters$new(
@@ -166,7 +165,7 @@ test_that(
 # ###########################################################################
 
 test_that(
-  desc = "test nested cv, bayesian, binary - ranger",
+  desc = "test nested cv, bayesian, regression - ranger",
   code = {
 
     ranger_optimizer <- mlexperiments::MLNestedCV$new(
@@ -183,9 +182,8 @@ test_that(
     ranger_optimizer$split_type <- "stratified"
     ranger_optimizer$optim_args <- optim_args
 
-    ranger_optimizer$performance_metric_args <- list(positive = "1")
-    ranger_optimizer$performance_metric <- mlexperiments::metric("auc")
-    ranger_optimizer$performance_metric_name <- "AUC"
+    ranger_optimizer$performance_metric <- mlexperiments::metric("msle")
+    ranger_optimizer$performance_metric_name <- "Mean squared error loss"
 
     # set data
     ranger_optimizer$set_data(
@@ -222,9 +220,8 @@ test_that(
       param_list_ranger[random_grid, ]
     ranger_optimizer$split_type <- "stratified"
 
-    ranger_optimizer$performance_metric_args <- list(positive = "1")
-    ranger_optimizer$performance_metric <- mlexperiments::metric("auc")
-    ranger_optimizer$performance_metric_name <- "AUC"
+    ranger_optimizer$performance_metric <- mlexperiments::metric("msle")
+    ranger_optimizer$performance_metric_name <- "Mean squared error loss"
 
     # set data
     ranger_optimizer$set_data(
