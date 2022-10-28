@@ -20,6 +20,7 @@ Currently implemented are:
 | LearnerSurvRangerCox | `ranger::ranger` | Random Survival Forest for right-censored data |
 | LearnerXgboost | `xgboost::xgb.train` | General interface to `xgboost` (unit-tests available for objectives [`binary:logistic`](tests/testthat/test-xgboost_binary.R) , [`multi:softprob`](tests/testthat/test-xgboost_multiclass.R), and [`reg:squarederror`](tests/testthat/test-xgboost_regression.R) |
 | LearnerLightgbm | `lightgbm::lgb.train` | General interface to `lightgbm` (unit-tests available for objectives [`binary`](tests/testthat/test-lightgbm_binary.R) , [`multiclass`](tests/testthat/test-lightgbm_multiclass.R), and [`regression`](tests/testthat/test-lightgbm_regression.R) |
+| LearnerRanger | `ranger::ranger` | General interface to `ranger` (unit-tests available for tasks [`binary`](tests/testthat/test-ranger_binary.R) , [`multiclass`](tests/testthat/test-ranger_multiclass.R), and [`regression`](tests/testthat/test-ranger_regression.R) |
 
 ## Installation
 
@@ -32,6 +33,5 @@ remotes::install_github("kapsner/mllrnrs")
 
 ## Backlog
 
-- LearnerRanger
 - LearnerGlmnet
 - LearnerSurvXgboostAft
