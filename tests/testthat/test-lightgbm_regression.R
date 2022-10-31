@@ -79,7 +79,6 @@ test_that(
       nrounds = 45L
     )
     lightgbm_optimization$performance_metric <- mlexperiments::metric("msle")
-    lightgbm_optimization$performance_metric_name <- "Mean squared error loss"
 
     # set data
     lightgbm_optimization$set_data(
@@ -215,8 +214,6 @@ test_that(
       metric = "l2"
     )
     lightgbm_optimization$performance_metric <- mlexperiments::metric("msle")
-    lightgbm_optimization$performance_metric_name <- "Mean squared error loss"
-
     # set data
     lightgbm_optimization$set_data(
       x = train_x,
@@ -259,7 +256,6 @@ test_that(
       metric = "l2"
     )
     lightgbm_optimization$performance_metric <- mlexperiments::metric("msle")
-    lightgbm_optimization$performance_metric_name <- "Mean squared error loss"
 
     # set data
     lightgbm_optimization$set_data(

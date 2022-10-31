@@ -73,7 +73,6 @@ test_that(
 
     ranger_optimizer$performance_metric_args <- list(positive = "1")
     ranger_optimizer$performance_metric <- mlexperiments::metric("auc")
-    ranger_optimizer$performance_metric_name <- "AUC"
 
     # set data
     ranger_optimizer$set_data(
@@ -191,7 +190,6 @@ test_that(
 
     ranger_optimizer$performance_metric_args <- list(positive = "1")
     ranger_optimizer$performance_metric <- mlexperiments::metric("auc")
-    ranger_optimizer$performance_metric_name <- "AUC"
 
     # set data
     ranger_optimizer$set_data(
@@ -233,7 +231,6 @@ test_that(
 
     ranger_optimizer$performance_metric_args <- list(positive = "1")
     ranger_optimizer$performance_metric <- mlexperiments::metric("auc")
-    ranger_optimizer$performance_metric_name <- "AUC"
 
     # set data
     ranger_optimizer$set_data(

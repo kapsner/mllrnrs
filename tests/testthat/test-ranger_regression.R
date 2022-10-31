@@ -69,7 +69,6 @@ test_that(
       )
     )
     ranger_optimizer$performance_metric <- mlexperiments::metric("msle")
-    ranger_optimizer$performance_metric_name <- "Mean squared error loss"
 
     # set data
     ranger_optimizer$set_data(
@@ -183,7 +182,6 @@ test_that(
     ranger_optimizer$optim_args <- optim_args
 
     ranger_optimizer$performance_metric <- mlexperiments::metric("msle")
-    ranger_optimizer$performance_metric_name <- "Mean squared error loss"
 
     # set data
     ranger_optimizer$set_data(
@@ -221,7 +219,6 @@ test_that(
     ranger_optimizer$split_type <- "stratified"
 
     ranger_optimizer$performance_metric <- mlexperiments::metric("msle")
-    ranger_optimizer$performance_metric_name <- "Mean squared error loss"
 
     # set data
     ranger_optimizer$set_data(

@@ -85,7 +85,6 @@ test_that(
     nrounds = 45L
     )
     surv_xgboost_cox_optimizer$performance_metric <- c_index
-    surv_xgboost_cox_optimizer$performance_metric_name <- "C-index"
 
     # set data
     surv_xgboost_cox_optimizer$set_data(
@@ -212,7 +211,6 @@ test_that(
     surv_xgboost_cox_optimizer$optim_args <- optim_args
 
     surv_xgboost_cox_optimizer$performance_metric <- c_index
-    surv_xgboost_cox_optimizer$performance_metric_name <- "C-index"
 
     # set data
     surv_xgboost_cox_optimizer$set_data(
@@ -254,7 +252,6 @@ test_that(
     surv_xgboost_cox_optimizer$optim_args <- optim_args
 
     surv_xgboost_cox_optimizer$performance_metric <- c_index
-    surv_xgboost_cox_optimizer$performance_metric_name <- "C-index"
 
     # set data
     surv_xgboost_cox_optimizer$set_data(

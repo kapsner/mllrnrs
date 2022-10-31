@@ -80,7 +80,6 @@ test_that(
     )
     xgboost_optimizer$predict_args <- list(reshape = TRUE)
     xgboost_optimizer$performance_metric <- mlexperiments::metric("bacc")
-    xgboost_optimizer$performance_metric_name <- "Balanced accuracy"
 
     # set data
     xgboost_optimizer$set_data(
@@ -218,7 +217,6 @@ test_that(
     )
     xgboost_optimizer$predict_args <- list(reshape = TRUE)
     xgboost_optimizer$performance_metric <- mlexperiments::metric("bacc")
-    xgboost_optimizer$performance_metric_name <- "Balanced accuracy"
 
     # set data
     xgboost_optimizer$set_data(
@@ -264,7 +262,6 @@ test_that(
     )
     xgboost_optimizer$predict_args <- list(reshape = TRUE)
     xgboost_optimizer$performance_metric <- mlexperiments::metric("bacc")
-    xgboost_optimizer$performance_metric_name <- "Balanced accuracy"
 
     # set data
     xgboost_optimizer$set_data(

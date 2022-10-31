@@ -79,7 +79,6 @@ test_that(
     )
     xgboost_optimizer$performance_metric_args <- list(positive = "1")
     xgboost_optimizer$performance_metric <- mlexperiments::metric("auc")
-    xgboost_optimizer$performance_metric_name <- "AUC"
 
     # set data
     xgboost_optimizer$set_data(
@@ -214,7 +213,6 @@ test_that(
     )
     xgboost_optimizer$performance_metric_args <- list(positive = "1")
     xgboost_optimizer$performance_metric <- mlexperiments::metric("auc")
-    xgboost_optimizer$performance_metric_name <- "AUC"
 
     # set data
     xgboost_optimizer$set_data(
@@ -259,7 +257,6 @@ test_that(
     )
     xgboost_optimizer$performance_metric_args <- list(positive = "1")
     xgboost_optimizer$performance_metric <- mlexperiments::metric("auc")
-    xgboost_optimizer$performance_metric_name <- "AUC"
 
     # set data
     xgboost_optimizer$set_data(

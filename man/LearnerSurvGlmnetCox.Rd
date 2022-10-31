@@ -71,7 +71,6 @@ surv_glmnet_cox_optimizer$learner_args <- list(
   lambda = 0.002
 )
 surv_glmnet_cox_optimizer$performance_metric <- c_index
-surv_glmnet_cox_optimizer$performance_metric_name <- "C-index"
 
 # set data
 surv_glmnet_cox_optimizer$set_data(

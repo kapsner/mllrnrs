@@ -44,7 +44,6 @@ test_that(
       seed = seed
     )
     surv_coxph_cox_optimizer$performance_metric <- c_index
-    surv_coxph_cox_optimizer$performance_metric_name <- "C-index"
 
     # set data
     surv_coxph_cox_optimizer$set_data(

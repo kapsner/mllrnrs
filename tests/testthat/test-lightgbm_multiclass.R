@@ -81,7 +81,6 @@ test_that(
     )
     lightgbm_optimizer$predict_args <- list(reshape = TRUE)
     lightgbm_optimizer$performance_metric <- mlexperiments::metric("bacc")
-    lightgbm_optimizer$performance_metric_name <- "Balanced accuracy"
 
     # set data
     lightgbm_optimizer$set_data(
@@ -219,7 +218,6 @@ test_that(
     )
     lightgbm_optimizer$predict_args <- list(reshape = TRUE)
     lightgbm_optimizer$performance_metric <- mlexperiments::metric("bacc")
-    lightgbm_optimizer$performance_metric_name <- "Balanced accuracy"
 
     # set data
     lightgbm_optimizer$set_data(
@@ -265,7 +263,6 @@ test_that(
     )
     lightgbm_optimizer$predict_args <- list(reshape = TRUE)
     lightgbm_optimizer$performance_metric <- mlexperiments::metric("bacc")
-    lightgbm_optimizer$performance_metric_name <- "Balanced accuracy"
 
     # set data
     lightgbm_optimizer$set_data(

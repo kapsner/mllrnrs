@@ -70,7 +70,6 @@ test_that(
       list(classification = TRUE)
     )
     ranger_optimizer$performance_metric <- mlexperiments::metric("bacc")
-    ranger_optimizer$performance_metric_name <- "Balanced accuracy"
 
     # set data
     ranger_optimizer$set_data(
@@ -190,7 +189,6 @@ test_that(
     ranger_optimizer$learner_args <- list(classification = TRUE)
 
     ranger_optimizer$performance_metric <- mlexperiments::metric("msle")
-    ranger_optimizer$performance_metric_name <- "Mean squared error loss"
 
     # set data
     ranger_optimizer$set_data(
@@ -230,7 +228,6 @@ test_that(
     ranger_optimizer$learner_args <- list(classification = TRUE)
 
     ranger_optimizer$performance_metric <- mlexperiments::metric("msle")
-    ranger_optimizer$performance_metric_name <- "Mean squared error loss"
 
     # set data
     ranger_optimizer$set_data(

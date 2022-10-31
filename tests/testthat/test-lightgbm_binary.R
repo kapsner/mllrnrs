@@ -80,7 +80,6 @@ test_that(
     )
     lightgbm_optimizer$performance_metric_args <- list(positive = "1")
     lightgbm_optimizer$performance_metric <- mlexperiments::metric("auc")
-    lightgbm_optimizer$performance_metric_name <- "AUC"
 
     # set data
     lightgbm_optimizer$set_data(
@@ -215,7 +214,6 @@ test_that(
     )
     lightgbm_optimizer$performance_metric_args <- list(positive = "1")
     lightgbm_optimizer$performance_metric <- mlexperiments::metric("auc")
-    lightgbm_optimizer$performance_metric_name <- "AUC"
 
     # set data
     lightgbm_optimizer$set_data(
@@ -260,7 +258,6 @@ test_that(
     )
     lightgbm_optimizer$performance_metric_args <- list(positive = "1")
     lightgbm_optimizer$performance_metric <- mlexperiments::metric("auc")
-    lightgbm_optimizer$performance_metric_name <- "AUC"
 
     # set data
     lightgbm_optimizer$set_data(

@@ -64,7 +64,6 @@
 #' )
 #' ranger_cv$performance_metric_args <- list(positive = "1")
 #' ranger_cv$performance_metric <- mlexperiments::metric("auc")
-#' ranger_cv$performance_metric_name <- "AUC"
 #'
 #' # set data
 #' ranger_cv$set_data(
@@ -217,7 +216,7 @@ ranger_optimization <- function(
     msg <- "Regression: using 'mean squared error'"
     FUN <- mlexperiments::metric("mse") # nolint
   }
-  message(paste(msg, "as optimization metric."))
+  message(paste("\n", msg, "as optimization metric."))
 
   # currently, there is no cross validation implemented in the ranger package.
   # as the code has already been written for xgboost, I just adapt it here

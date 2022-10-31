@@ -77,7 +77,6 @@ test_that(
       data.table::data.table(param_list_ranger[1, ], stringsAsFactors = FALSE)
     )
     surv_ranger_cox_optimizer$performance_metric <- c_index
-    surv_ranger_cox_optimizer$performance_metric_name <- "C-index"
 
 
     # set data
@@ -197,7 +196,6 @@ test_that(
     surv_ranger_cox_optimizer$optim_args <- optim_args
 
     surv_ranger_cox_optimizer$performance_metric <- c_index
-    surv_ranger_cox_optimizer$performance_metric_name <- "C-index"
 
     # set data
     surv_ranger_cox_optimizer$set_data(
@@ -237,7 +235,6 @@ test_that(
     surv_ranger_cox_optimizer$optim_args <- optim_args
 
     surv_ranger_cox_optimizer$performance_metric <- c_index
-    surv_ranger_cox_optimizer$performance_metric_name <- "C-index"
 
     # set data
     surv_ranger_cox_optimizer$set_data(

@@ -78,7 +78,6 @@ test_that(
       nrounds = 45L
     )
     xgboost_optimizer$performance_metric <- mlexperiments::metric("msle")
-    xgboost_optimizer$performance_metric_name <- "Mean squared error loss"
 
     # set data
     xgboost_optimizer$set_data(
@@ -212,7 +211,6 @@ test_that(
       eval_metric = "rmse"
     )
     xgboost_optimizer$performance_metric <- mlexperiments::metric("msle")
-    xgboost_optimizer$performance_metric_name <- "Mean squared error loss"
 
     # set data
     xgboost_optimizer$set_data(
@@ -256,7 +254,6 @@ test_that(
       eval_metric = "rmse"
     )
     xgboost_optimizer$performance_metric <- mlexperiments::metric("msle")
-    xgboost_optimizer$performance_metric_name <- "Mean squared error loss"
 
     # set data
     xgboost_optimizer$set_data(

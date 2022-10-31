@@ -79,7 +79,6 @@ surv_xgboost_cox_optimizer$learner_args <- c(as.list(
 nrounds = 45L
 )
 surv_xgboost_cox_optimizer$performance_metric <- c_index
-surv_xgboost_cox_optimizer$performance_metric_name <- "C-index"
 
 # set data
 surv_xgboost_cox_optimizer$set_data(
