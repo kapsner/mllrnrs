@@ -120,13 +120,13 @@ glmnet_optimization <- function(
   }
 
   cv_args <- kdry::list.append(
+    params,
     list(
       x = x,
       y = y,
       foldid = glmnet_fids$fold_id,
       parallel = go_parallel
-    ),
-    params
+    )
   )
 
   set.seed(seed)

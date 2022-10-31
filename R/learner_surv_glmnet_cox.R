@@ -184,6 +184,7 @@ surv_glmnet_cox_optimization <- function(
   }
 
   cv_args <- kdry::list.append(
+    params,
     list(
       x = x,
       y = y,
@@ -192,8 +193,7 @@ surv_glmnet_cox_optimization <- function(
       type.measure = "C",
       parallel = go_parallel,
       standardize = TRUE
-    ),
-    params
+    )
   )
 
   set.seed(seed)
