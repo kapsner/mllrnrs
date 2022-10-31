@@ -94,8 +94,8 @@ surv_rpart_cox_bsF <- function(...) { # nolint
 
   stopifnot(inherits(y, "Surv"))
 
-  # call to surv_rpart_cox_optimization here with ncores = 1, since the Bayesian search
-  # is parallelized already / "FUN is fitted n times in m threads"
+  # call to surv_rpart_cox_optimization here with ncores = 1, since the Bayesian
+  # search is parallelized already / "FUN is fitted n times in m threads"
   set.seed(seed)#, kind = "L'Ecuyer-CMRG")
   bayes_opt_rpart <- surv_rpart_cox_optimization(
     x = x,

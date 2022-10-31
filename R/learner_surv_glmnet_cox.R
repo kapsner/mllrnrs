@@ -1,7 +1,7 @@
 #' @title R6 Class to construct a Glmnet survival learner for Cox regression
 #'
 #' @description
-#' The `LearnerSurvXgboostCox` class is the interface to perform a Cox
+#' The `LearnerSurvGlmnetCox` class is the interface to perform a Cox
 #'   regression with the `glmnet` R package for use with the `mlexperiments`
 #'   package.
 #'
@@ -120,7 +120,8 @@ surv_glmnet_cox_ce <- function() {
   c("surv_glmnet_cox_optimization", "surv_glmnet_cox_fit")
 }
 
-surv_glmnet_cox_bsF <- function(alpha) { # nolint
+surv_glmnet_cox_bsF <- function(...) { # nolint
+  kwargs <- list(...)
   # call to surv_glmnet_cox_optimization here with ncores = 1, since the
   # Bayesian search is parallelized already / "FUN is fitted n times
   # in m threads"
@@ -128,7 +129,7 @@ surv_glmnet_cox_bsF <- function(alpha) { # nolint
   bayes_opt_glmnet <- surv_glmnet_cox_optimization(
     x = x,
     y = y,
-    params = list("alpha" = alpha),
+    params = kwargs,
     fold_list = method_helper$fold_list,
     ncores = 1L, # important, as bayesian search is already parallelized
     seed = seed
@@ -182,18 +183,22 @@ surv_glmnet_cox_optimization <- function(
     go_parallel <- FALSE
   }
 
+  cv_args <- kdry::list.append(
+    list(
+      x = x,
+      y = y,
+      family = "cox",
+      foldid = glmnet_fids$fold_id,
+      type.measure = "C",
+      parallel = go_parallel,
+      standardize = TRUE
+    ),
+    params
+  )
+
   set.seed(seed)
   # fit the glmnet-cv-model
-  cvfit <- glmnet::cv.glmnet(
-    x = x,
-    y = y,
-    family = "cox",
-    foldids = glmnet_fids$fold_id,
-    type.measure = "C",
-    alpha = params$alpha,
-    parallel = go_parallel,
-    standardize = TRUE
-  )
+  cvfit <- do.call(glmnet::cv.glmnet, cv_args)
 
   res <- list(
     "metric_optim_mean" = max(cvfit$cvm),
@@ -205,20 +210,23 @@ surv_glmnet_cox_optimization <- function(
 
 surv_glmnet_cox_fit <- function(x, y, ncores, seed, ...) {
   kwargs <- list(...)
-  stopifnot("lambda" %in% names(kwargs),
-            "alpha" %in% names(kwargs))
-
-  set.seed(seed)
-  # train final model with a given lambda / alpha
-  fit <- glmnet::glmnet(
-    x = x,
-    y = y,
-    family = "cox",
-    standardize = TRUE,
-    alpha = kwargs$alpha,
-    lambda = kwargs$lambda
+  kwargs <- kdry::list.append(
+    kwargs,
+      list(
+      family = "cox",
+      standardize = TRUE
+    )
   )
-  return(fit)
+  fit_args <- kdry::list.append(
+    list(
+      x = x,
+      y = y,
+      ncores = ncores,
+      seed = seed
+    ),
+    kwargs
+  )
+  return(do.call(glmnet_fit, fit_args))
 }
 
 surv_glmnet_cox_predict <- function(model, newdata, ncores, ...) {

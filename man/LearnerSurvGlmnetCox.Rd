@@ -4,7 +4,7 @@
 \alias{LearnerSurvGlmnetCox}
 \title{R6 Class to construct a Glmnet survival learner for Cox regression}
 \description{
-The `LearnerSurvXgboostCox` class is the interface to perform a Cox
+The `LearnerSurvGlmnetCox` class is the interface to perform a Cox
   regression with the `glmnet` R package for use with the `mlexperiments`
   package.
 }
