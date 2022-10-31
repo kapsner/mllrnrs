@@ -65,9 +65,11 @@ LearnerSurvRpartCox <- R6::R6Class( # nolint
         metric_optimization_higher_better = TRUE # C-index
       )
       self$environment <- "mllrnrs"
-      self$cluster_export <- c("rpart_optimization", "rpart_fit",
-                               "rpart_predict")
-      private$fun_optim_cv <- rpart_optimization
+      self$cluster_export <- c(
+        "surv_rpart_cox_optimization", "surv_rpart_cox_fit",
+        "surv_rpart_cox_predict"
+      )
+      private$fun_optim_cv <- surv_rpart_cox_optimization
       private$fun_fit <- function(x, y, ncores, seed, ...) {
         kwargs <- list(...)
         stopifnot(kwargs$method == "exp",
@@ -78,24 +80,24 @@ LearnerSurvRpartCox <- R6::R6Class( # nolint
           ),
           kwargs
         )
-        return(do.call(rpart_fit, args))
+        return(do.call(surv_rpart_cox_fit, args))
       }
-      private$fun_predict <- rpart_predict
-      private$fun_bayesian_scoring_function <- rpart_bsF
+      private$fun_predict <- surv_rpart_cox_predict
+      private$fun_bayesian_scoring_function <- surv_rpart_cox_bsF
     }
   )
 )
 
 
-rpart_bsF <- function(...) { # nolint
+surv_rpart_cox_bsF <- function(...) { # nolint
   params <- list(...)
 
   stopifnot(inherits(y, "Surv"))
 
-  # call to rpart_optimization here with ncores = 1, since the Bayesian search
+  # call to surv_rpart_cox_optimization here with ncores = 1, since the Bayesian search
   # is parallelized already / "FUN is fitted n times in m threads"
   set.seed(seed)#, kind = "L'Ecuyer-CMRG")
-  bayes_opt_rpart <- rpart_optimization(
+  bayes_opt_rpart <- surv_rpart_cox_optimization(
     x = x,
     y = y,
     params = params,
@@ -112,7 +114,46 @@ rpart_bsF <- function(...) { # nolint
   return(ret)
 }
 
-rpart_optimization <- function(x, y, params, fold_list, ncores, seed) {
+
+surv_rpart_cox_cv <- function(
+    x,
+    y,
+    params,
+    fold_list,
+    ncores,
+    seed
+) {
+  stopifnot(inherits(y, "Surv"))
+
+  outlist <- list()
+
+  # loop over the folds
+  for (fold in names(fold_list)) {
+
+    # get row-ids of the current fold
+    train_idx <- fold_list[[fold]]
+
+    y_surv <- .subset_surv(y, train_idx, type = "right")
+
+    # train the model for this cv-fold
+    args <- kdry::list.append(
+      list(
+        y = y_surv,
+        x = kdry::mlh_subset(x, train_idx),
+        ncores = ncores,
+        seed = seed
+      ),
+      params
+    )
+    set.seed(seed)
+    cvfit <- do.call(surv_rpart_cox_fit, args)
+    outlist[[fold]] <- list(cvfit = cvfit,
+                            train_idx = train_idx)
+  }
+  return(outlist)
+}
+
+surv_rpart_cox_optimization <- function(x, y, params, fold_list, ncores, seed) {
   stopifnot(
     is.list(params),
     "method" %in% names(params),
@@ -128,7 +169,7 @@ rpart_optimization <- function(x, y, params, fold_list, ncores, seed) {
     ncores = ncores,
     seed = seed
   )
-  cv_fit_list <- do.call(mlexperiments:::rpart_cv, args)
+  cv_fit_list <- do.call(surv_rpart_cox_cv, args)
 
   # initialize a dataframe to store the results
   results_df <- data.table::data.table(
@@ -148,7 +189,7 @@ rpart_optimization <- function(x, y, params, fold_list, ncores, seed) {
       type = "vector"
     )
 
-    preds <- do.call(rpart_predict, pred_args)
+    preds <- do.call(surv_rpart_cox_predict, pred_args)
 
     perf <- c_index(
       predictions = preds,
@@ -174,10 +215,11 @@ rpart_optimization <- function(x, y, params, fold_list, ncores, seed) {
   return(res)
 }
 
-rpart_fit <- function(x, y, ncores, seed, ...) {
+surv_rpart_cox_fit <- function(x, y, ncores, seed, ...) {
   kwargs <- list(...)
   stopifnot("method" %in% names(kwargs),
-            kwargs$method == "exp")
+            kwargs$method == "exp",
+            inherits(y, "Surv"))
   fit_args <- kdry::list.append(
     list(
       x = x,
@@ -187,10 +229,10 @@ rpart_fit <- function(x, y, ncores, seed, ...) {
     ),
     kwargs
   )
-  return(do.call(mlexperiments:::rpart_fit_fun, fit_args))
+  return(do.call(mlexperiments:::rpart_fit, fit_args))
 }
 
-rpart_predict <- function(model, newdata, ncores, ...) {
+surv_rpart_cox_predict <- function(model, newdata, ncores, ...) {
   kwargs <- list(...)
 
   args <- list(

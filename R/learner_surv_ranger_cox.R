@@ -118,8 +118,8 @@ LearnerSurvRangerCox <- R6::R6Class( # nolint
 
 
 surv_ranger_cox_ce <- function() {
-  c("surv_ranger_cox_optimization", "ranger_fit",
-    "surv_ranger_cox_predict", "ranger_predict_base", "ranger_cv", "c_index")
+  c("surv_ranger_cox_optimization", "ranger_fit", "surv_ranger_cox_cv",
+    "surv_ranger_cox_predict", "ranger_predict_base", "c_index")
 }
 
 surv_ranger_cox_bsF <- function(...) { # nolint
@@ -144,6 +144,55 @@ surv_ranger_cox_bsF <- function(...) { # nolint
   return(ret)
 }
 
+# ranger-cv is not implemented yet
+surv_ranger_cox_cv <- function(
+    x,
+    y,
+    params,
+    fold_list,
+    ncores,
+    seed
+) {
+  stopifnot(
+    is.list(params)
+  )
+
+  outlist <- list()
+
+  # currently, there is no cross validation implemented in the ranger package.
+  # as the code has already been written for xgboost, I just adapt it here
+  # to work for survival models with ranger and to accept a list of parameters
+  # from the parmeter grid-search.
+
+  # loop over the folds
+  for (fold in names(fold_list)) {
+
+    # get row-ids of the current fold
+    ranger_train_idx <- fold_list[[fold]]
+
+    y_surv <- .subset_surv(y, ranger_train_idx, type = "right")
+
+    # train the model for this cv-fold
+    args <- kdry::list.append(
+      list(
+        x = kdry::mlh_subset(x, ranger_train_idx),
+        y = y_surv,
+        ncores = ncores,
+        seed = seed
+      ),
+      params
+    )
+
+    outlist[[fold]] <- list()
+
+    set.seed(seed)
+    outlist[[fold]][["cvfit"]] <- do.call(ranger_fit, args)
+    outlist[[fold]][["train_idx"]] <- ranger_train_idx
+
+  }
+  return(outlist)
+}
+
 surv_ranger_cox_optimization <- function(
     x,
     y,
@@ -159,7 +208,7 @@ surv_ranger_cox_optimization <- function(
     "metric" = numeric(0)
   )
 
-  cvfit_list <- ranger_cv(
+  cvfit_list <- surv_ranger_cox_cv(
     x = x,
     y = y,
     params = params,
