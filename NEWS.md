@@ -1,9 +1,11 @@
 # mllrnrs NEWS
 
-## Unreleased (2022-10-28)
+## Unreleased (2022-10-31)
 
 #### New features
 
+-   working on adding rpart for survival data
+    ([7e16ec8](https://github.com/kapsner/mllrnrs/tree/7e16ec8219b6b9aee42b0b12c8d5e08e752ea627))
 -   added learnerranger
     ([4966ff3](https://github.com/kapsner/mllrnrs/tree/4966ff3d2320de6868e6ce99fa5e3cb12f41be36))
 -   added lgb
@@ -15,6 +17,8 @@
 
 #### Bug fixes
 
+-   fixed ranger learner to work with all tasks
+    ([eec0a4f](https://github.com/kapsner/mllrnrs/tree/eec0a4f5dab8d00a24c10046ff8c7a02e5e3cdc7))
 -   adaptions to upstream changes
     ([e82693c](https://github.com/kapsner/mllrnrs/tree/e82693c3725313f13f57359d9656e595b3b22564))
 -   working on functioning of code
@@ -71,6 +75,8 @@
 
 #### Other changes
 
+-   updated message from learner
+    ([4e9f2c5](https://github.com/kapsner/mllrnrs/tree/4e9f2c5c9b005ad09a83010581b2f90b1b62875c))
 -   updated description
     ([6d169c5](https://github.com/kapsner/mllrnrs/tree/6d169c5da56da61146ac9181313a3db813ccfb4b))
 -   updated readme, added lifecycle badge
@@ -81,4 +87,4 @@
     ([1f4a6b5](https://github.com/kapsner/mllrnrs/tree/1f4a6b52c1f9a64eb7143e99843618329182ca08))
 
 Full set of changes:
-[`ceea1ce...dccc08a`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...dccc08a)
+[`ceea1ce...7e16ec8`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...7e16ec8)
