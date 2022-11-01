@@ -111,6 +111,7 @@ LearnerSurvXgboostCox <- R6::R6Class( # nolint
                          metric_optimization_higher_better)
       self$cluster_export <- surv_xgboost_cox_ce()
       private$fun_optim_cv <- surv_xgboost_cox_optimization
+      private$fun_bayesian_scoring_function <- surv_xgboost_cox_bsF
     }
   )
 )
@@ -119,6 +120,29 @@ LearnerSurvXgboostCox <- R6::R6Class( # nolint
 surv_xgboost_cox_ce <- function() {
   c("surv_xgboost_cox_optimization", "setup_surv_xgb_dataset",
     xgboost_ce())
+}
+
+
+surv_xgboost_cox_bsF <- function(...) { # nolint
+
+  params <- list(...)
+
+  set.seed(seed)#, kind = "L'Ecuyer-CMRG")
+  bayes_opt_xgboost <- surv_xgboost_cox_optimization(
+    x = x,
+    y = y,
+    params = params,
+    fold_list = method_helper$fold_list,
+    ncores = 1L, # important, as bayesian search is already parallelized
+    seed = seed
+  )
+
+  ret <- kdry::list.append(
+    list("Score" = bayes_opt_xgboost$metric_optim_mean),
+    bayes_opt_xgboost
+  )
+
+  return(ret)
 }
 
 # tune lambda

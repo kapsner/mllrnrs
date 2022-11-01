@@ -52,9 +52,18 @@ LearnerGlmnet$new()
 \subsection{Method \code{new()}}{
 Create a new `LearnerGlmnet` object.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{LearnerGlmnet$new()}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{LearnerGlmnet$new(metric_optimization_higher_better)}\if{html}{\out{</div>}}
 }
 
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{metric_optimization_higher_better}}{A logical. Defines the direction
+of the optimization metric used throughout the hyperparameter
+optimization.}
+}
+\if{html}{\out{</div>}}
+}
 \subsection{Returns}{
 A new `LearnerGlmnet` R6 object.
 }

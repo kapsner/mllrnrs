@@ -155,8 +155,13 @@ surv_glmnet_cox_optimization <- function(
   stopifnot(
     inherits(x = y, what = "Surv"),
     is.list(params),
-    length(params) == 1L,
-    names(params) == "alpha"
+    "alpha" %in% names(params),
+    (!sapply(
+      X = c("x", "y", "foldid", "standardize", "type.measure", "family"),
+      FUN = function(x) {
+        x %in% names(params)
+      }
+    ))
   )
 
   # from the documentation (help("glmnet::cv.glmnet")):
@@ -210,6 +215,12 @@ surv_glmnet_cox_optimization <- function(
 
 surv_glmnet_cox_fit <- function(x, y, ncores, seed, ...) {
   kwargs <- list(...)
+  stopifnot(!sapply(
+    X = c("x", "y", "family", "standardize"),
+    FUN = function(x) {
+      x %in% names(kwargs)
+    }
+  ))
   kwargs <- kdry::list.append(
     kwargs,
       list(

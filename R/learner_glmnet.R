@@ -25,12 +25,16 @@ LearnerGlmnet <- R6::R6Class( # nolint
     #' @description
     #' Create a new `LearnerGlmnet` object.
     #'
+    #' @param metric_optimization_higher_better A logical. Defines the direction
+    #'  of the optimization metric used throughout the hyperparameter
+    #'  optimization.
+    #'
     #' @return A new `LearnerGlmnet` R6 object.
     #'
     #' @examples
     #' LearnerGlmnet$new()
     #'
-    initialize = function() {
+    initialize = function(metric_optimization_higher_better) {
       if (!requireNamespace("glmnet", quietly = TRUE)) {
         stop(
           paste0(
@@ -40,13 +44,53 @@ LearnerGlmnet <- R6::R6Class( # nolint
           call. = FALSE
         )
       }
-      super$initialize(metric_optimization_higher_better = FALSE)
+      super$initialize0(
+        metric_optimization_higher_better = metric_optimization_higher_better
+      )
+      # type.measure:
+      # * default: "deviance" (lower = better), for gaussian models, logistic
+      #   and poisson regression
+      # * "class": misclassification error (lower = better), for binomial and
+      #   multinomial logistic regression
+      # * "auc": two-class logistic regression
       self$environment <- "mllrnrs"
       self$cluster_export <- glmnet_ce()
-      private$fun_optim_cv <- glmnet_optimization
+      private$fun_optim_cv <- function(...) {
+        kwargs <- list(...)
+        stopifnot(
+          "family" %in% names(kwargs$params),
+          "type.measure" %in% names(kwargs$params),
+          kwargs$params$family %in% c("gaussian", "binomial", "poisson",
+                               "multinomial", "mgaussian"),
+          kwargs$params$type.measure != "C",
+          ifelse(
+            test = kwargs$params$family == "binomial" &&
+              kwargs$params$type.measure == "auc",
+            yes = isTRUE(self$metric_optimization_higher_better),
+            no = isFALSE(self$metric_optimization_higher_better)
+          )
+        )
+        return(do.call(glmnet_optimization, kwargs))
+      }
       private$fun_fit <- glmnet_fit
       private$fun_predict <- glmnet_predict
-      private$fun_bayesian_scoring_function <- glmnet_bsF
+      private$fun_bayesian_scoring_function <- function(...) {
+        kwargs <- list(...)
+        stopifnot(
+          "family" %in% names(kwargs),
+          "type.measure" %in% names(kwargs),
+          kwargs$family %in% c("gaussian", "binomial", "poisson",
+                               "multinomial", "mgaussian"),
+          kwargs$type.measure != "C",
+          ifelse(
+            test = kwargs$family == "binomial" &&
+              kwargs$type.measure == "auc",
+            yes = isTRUE(self$metric_optimization_higher_better),
+            no = isFALSE(self$metric_optimization_higher_better)
+          )
+        )
+        return(do.call(glmnet_bsF, kwargs))
+      }
     }
   )
 )
@@ -89,10 +133,13 @@ glmnet_optimization <- function(
     seed
   ) {
   stopifnot(
-    inherits(x = y, what = "Surv"),
     is.list(params),
-    length(params) == 1L,
-    names(params) == "alpha"
+    (!sapply(
+      X = c("x", "y", "foldid"),
+      FUN = function(x) {
+        x %in% names(params)
+      }
+    ))
   )
 
   # from the documentation (help("glmnet::cv.glmnet")):
@@ -144,7 +191,13 @@ glmnet_optimization <- function(
 glmnet_fit <- function(x, y, ncores, seed, ...) {
   kwargs <- list(...)
   stopifnot("lambda" %in% names(kwargs),
-            "alpha" %in% names(kwargs))
+            "alpha" %in% names(kwargs),
+            (!sapply(
+              X = c("x", "y"),
+              FUN = function(x) {
+                x %in% names(params)
+              }
+            )))
 
   set.seed(seed)
   # train final model with a given lambda / alpha
