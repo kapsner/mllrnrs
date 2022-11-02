@@ -16,9 +16,10 @@ Currently implemented are:
 | ---- | -------- | ------------------- |
 | LearnerSurvCoxPHCox | `survival::coxph` | Cox Proportional Hazards Regression |
 | LearnerSurvGlmnetCox | `glmnet::glmnet` | Regularized Cox Regression |
-| LearnerSurvRangerCox | `ranger::ranger` | Random Survival Forest for right-censored data |
-| LearnerSurvRpartCox | `rpart::rpart` | Random Survival Forest for right-censored data |
-| LearnerSurvXgboostCox | `xgboost::xgb.train` | Cox Regression for right-censored data |
+| LearnerSurvRangerCox | `ranger::ranger` | Random Survival Forest with right-censored data |
+| LearnerSurvRpartCox | `rpart::rpart` | Random Survival Forest with right-censored data |
+| LearnerSurvXgboostCox | `xgboost::xgb.train` | Cox Regression with right-censored data |
+| LearnerSurvXgboostAft | `xgboost::xgb.train` | [Accelerated failure time models](https://xgboost.readthedocs.io/en/stable/tutorials/aft_survival_analysis.html) with right-censored data |
 | LearnerGlmnet | `glmnet::glmnet` | General interface to `glmnet` (unit-tests available for families [`binomial`](tests/testthat/test-glmnet_binary.R) , [`multinomial`](tests/testthat/test-glmnet_multiclass.R), and [`regression`](tests/testthat/test-glmnet_regression.R) |
 | LearnerLightgbm | `lightgbm::lgb.train` | General interface to `lightgbm` (unit-tests available for objectives [`binary`](tests/testthat/test-lightgbm_binary.R) , [`multiclass`](tests/testthat/test-lightgbm_multiclass.R), and [`regression`](tests/testthat/test-lightgbm_regression.R) |
 | LearnerRanger | `ranger::ranger` | General interface to `ranger` (unit-tests available for tasks [`binary`](tests/testthat/test-ranger_binary.R) , [`multiclass`](tests/testthat/test-ranger_multiclass.R), and [`regression`](tests/testthat/test-ranger_regression.R) |
@@ -32,7 +33,3 @@ To install the development version, run
 install.packages("remotes")
 remotes::install_github("kapsner/mllrnrs")
 ```
-
-## Backlog
-
-- LearnerSurvXgboostAft
