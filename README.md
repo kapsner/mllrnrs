@@ -10,7 +10,7 @@
 
 The goal of `mllrnrs` is to enhance the [`mlexperiments`](https://github.com/kapsner/mlexperiments) R package with learners. 
 
-Currently implemented are:
+Currently implemented learners are:
 
 | Name | Based on | Description / Tasks |
 | ---- | -------- | ------------------- |
