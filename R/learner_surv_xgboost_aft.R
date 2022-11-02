@@ -239,11 +239,10 @@ surv_xgboost_aft_optimization <- function(
     )
   }
 
-  nrounds <- mean(results_df$best_iteration)
-
   res <- list(
     "metric_optim_mean" = mean(results_df$metric),
-    "nrounds" = nrounds + ceiling(nrounds * (1 / length(fold_list)))
+    "nrounds" = mean(results_df$best_iteration)
+    #% nrounds + ceiling(nrounds * (1 / length(fold_list)))
   )
 
   return(res)
