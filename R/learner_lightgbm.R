@@ -284,9 +284,7 @@ lightgbm_predict <- function(model, newdata, ncores, ...) {
   preds <- do.call(stats::predict, args)
   if (!is.null(kwargs$reshape)) {
     if (isTRUE(kwargs$reshape)) {
-      preds <- data.table::as.data.table(preds)[
-        , which.max(.SD) - 1L, by = seq_len(nrow(preds))
-      ][, get("V1")]
+      preds <- kdry::mlh_reshape(preds)
     }
   }
   return(preds)

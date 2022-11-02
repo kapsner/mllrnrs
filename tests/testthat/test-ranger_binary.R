@@ -4,7 +4,7 @@ dataset <- PimaIndiansDiabetes2 |>
   data.table::as.data.table() |>
   na.omit()
 
-seed <- 123
+seed <- 312
 feature_cols <- colnames(dataset)[1:8]
 
 param_list_ranger <- expand.grid(

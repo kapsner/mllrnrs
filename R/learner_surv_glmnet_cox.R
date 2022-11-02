@@ -206,7 +206,7 @@ surv_glmnet_cox_optimization <- function(
   cvfit <- do.call(glmnet::cv.glmnet, cv_args)
 
   res <- list(
-    "metric_optim_mean" = max(cvfit$cvm),
+    "metric_optim_mean" = max(cvfit$cvm), # we are optimizing the C-index
     "lambda" = cvfit$lambda.min
   )
 

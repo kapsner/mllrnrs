@@ -133,12 +133,10 @@ surv_rpart_cox_cv <- function(
     # get row-ids of the current fold
     train_idx <- fold_list[[fold]]
 
-    y_surv <- .subset_surv(y, train_idx, type = "right")
-
     # train the model for this cv-fold
     args <- kdry::list.append(
       list(
-        y = y_surv,
+        y = kdry::mlh_subset(y, train_idx),
         x = kdry::mlh_subset(x, train_idx),
         ncores = ncores,
         seed = seed

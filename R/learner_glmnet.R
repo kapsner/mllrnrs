@@ -34,7 +34,7 @@ LearnerGlmnet <- R6::R6Class( # nolint
     #' @examples
     #' LearnerGlmnet$new()
     #'
-    initialize = function(metric_optimization_higher_better) {
+    initialize = function(metric_optimization_higher_better) { # nolint
       if (!requireNamespace("glmnet", quietly = TRUE)) {
         stop(
           paste0(
@@ -44,7 +44,7 @@ LearnerGlmnet <- R6::R6Class( # nolint
           call. = FALSE
         )
       }
-      super$initialize0(
+      super$initialize(
         metric_optimization_higher_better = metric_optimization_higher_better
       )
       # type.measure:
@@ -58,17 +58,14 @@ LearnerGlmnet <- R6::R6Class( # nolint
       private$fun_optim_cv <- function(...) {
         kwargs <- list(...)
         stopifnot(
-          "family" %in% names(kwargs$params),
-          "type.measure" %in% names(kwargs$params),
-          kwargs$params$family %in% c("gaussian", "binomial", "poisson",
-                               "multinomial", "mgaussian"),
-          kwargs$params$type.measure != "C",
-          ifelse(
-            test = kwargs$params$family == "binomial" &&
-              kwargs$params$type.measure == "auc",
-            yes = isTRUE(self$metric_optimization_higher_better),
-            no = isFALSE(self$metric_optimization_higher_better)
-          )
+          (sapply(
+            X = c("family", "type.measure"),
+            FUN = function(x) {
+              x %in% names(kwargs$params)
+            }
+          )),
+          .check_glmnet_params(kwargs$params,
+                               self$metric_optimization_higher_better)
         )
         return(do.call(glmnet_optimization, kwargs))
       }
@@ -77,23 +74,34 @@ LearnerGlmnet <- R6::R6Class( # nolint
       private$fun_bayesian_scoring_function <- function(...) {
         kwargs <- list(...)
         stopifnot(
-          "family" %in% names(kwargs),
-          "type.measure" %in% names(kwargs),
-          kwargs$family %in% c("gaussian", "binomial", "poisson",
-                               "multinomial", "mgaussian"),
-          kwargs$type.measure != "C",
-          ifelse(
-            test = kwargs$family == "binomial" &&
-              kwargs$type.measure == "auc",
-            yes = isTRUE(self$metric_optimization_higher_better),
-            no = isFALSE(self$metric_optimization_higher_better)
-          )
+          (sapply(
+            X = c("family", "type.measure"),
+            FUN = function(x) {
+              x %in% names(kwargs)
+            }
+          )),
+          .check_glmnet_params(kwargs, self$metric_optimization_higher_better)
         )
         return(do.call(glmnet_bsF, kwargs))
       }
     }
   )
 )
+
+.check_glmnet_params <- function(params, higher_better) {
+  stopifnot(
+    params$family %in% c("gaussian", "binomial", "poisson",
+                         "multinomial", "mgaussian"),
+    params$type.measure != "C",
+    ifelse(
+      test = params$family == "binomial" &&
+        params$type.measure == "auc",
+      yes = isTRUE(higher_better),
+      no = isFALSE(higher_better)
+    )
+  )
+  TRUE
+}
 
 
 glmnet_ce <- function() {
@@ -134,12 +142,25 @@ glmnet_optimization <- function(
   ) {
   stopifnot(
     is.list(params),
+    (sapply(
+      X = c("alpha", "family", "type.measure"),
+      FUN = function(x) {
+        x %in% names(params)
+      }
+    )),
     (!sapply(
       X = c("x", "y", "foldid"),
       FUN = function(x) {
         x %in% names(params)
       }
     ))
+  )
+
+  FUN <- ifelse( # nolint
+    test = params$family == "binomial" &&
+      params$type.measure == "auc",
+    yes = max,
+    no = min
   )
 
   # from the documentation (help("glmnet::cv.glmnet")):
@@ -181,7 +202,7 @@ glmnet_optimization <- function(
   cvfit <- do.call(glmnet::cv.glmnet, cv_args)
 
   res <- list(
-    "metric_optim_mean" = max(cvfit$cvm),
+    "metric_optim_mean" = FUN(cvfit$cvm),
     "lambda" = cvfit$lambda.min
   )
 
@@ -190,12 +211,16 @@ glmnet_optimization <- function(
 
 glmnet_fit <- function(x, y, ncores, seed, ...) {
   kwargs <- list(...)
-  stopifnot("lambda" %in% names(kwargs),
-            "alpha" %in% names(kwargs),
+  stopifnot((sapply(
+              X = c("lambda", "alpha", "family"),
+              FUN = function(x) {
+                x %in% names(kwargs)
+              }
+            )),
             (!sapply(
               X = c("x", "y"),
               FUN = function(x) {
-                x %in% names(params)
+                x %in% names(kwargs)
               }
             )))
 
@@ -214,7 +239,20 @@ glmnet_fit <- function(x, y, ncores, seed, ...) {
 
 glmnet_predict <- function(model, newdata, ncores, ...) {
   kwargs <- list(...) # nolint
-  # From the docs:
-  # Type "response" gives [...] the fitted relative-risk for "cox".
-  return(stats::predict(model, newx = newdata, type = "response")[, 1])
+  pred_args <- kdry::list.append(
+    list(
+      object = model,
+      newx = newdata
+    ),
+    kwargs
+  )
+  preds <- do.call(stats::predict, pred_args)
+  if (!is.null(kwargs$reshape)) {
+    if (isTRUE(kwargs$reshape)) {
+      preds <-  preds[, , 1]
+      preds <- kdry::mlh_reshape(preds)
+    }
+  } else {
+    preds <- preds[, 1]
+  }
 }
