@@ -224,8 +224,6 @@ glmnet_fit <- function(x, y, ncores, seed, ...) {
               }
             )))
 
-  set.seed(seed)
-  # train final model with a given lambda / alpha
   fit_args <- kdry::list.append(
     list(
       x = x,
@@ -233,6 +231,8 @@ glmnet_fit <- function(x, y, ncores, seed, ...) {
     ),
     kwargs
   )
+  set.seed(seed)
+  # train final model with a given lambda / alpha
   fit <- do.call(glmnet::glmnet, fit_args)
   return(fit)
 }

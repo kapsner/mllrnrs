@@ -1,9 +1,17 @@
 # mllrnrs NEWS
 
-## Unreleased (2022-10-31)
+## Unreleased (2022-11-02)
 
 #### New features
 
+-   added xgboost aft survival learner
+    ([c079e56](https://github.com/kapsner/mllrnrs/tree/c079e56eecc4461cdb5334bca60830024c84883b))
+-   finalized glmnet learner0
+    ([f27e4e6](https://github.com/kapsner/mllrnrs/tree/f27e4e6b5cbdba7616acae247628a5560ccede9c))
+-   working on glmnet learner
+    ([101b15b](https://github.com/kapsner/mllrnrs/tree/101b15bac5795ee285a36e7c9b312c0443062499))
+-   working on adding glmnet learner (wip)
+    ([2adaf40](https://github.com/kapsner/mllrnrs/tree/2adaf405a30679fb49233f5f4a42279e0d688541))
 -   working on adding rpart for survival data
     ([7e16ec8](https://github.com/kapsner/mllrnrs/tree/7e16ec8219b6b9aee42b0b12c8d5e08e752ea627))
 -   added learnerranger
@@ -17,6 +25,10 @@
 
 #### Bug fixes
 
+-   back to arithmetic mean of nrounds for xgboost aft models
+    ([9771479](https://github.com/kapsner/mllrnrs/tree/9771479c6ba609f5b950d39cdc2154ede57c6a0c))
+-   fixed issues with rpart survival learner
+    ([9c64352](https://github.com/kapsner/mllrnrs/tree/9c643525dea8863a40be5792fb9e8dac79b0b616))
 -   fixed ranger learner to work with all tasks
     ([eec0a4f](https://github.com/kapsner/mllrnrs/tree/eec0a4f5dab8d00a24c10046ff8c7a02e5e3cdc7))
 -   adaptions to upstream changes
@@ -26,6 +38,8 @@
 
 #### Refactorings
 
+-   changed order of list to be updated
+    ([066eb5a](https://github.com/kapsner/mllrnrs/tree/066eb5a05408e92025c570b58def13c29ed25bab))
 -   to metric\_types\_helper from mlexperiments
     ([1099f1a](https://github.com/kapsner/mllrnrs/tree/1099f1aac600c2cac41a789ca5bdfcc91f2f802b))
 -   code adaptions to upstream changes
@@ -50,6 +64,8 @@
 
 #### Docs
 
+-   updated readme
+    ([b14b176](https://github.com/kapsner/mllrnrs/tree/b14b17683dc8a54eb843b54aa1f562ffc7354285))
 -   updated learner table
     ([29298aa](https://github.com/kapsner/mllrnrs/tree/29298aac830529dbabcb1d6f0351c9c2fa14d90d))
 -   updated details
@@ -75,6 +91,8 @@
 
 #### Other changes
 
+-   updated description and news.md
+    ([00c72da](https://github.com/kapsner/mllrnrs/tree/00c72da72cc1cba4b2d67c8f6d7de234f7baa181))
 -   updated message from learner
     ([4e9f2c5](https://github.com/kapsner/mllrnrs/tree/4e9f2c5c9b005ad09a83010581b2f90b1b62875c))
 -   updated description
@@ -87,4 +105,4 @@
     ([1f4a6b5](https://github.com/kapsner/mllrnrs/tree/1f4a6b52c1f9a64eb7143e99843618329182ca08))
 
 Full set of changes:
-[`ceea1ce...7e16ec8`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...7e16ec8)
+[`ceea1ce...b14b176`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...b14b176)

@@ -26,6 +26,7 @@ Suggests:
     rpart,
     splitTools,
     survival,
+    survivalsvm,
     testthat (>= 3.0.1),
     xgboost
 Enhances: 
@@ -37,6 +38,6 @@ Remotes:
     github::kapsner/mlexperiments@main
 Config/testthat/edition: 3
 Config/testthat/parallel: false
-Date/Publication: 2022-10-31 16:46:27 UTC
+Date/Publication: 2022-11-03 09:05:00 UTC
 Encoding: UTF-8
 RoxygenNote: 7.2.1
