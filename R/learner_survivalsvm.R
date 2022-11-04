@@ -68,7 +68,8 @@
 #'   seed = seed
 #' )
 #' surv_survivalsvm_optimizer$learner_args <- as.list(
-#'   data.table::data.table(param_list_survivalsvm[1, ], stringsAsFactors = FALSE)
+#'   data.table::data.table(param_list_survivalsvm[1, ],
+#'                          stringsAsFactors = FALSE)
 #' )
 #' surv_survivalsvm_optimizer$performance_metric <- c_index
 #'
@@ -219,10 +220,11 @@ surv_survivalsvm_optimization <- function(
     seed = seed
   )
 
-  # currently, there is no cross validation implemented in the Survivalsvm package.
+  # currently, there is no cross validation implemented in the Survivalsvm
+  # package.
   # as the code has already been written for xgboost, I just adapt it here
-  # to work for survival models with Survivalsvm and to accept a list of parameters
-  # from the parmeter grid-search.
+  # to work for survival models with Survivalsvm and to accept a list of
+  # parameters from the parmeter grid-search.
 
   # loop over the folds
   for (fold in names(cvfit_list)) {
@@ -305,15 +307,15 @@ surv_survivalsvm_fit <- function(x, y, ncores, seed, ...) {
     svm_params
   )
 
-  # initialize the parallel backend, if required
-  # if (ncores > 1L) {
-  #   cl <- kdry::pch_register_parallel(ncores)
-  #   on.exit(
-  #     expr = {
-  #       kdry::pch_clean_up(cl)
-  #     }
-  #   )
-  # }
+  #% initialize the parallel backend, if required
+  #% if (ncores > 1L) {
+  #%   cl <- kdry::pch_register_parallel(ncores)
+  #%   on.exit(
+  #%     expr = {
+  #%       kdry::pch_clean_up(cl)
+  #%     }
+  #%   )
+  #% }
 
   set.seed(seed)
   # train final model
