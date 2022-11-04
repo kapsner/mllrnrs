@@ -1,7 +1,7 @@
 #' @title R6 Class to construct a Support Vector Machine survival learner
 #'
 #' @description
-#' The `LearnerSurvSurvivalsvm` class is the interface to the `Survivalsvm`
+#' The `LearnerSurvSurvivalsvm` class is the interface to the `survivalsvm`
 #'   R package for use with the `mlexperiments` package.
 #'
 #' @details
