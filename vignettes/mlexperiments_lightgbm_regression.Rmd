@@ -1,9 +1,9 @@
 ---
-title: "rpart: Regression"
+title: "lightgbm: Regression"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEncoding{UTF-8}
-  %\VignetteIndexEntry{rpart: Regression}
+  %\VignetteIndexEntry{lightgbm: Regression}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
@@ -21,7 +21,7 @@ library(mlexperiments)
 library(mllrnrs)
 ```
 
-See [https://github.com/kapsner/mllrnrs/blob/main/R/learner_lightgmb.R](https://github.com/kapsner/mllrnrs/blob/main/R/learner_lightgmb.R) for implementation details.
+See [https://github.com/kapsner/mllrnrs/blob/main/R/learner_lightgbm.R](https://github.com/kapsner/mllrnrs/blob/main/R/learner_lightgbm.R) for implementation details.
 
 # Preprocessing
 
@@ -310,7 +310,7 @@ head(validator_results)
 ### Predict Outcome in Holdout Test Dataset
 
 ```{r}
-preds_lightgmb <- mlexperiments::predictions(
+preds_lightgbm <- mlexperiments::predictions(
   object = validator,
   newdata = test_x
 )
@@ -319,11 +319,11 @@ preds_lightgmb <- mlexperiments::predictions(
 ### Evaluate Performance on Holout Test Dataset
 
 ```{r}
-perf_lightgmb <- mlexperiments::performance(
+perf_lightgbm <- mlexperiments::performance(
   object = validator,
-  prediction_results = preds_lightgmb,
+  prediction_results = preds_lightgbm,
   y_ground_truth = test_y,
   type = "regression"
 )
-perf_lightgmb
+perf_lightgbm
 ```

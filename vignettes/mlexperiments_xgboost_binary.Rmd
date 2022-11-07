@@ -1,9 +1,9 @@
 ---
-title: "lightgbm: Binary Classification"
+title: "xgboost: Binary Classification"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEncoding{UTF-8}
-  %\VignetteIndexEntry{lightgbm: Binary Classification}
+  %\VignetteIndexEntry{xgboost: Binary Classification}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
@@ -21,7 +21,7 @@ library(mlexperiments)
 library(mllrnrs)
 ```
 
-See [https://github.com/kapsner/mllrnrs/blob/main/R/learner_lightgbm.R](https://github.com/kapsner/mllrnrs/blob/main/R/learner_lightgbm.R) for implementation details.
+See [https://github.com/kapsner/mllrnrs/blob/main/R/learner_xgboost.R](https://github.com/kapsner/mllrnrs/blob/main/R/learner_xgboost.R) for implementation details.
 
 # Preprocessing
 
@@ -29,13 +29,13 @@ See [https://github.com/kapsner/mllrnrs/blob/main/R/learner_lightgbm.R](https://
 
 ```{r}
 library(mlbench)
-data("DNA")
-dataset <- DNA |>
+data("PimaIndiansDiabetes2")
+dataset <- PimaIndiansDiabetes2 |>
   data.table::as.data.table() |>
   na.omit()
 
-feature_cols <- colnames(dataset)[1:180]
-target_col <- "Class"
+feature_cols <- colnames(dataset)[1:8]
+target_col <- "diabetes"
 ```
 
 ## General Configurarions
@@ -57,8 +57,8 @@ if (isTRUE(as.logical(Sys.getenv("_R_CHECK_LIMIT_CORES_")))) {
   )
 }
 options("mlexperiments.bayesian.max_init" = 10L)
-options("mlexperiments.optim.lgb.nrounds" = 100L)
-options("mlexperiments.optim.lgb.early_stopping_rounds" = 10L)
+options("mlexperiments.optim.xgb.nrounds" = 100L)
+options("mlexperiments.optim.xgb.early_stopping_rounds" = 10L)
 ```
 
 ## Generate Training- and Test Data
@@ -103,27 +103,25 @@ fold_list <- splitTools::create_folds(
 ```{r}
 # required learner arguments, not optimized
 learner_args <- list(
-  objective = "multiclass",
-  metric = "multi_logloss",
-  num_class = "3"
+  objective = "binary:logistic",
+  eval_metric = "logloss"
 )
 
 # set arguments for predict function and performance metric,
 # required for mlexperiments::MLCrossValidation and
 # mlexperiments::MLNestedCV
-predict_args <- list(reshape = TRUE)
-performance_metric <- metric("bacc")
-performance_metric_args <- NULL
+predict_args <- NULL
+performance_metric <- metric("auc")
+performance_metric_args <- list(positive = "1")
 return_models <- FALSE
 
 # required for grid search and initialization of bayesian optimization
 parameter_grid <- expand.grid(
-  bagging_fraction = seq(0.6, 1, .2),
-  feature_fraction = seq(0.6, 1, .2),
-  min_data_in_leaf = seq(10, 50, 10),
+  subsample = seq(0.6, 1, .2),
+  colsample_bytree = seq(0.6, 1, .2),
+  min_child_weight = seq(1, 5, 4),
   learning_rate = seq(0.1, 0.2, 0.1),
-  num_leaves = seq(10, 50, 10),
-  max_depth = -1L
+  max_depth = seq(1, 5, 4)
 )
 # reduce to a maximum of 10 rows
 if (nrow(parameter_grid) > 10) {
@@ -134,11 +132,11 @@ if (nrow(parameter_grid) > 10) {
 
 # required for bayesian optimization
 parameter_bounds <- list(
-  bagging_fraction = c(0.2, 1),
-  feature_fraction = c(0.2, 1),
-  min_data_in_leaf = c(10L, 50L),
+  subsample = c(0.2, 1),
+  colsample_bytree = c(0.2, 1),
+  min_child_weight = c(1L, 10L),
   learning_rate = c(0.1, 0.2),
-  num_leaves =  c(10L, 50L)
+  max_depth =  c(1L, 10L)
 )
 optim_args <- list(
   iters.n = ncores,
@@ -154,7 +152,7 @@ optim_args <- list(
 
 ```{r}
 tuner <- mlexperiments::MLTuneParameters$new(
-  learner = mllrnrs::LearnerLightgbm$new(
+  learner = mllrnrs::LearnerXgboost$new(
     metric_optimization_higher_better = FALSE
   ),
   strategy = "grid",
@@ -180,7 +178,7 @@ head(tuner_results_grid)
 
 ```{r}
 tuner <- mlexperiments::MLTuneParameters$new(
-  learner = mllrnrs::LearnerLightgbm$new(
+  learner = mllrnrs::LearnerXgboost$new(
     metric_optimization_higher_better = FALSE
   ),
   strategy = "bayesian",
@@ -209,7 +207,7 @@ head(tuner_results_bayesian)
 
 ```{r}
 validator <- mlexperiments::MLCrossValidation$new(
-  learner = mllrnrs::LearnerLightgbm$new(
+  learner = mllrnrs::LearnerXgboost$new(
     metric_optimization_higher_better = FALSE
   ),
   fold_list = fold_list,
@@ -240,7 +238,7 @@ head(validator_results)
 
 ```{r}
 validator <- mlexperiments::MLNestedCV$new(
-  learner = mllrnrs::LearnerLightgbm$new(
+  learner = mllrnrs::LearnerXgboost$new(
     metric_optimization_higher_better = FALSE
   ),
   strategy = "grid",
@@ -273,7 +271,7 @@ head(validator_results)
 
 ```{r}
 validator <- mlexperiments::MLNestedCV$new(
-  learner = mllrnrs::LearnerLightgbm$new(
+  learner = mllrnrs::LearnerXgboost$new(
     metric_optimization_higher_better = FALSE
   ),
   strategy = "bayesian",
@@ -311,7 +309,7 @@ head(validator_results)
 ### Predict Outcome in Holdout Test Dataset
 
 ```{r}
-preds_lightgbm <- mlexperiments::predictions(
+preds_xgboost <- mlexperiments::predictions(
   object = validator,
   newdata = test_x
 )
@@ -320,10 +318,11 @@ preds_lightgbm <- mlexperiments::predictions(
 ### Evaluate Performance on Holout Test Dataset
 
 ```{r}
-perf_lightgbm <- mlexperiments::performance(
+perf_xgboost <- mlexperiments::performance(
   object = validator,
-  prediction_results = preds_lightgbm,
-  y_ground_truth = test_y
+  prediction_results = preds_xgboost,
+  y_ground_truth = test_y,
+  type = "binary"
 )
-perf_lightgbm
+perf_xgboost
 ```
