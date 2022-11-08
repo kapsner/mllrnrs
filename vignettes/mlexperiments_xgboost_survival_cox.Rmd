@@ -175,7 +175,7 @@ optim_args <- list(
 ```{r}
 tuner <- mlexperiments::MLTuneParameters$new(
   learner = mllrnrs::LearnerSurvXgboostCox$new(
-    metric_optimization_higher_better = TRUE
+    metric_optimization_higher_better = FALSE
   ),
   strategy = "grid",
   ncores = ncores,
@@ -202,7 +202,7 @@ head(tuner_results_grid)
 ```{r}
 tuner <- mlexperiments::MLTuneParameters$new(
   learner = mllrnrs::LearnerSurvXgboostCox$new(
-    metric_optimization_higher_better = TRUE
+    metric_optimization_higher_better = FALSE
   ),
   strategy = "bayesian",
   ncores = ncores,
@@ -232,7 +232,7 @@ head(tuner_results_bayesian)
 ```{r}
 validator <- mlexperiments::MLCrossValidation$new(
   learner = mllrnrs::LearnerSurvXgboostCox$new(
-    metric_optimization_higher_better = TRUE
+    metric_optimization_higher_better = FALSE
   ),
   fold_list = fold_list,
   ncores = ncores,
@@ -263,7 +263,7 @@ head(validator_results)
 ```{r}
 validator <- mlexperiments::MLNestedCV$new(
   learner = mllrnrs::LearnerSurvXgboostCox$new(
-    metric_optimization_higher_better = TRUE
+    metric_optimization_higher_better = FALSE
   ),
   strategy = "grid",
   fold_list = fold_list,
@@ -297,7 +297,7 @@ head(validator_results)
 ```{r}
 validator <- mlexperiments::MLNestedCV$new(
   learner = mllrnrs::LearnerSurvXgboostCox$new(
-    metric_optimization_higher_better = TRUE
+    metric_optimization_higher_better = FALSE
   ),
   strategy = "bayesian",
   fold_list = fold_list,

@@ -1,9 +1,9 @@
 ---
-title: "xgboost: Survival Analysis, AFT Analysis"
+title: "ranger: Regression"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEncoding{UTF-8}
-  %\VignetteIndexEntry{xgboost: Survival Analysis, AFT Analysis}
+  %\VignetteIndexEntry{ranger: Regression}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
@@ -21,20 +21,21 @@ library(mlexperiments)
 library(mllrnrs)
 ```
 
-See [https://github.com/kapsner/mllrnrs/blob/main/R/learner_surv_xgboost_aft.R](https://github.com/kapsner/mllrnrs/blob/main/R/learner_surv_xgboost_aft.R) for implementation details.
+See [https://github.com/kapsner/mllrnrs/blob/main/R/learner_ranger.R](https://github.com/kapsner/mllrnrs/blob/main/R/learner_ranger.R) for implementation details.
 
 # Preprocessing
 
 ## Import and Prepare Data
 
 ```{r}
-dataset <- survival::colon |>
+library(mlbench)
+data("BostonHousing")
+dataset <- BostonHousing |>
   data.table::as.data.table() |>
   na.omit()
-dataset <- dataset[get("etype") == 2, ]
 
-surv_cols <- c("status", "time", "rx")
-feature_cols <- colnames(dataset)[3:(ncol(dataset) - 1)]
+feature_cols <- colnames(dataset)[1:13]
+target_col <- "medv"
 ```
 
 ## General Configurarions
@@ -56,21 +57,13 @@ if (isTRUE(as.logical(Sys.getenv("_R_CHECK_LIMIT_CORES_")))) {
   )
 }
 options("mlexperiments.bayesian.max_init" = 10L)
-options("mlexperiments.optim.xgb.nrounds" = 100L)
-options("mlexperiments.optim.xgb.early_stopping_rounds" = 10L)
 ```
 
 ## Generate Training- and Test Data
 
 ```{r}
-split_vector <- splitTools::multi_strata(
-  df = dataset[, .SD, .SDcols = surv_cols],
-  strategy = "kmeans",
-  k = 4
-)
-
 data_split <- splitTools::partition(
-  y = split_vector,
+  y = dataset[, get(target_col)],
   p = c(train = 0.7, test = 0.3),
   type = "stratified",
   seed = seed
@@ -78,40 +71,23 @@ data_split <- splitTools::partition(
 
 train_x <- model.matrix(
   ~ -1 + .,
-  dataset[data_split$train, .SD, .SDcols = setdiff(feature_cols, surv_cols[1:2])]
+  dataset[data_split$train, .SD, .SDcols = feature_cols]
 )
-train_y <- survival::Surv(
-  event = (dataset[data_split$train, get("status")] |>
-             as.character() |>
-             as.integer()),
-  time = dataset[data_split$train, get("time")],
-  type = "right"
-)
-split_vector_train <- splitTools::multi_strata(
-  df = dataset[data_split$train, .SD, .SDcols = surv_cols],
-  strategy = "kmeans",
-  k = 4
-)
+train_y <- log(dataset[data_split$train, get(target_col)])
 
 
 test_x <- model.matrix(
   ~ -1 + .,
-  dataset[data_split$test, .SD, .SDcols = setdiff(feature_cols, surv_cols[1:2])]
+  dataset[data_split$test, .SD, .SDcols = feature_cols]
 )
-test_y <- survival::Surv(
-  event = (dataset[data_split$test, get("status")] |>
-             as.character() |>
-             as.integer()),
-  time = dataset[data_split$test, get("time")],
-  type = "right"
-)
+test_y <- log(dataset[data_split$test, get(target_col)])
 ```
 
 ## Generate Training Data Folds
 
 ```{r}
 fold_list <- splitTools::create_folds(
-  y = split_vector_train,
+  y = train_y,
   k = 3,
   type = "stratified",
   seed = seed
@@ -124,26 +100,23 @@ fold_list <- splitTools::create_folds(
 
 ```{r}
 # required learner arguments, not optimized
-learner_args <- list(
-  objective = "survival:aft",
-  eval_metric = "aft-nloglik"
-)
+learner_args <- NULL
 
 # set arguments for predict function and performance metric,
 # required for mlexperiments::MLCrossValidation and
 # mlexperiments::MLNestedCV
 predict_args <- NULL
-performance_metric <- c_index
+performance_metric <- metric("rmsle")
 performance_metric_args <- NULL
 return_models <- FALSE
 
 # required for grid search and initialization of bayesian optimization
 parameter_grid <- expand.grid(
-  subsample = seq(0.6, 1, .2),
-  colsample_bytree = seq(0.6, 1, .2),
-  min_child_weight = seq(1, 5, 4),
-  learning_rate = seq(0.1, 0.2, 0.1),
-  max_depth = seq(1, 5, 4)
+  num.trees = seq(500, 1000, 500),
+  mtry = seq(2, 6, 2),
+  min.node.size = seq(1, 9, 4),
+  max.depth = seq(1, 9, 4),
+  sample.fraction = seq(0.5, 0.8, 0.3)
 )
 # reduce to a maximum of 10 rows
 if (nrow(parameter_grid) > 10) {
@@ -154,11 +127,11 @@ if (nrow(parameter_grid) > 10) {
 
 # required for bayesian optimization
 parameter_bounds <- list(
-  subsample = c(0.2, 1),
-  colsample_bytree = c(0.2, 1),
-  min_child_weight = c(1L, 10L),
-  learning_rate = c(0.1, 0.2),
-  max_depth =  c(1L, 10L)
+  num.trees = c(100L, 1000L),
+  mtry = c(2L, 9L),
+  min.node.size = c(1L, 20L),
+  max.depth = c(1L, 40L),
+  sample.fraction = c(0.3, 1.)
 )
 optim_args <- list(
   iters.n = ncores,
@@ -174,9 +147,7 @@ optim_args <- list(
 
 ```{r}
 tuner <- mlexperiments::MLTuneParameters$new(
-  learner = mllrnrs::LearnerSurvXgboostAft$new(
-    metric_optimization_higher_better = FALSE
-  ),
+  learner = mllrnrs::LearnerRanger$new(),
   strategy = "grid",
   ncores = ncores,
   seed = seed
@@ -185,7 +156,6 @@ tuner <- mlexperiments::MLTuneParameters$new(
 tuner$parameter_grid <- parameter_grid
 tuner$learner_args <- learner_args
 tuner$split_type <- "stratified"
-tuner$split_vector <- split_vector_train
 
 tuner$set_data(
   x = train_x,
@@ -201,9 +171,7 @@ head(tuner_results_grid)
 
 ```{r}
 tuner <- mlexperiments::MLTuneParameters$new(
-  learner = mllrnrs::LearnerSurvXgboostAft$new(
-    metric_optimization_higher_better = FALSE
-  ),
+  learner = mllrnrs::LearnerRanger$new(),
   strategy = "bayesian",
   ncores = ncores,
   seed = seed
@@ -216,7 +184,6 @@ tuner$learner_args <- learner_args
 tuner$optim_args <- optim_args
 
 tuner$split_type <- "stratified"
-tuner$split_vector <- split_vector_train
 
 tuner$set_data(
   x = train_x,
@@ -231,9 +198,7 @@ head(tuner_results_bayesian)
 
 ```{r}
 validator <- mlexperiments::MLCrossValidation$new(
-  learner = mllrnrs::LearnerSurvXgboostAft$new(
-    metric_optimization_higher_better = FALSE
-  ),
+  learner = mllrnrs::LearnerRanger$new(),
   fold_list = fold_list,
   ncores = ncores,
   seed = seed
@@ -262,9 +227,7 @@ head(validator_results)
 
 ```{r}
 validator <- mlexperiments::MLNestedCV$new(
-  learner = mllrnrs::LearnerSurvXgboostAft$new(
-    metric_optimization_higher_better = FALSE
-  ),
+  learner = mllrnrs::LearnerRanger$new(),
   strategy = "grid",
   fold_list = fold_list,
   k_tuning = 3L,
@@ -275,7 +238,6 @@ validator <- mlexperiments::MLNestedCV$new(
 validator$parameter_grid <- parameter_grid
 validator$learner_args <- learner_args
 validator$split_type <- "stratified"
-validator$split_vector <- split_vector_train
 
 validator$predict_args <- predict_args
 validator$performance_metric <- performance_metric
@@ -296,9 +258,7 @@ head(validator_results)
 
 ```{r}
 validator <- mlexperiments::MLNestedCV$new(
-  learner = mllrnrs::LearnerSurvXgboostAft$new(
-    metric_optimization_higher_better = FALSE
-  ),
+  learner = mllrnrs::LearnerRanger$new(),
   strategy = "bayesian",
   fold_list = fold_list,
   k_tuning = 3L,
@@ -309,7 +269,6 @@ validator <- mlexperiments::MLNestedCV$new(
 validator$parameter_grid <- parameter_grid
 validator$learner_args <- learner_args
 validator$split_type <- "stratified"
-validator$split_vector <- split_vector_train
 
 
 validator$parameter_bounds <- parameter_bounds
@@ -335,7 +294,7 @@ head(validator_results)
 ### Predict Outcome in Holdout Test Dataset
 
 ```{r}
-preds_xgboost <- mlexperiments::predictions(
+preds_ranger <- mlexperiments::predictions(
   object = validator,
   newdata = test_x
 )
@@ -344,10 +303,11 @@ preds_xgboost <- mlexperiments::predictions(
 ### Evaluate Performance on Holout Test Dataset
 
 ```{r}
-perf_xgboost <- mlexperiments::performance(
+perf_ranger <- mlexperiments::performance(
   object = validator,
-  prediction_results = preds_xgboost,
-  y_ground_truth = test_y
+  prediction_results = preds_ranger,
+  y_ground_truth = test_y,
+  type = "regression"
 )
-perf_xgboost
+perf_ranger
 ```
