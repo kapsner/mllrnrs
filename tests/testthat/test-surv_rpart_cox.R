@@ -8,10 +8,6 @@ surv_cols <- c("status", "time", "rx")
 
 feature_cols <- colnames(dataset)[3:(ncol(dataset) - 1)]
 
-param_list_glmnet <- expand.grid(
-  alpha = seq(0, 1, .2)
-)
-
 if (isTRUE(as.logical(Sys.getenv("_R_CHECK_LIMIT_CORES_")))) {
   # on cran
   ncores <- 2L

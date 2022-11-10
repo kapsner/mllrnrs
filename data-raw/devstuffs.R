@@ -57,9 +57,7 @@ usethis::use_package("R6", type = "Imports")
 usethis::use_package("data.table", type = "Imports")
 usethis::use_package("kdry", type = "Imports")
 usethis::use_package("stats", type = "Imports")
-
-# Enhances
-usethis::use_package("mlexperiments", type = "Enhances")
+usethis::use_package("mlexperiments", type = "Imports")
 
 # Suggests
 usethis::use_package("testthat", type = "Suggests", min_version = "3.0.1")

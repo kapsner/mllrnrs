@@ -56,8 +56,6 @@ if (isTRUE(as.logical(Sys.getenv("_R_CHECK_LIMIT_CORES_")))) {
   )
 }
 options("mlexperiments.bayesian.max_init" = 10L)
-options("mlexperiments.optim.xgb.nrounds" = 100L)
-options("mlexperiments.optim.xgb.early_stopping_rounds" = 10L)
 ```
 
 ## Generate Training- and Test Data
@@ -78,7 +76,9 @@ data_split <- splitTools::partition(
 
 train_x <- model.matrix(
   ~ -1 + .,
-  dataset[data_split$train, .SD, .SDcols = setdiff(feature_cols, surv_cols[1:2])]
+  dataset[
+    data_split$train, .SD, .SDcols = setdiff(feature_cols, surv_cols[1:2])
+  ]
 )
 train_y <- survival::Surv(
   event = (dataset[data_split$train, get("status")] |>

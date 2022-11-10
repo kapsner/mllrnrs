@@ -14,6 +14,7 @@
 #' @seealso [glmnet::glmnet()], [glmnet::cv.glmnet()]
 #'
 #' @examples
+#' LearnerGlmnet$new(metric_optimization_higher_better = FALSE)
 
 #' @export
 #'
@@ -32,7 +33,7 @@ LearnerGlmnet <- R6::R6Class( # nolint
     #' @return A new `LearnerGlmnet` R6 object.
     #'
     #' @examples
-    #' LearnerGlmnet$new()
+    #' LearnerGlmnet$new(metric_optimization_higher_better = FALSE)
     #'
     initialize = function(metric_optimization_higher_better) { # nolint
       if (!requireNamespace("glmnet", quietly = TRUE)) {

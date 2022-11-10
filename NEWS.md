@@ -1,9 +1,11 @@
 # mllrnrs NEWS
 
-## Unreleased (2022-11-02)
+## Unreleased (2022-11-08)
 
 #### New features
 
+-   added survivalsvm learner
+    ([18e35f2](https://github.com/kapsner/mllrnrs/tree/18e35f2d70d90791e0a1b775841fd0c5bafc35eb))
 -   added xgboost aft survival learner
     ([c079e56](https://github.com/kapsner/mllrnrs/tree/c079e56eecc4461cdb5334bca60830024c84883b))
 -   finalized glmnet learner0
@@ -47,6 +49,8 @@
 
 #### CI
 
+-   removed building of vignettes
+    ([8ea1931](https://github.com/kapsner/mllrnrs/tree/8ea193198e556056952db2dbf22fa94e4e16c695))
 -   working on fixing tests
     ([dccc08a](https://github.com/kapsner/mllrnrs/tree/dccc08ab68d15d2e4a49c23c29936f746ba13cab))
 -   finished unit tests for ranger
@@ -64,6 +68,14 @@
 
 #### Docs
 
+-   added ranger vignettes
+    ([9da7bb9](https://github.com/kapsner/mllrnrs/tree/9da7bb90f7467f77f187406a1fbc11f8c1b88042))
+-   working on vignettes
+    ([7af00e0](https://github.com/kapsner/mllrnrs/tree/7af00e0af8e6f282e7cf6dd709defa7d5a9448dc))
+-   added glmnet vignette
+    ([da43c59](https://github.com/kapsner/mllrnrs/tree/da43c5902d71f6f4e864f26c626c3900aed8eada))
+-   started working on vignettes
+    ([8cefc39](https://github.com/kapsner/mllrnrs/tree/8cefc399987adee3302783a4561755bd0499d208))
 -   updated readme
     ([b14b176](https://github.com/kapsner/mllrnrs/tree/b14b17683dc8a54eb843b54aa1f562ffc7354285))
 -   updated learner table
@@ -91,6 +103,10 @@
 
 #### Other changes
 
+-   updated docs
+    ([fc5857c](https://github.com/kapsner/mllrnrs/tree/fc5857c4e0ce69a9b660e6f881b224af92367267))
+-   fixed linting errors
+    ([8fb039c](https://github.com/kapsner/mllrnrs/tree/8fb039cef6463848fc3d81aad6205b5fc3c415af))
 -   updated description and news.md
     ([00c72da](https://github.com/kapsner/mllrnrs/tree/00c72da72cc1cba4b2d67c8f6d7de234f7baa181))
 -   updated message from learner
@@ -105,4 +121,4 @@
     ([1f4a6b5](https://github.com/kapsner/mllrnrs/tree/1f4a6b52c1f9a64eb7143e99843618329182ca08))
 
 Full set of changes:
-[`ceea1ce...b14b176`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...b14b176)
+[`ceea1ce...9da7bb9`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...9da7bb9)

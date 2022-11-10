@@ -1,3 +1,5 @@
+skip(message = "Skip all survivalsvm tests due to very long runtimes")
+
 dataset <- survival::colon |>
   data.table::as.data.table() |>
   na.omit()
@@ -12,7 +14,8 @@ param_list_survivalsvm <- expand.grid(
   type = "regression",
   gamma.mu = seq(0.1, 0.9, 0.2),
   opt.meth = "ipop",
-  kernel = "lin_kernel"
+  kernel = "rbf_kernel",
+  maxiter = 5
 )
 
 if (isTRUE(as.logical(Sys.getenv("_R_CHECK_LIMIT_CORES_")))) {

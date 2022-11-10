@@ -1,9 +1,9 @@
 ---
-title: "xgboost: Survival Analysis, AFT Analysis"
+title: "rpart: Survival Analysis"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEncoding{UTF-8}
-  %\VignetteIndexEntry{xgboost: Survival Analysis, AFT Analysis}
+  %\VignetteIndexEntry{rpart: Survival Analysis}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
@@ -21,7 +21,7 @@ library(mlexperiments)
 library(mllrnrs)
 ```
 
-See [https://github.com/kapsner/mllrnrs/blob/main/R/learner_surv_xgboost_aft.R](https://github.com/kapsner/mllrnrs/blob/main/R/learner_surv_xgboost_aft.R) for implementation details.
+See [https://github.com/kapsner/mllrnrs/blob/main/R/learner_surv_rpart_cox.R](https://github.com/kapsner/mllrnrs/blob/main/R/learner_surv_rpart_cox.R) for implementation details.
 
 # Preprocessing
 
@@ -56,8 +56,6 @@ if (isTRUE(as.logical(Sys.getenv("_R_CHECK_LIMIT_CORES_")))) {
   )
 }
 options("mlexperiments.bayesian.max_init" = 10L)
-options("mlexperiments.optim.xgb.nrounds" = 100L)
-options("mlexperiments.optim.xgb.early_stopping_rounds" = 10L)
 ```
 
 ## Generate Training- and Test Data
@@ -126,10 +124,7 @@ fold_list <- splitTools::create_folds(
 
 ```{r}
 # required learner arguments, not optimized
-learner_args <- list(
-  objective = "survival:aft",
-  eval_metric = "aft-nloglik"
-)
+learner_args <- list(method = "exp")
 
 # set arguments for predict function and performance metric,
 # required for mlexperiments::MLCrossValidation and
@@ -141,12 +136,11 @@ return_models <- FALSE
 
 # required for grid search and initialization of bayesian optimization
 parameter_grid <- expand.grid(
-  subsample = seq(0.6, 1, .2),
-  colsample_bytree = seq(0.6, 1, .2),
-  min_child_weight = seq(1, 5, 4),
-  learning_rate = seq(0.1, 0.2, 0.1),
-  max_depth = seq(1, 5, 4)
+  minsplit = seq(2L, 82L, 10L),
+  cp = seq(0.01, 0.1, 0.01),
+  maxdepth = seq(2L, 30L, 5L)
 )
+
 # reduce to a maximum of 10 rows
 if (nrow(parameter_grid) > 10) {
   set.seed(123)
@@ -156,11 +150,9 @@ if (nrow(parameter_grid) > 10) {
 
 # required for bayesian optimization
 parameter_bounds <- list(
-  subsample = c(0.2, 1),
-  colsample_bytree = c(0.2, 1),
-  min_child_weight = c(1L, 10L),
-  learning_rate = c(0.1, 0.2),
-  max_depth =  c(1L, 10L)
+  minsplit = c(2L, 100L),
+  cp = c(0.01, 0.1),
+  maxdepth = c(2L, 30L)
 )
 optim_args <- list(
   iters.n = ncores,
@@ -176,9 +168,7 @@ optim_args <- list(
 
 ```{r}
 tuner <- mlexperiments::MLTuneParameters$new(
-  learner = mllrnrs::LearnerSurvXgboostAft$new(
-    metric_optimization_higher_better = FALSE
-  ),
+  learner = mllrnrs::LearnerSurvRpartCox$new(),
   strategy = "grid",
   ncores = ncores,
   seed = seed
@@ -203,9 +193,7 @@ head(tuner_results_grid)
 
 ```{r}
 tuner <- mlexperiments::MLTuneParameters$new(
-  learner = mllrnrs::LearnerSurvXgboostAft$new(
-    metric_optimization_higher_better = FALSE
-  ),
+  learner = mllrnrs::LearnerSurvRpartCox$new(),
   strategy = "bayesian",
   ncores = ncores,
   seed = seed
@@ -233,9 +221,7 @@ head(tuner_results_bayesian)
 
 ```{r}
 validator <- mlexperiments::MLCrossValidation$new(
-  learner = mllrnrs::LearnerSurvXgboostAft$new(
-    metric_optimization_higher_better = FALSE
-  ),
+  learner = mllrnrs::LearnerSurvRpartCox$new(),
   fold_list = fold_list,
   ncores = ncores,
   seed = seed
@@ -264,9 +250,7 @@ head(validator_results)
 
 ```{r}
 validator <- mlexperiments::MLNestedCV$new(
-  learner = mllrnrs::LearnerSurvXgboostAft$new(
-    metric_optimization_higher_better = FALSE
-  ),
+  learner = mllrnrs::LearnerSurvRpartCox$new(),
   strategy = "grid",
   fold_list = fold_list,
   k_tuning = 3L,
@@ -298,9 +282,7 @@ head(validator_results)
 
 ```{r}
 validator <- mlexperiments::MLNestedCV$new(
-  learner = mllrnrs::LearnerSurvXgboostAft$new(
-    metric_optimization_higher_better = FALSE
-  ),
+  learner = mllrnrs::LearnerSurvRpartCox$new(),
   strategy = "bayesian",
   fold_list = fold_list,
   k_tuning = 3L,
@@ -337,7 +319,7 @@ head(validator_results)
 ### Predict Outcome in Holdout Test Dataset
 
 ```{r}
-preds_xgboost <- mlexperiments::predictions(
+preds_rpart <- mlexperiments::predictions(
   object = validator,
   newdata = test_x
 )
@@ -346,10 +328,10 @@ preds_xgboost <- mlexperiments::predictions(
 ### Evaluate Performance on Holout Test Dataset
 
 ```{r}
-perf_xgboost <- mlexperiments::performance(
+perf_rpart <- mlexperiments::performance(
   object = validator,
-  prediction_results = preds_xgboost,
+  prediction_results = preds_rpart,
   y_ground_truth = test_y
 )
-perf_xgboost
+perf_rpart
 ```

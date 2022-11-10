@@ -15,12 +15,13 @@ Can be used with
 * [mlexperiments::MLNestedCVs]
 }
 \examples{
+LearnerGlmnet$new(metric_optimization_higher_better = FALSE)
 
 ## ------------------------------------------------
 ## Method `LearnerGlmnet$new`
 ## ------------------------------------------------
 
-LearnerGlmnet$new()
+LearnerGlmnet$new(metric_optimization_higher_better = FALSE)
 
 }
 \seealso{
@@ -69,7 +70,7 @@ A new `LearnerGlmnet` R6 object.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{LearnerGlmnet$new()
+\preformatted{LearnerGlmnet$new(metric_optimization_higher_better = FALSE)
 
 }
 \if{html}{\out{</div>}}

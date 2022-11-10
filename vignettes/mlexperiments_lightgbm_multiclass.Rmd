@@ -1,9 +1,9 @@
 ---
-title: "lightgbm: Binary Classification"
+title: "lightgbm: Multiclass Classification"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEncoding{UTF-8}
-  %\VignetteIndexEntry{lightgbm: Binary Classification}
+  %\VignetteIndexEntry{lightgbm: Multiclass Classification}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
