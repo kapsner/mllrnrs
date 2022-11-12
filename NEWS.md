@@ -107,6 +107,8 @@
 
 #### Other changes
 
+-   updated description and news.md
+    ([26110f2](https://github.com/kapsner/mllrnrs/tree/26110f2560889a8d9b6f9f4abb60bb4439c89db8))
 -   updated docs
     ([fc5857c](https://github.com/kapsner/mllrnrs/tree/fc5857c4e0ce69a9b660e6f881b224af92367267))
 -   fixed linting errors
@@ -125,4 +127,4 @@
     ([1f4a6b5](https://github.com/kapsner/mllrnrs/tree/1f4a6b52c1f9a64eb7143e99843618329182ca08))
 
 Full set of changes:
-[`ceea1ce...224b53d`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...224b53d)
+[`ceea1ce...26110f2`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...26110f2)

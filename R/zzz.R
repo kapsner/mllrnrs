@@ -15,7 +15,7 @@ mlexperiments_default_options <- list(
   mlexperiments.optim.lgb.nrounds = 5000L,
   mlexperiments.optim.lgb.early_stopping_rounds = 500L,
   mlexperiments.lgb.print_every_n = 50L,
-  mlexperiments.lgb.verbose = 0L
+  mlexperiments.lgb.verbose = -1L
 )
 
 
