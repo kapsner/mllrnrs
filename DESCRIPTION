@@ -30,9 +30,10 @@ Suggests:
 VignetteBuilder: 
     knitr
 Remotes: 
+    github::kapsner/kdry@main,
     github::kapsner/mlexperiments@main
 Config/testthat/edition: 3
 Config/testthat/parallel: false
-Date/Publication: 2022-11-12 15:59:33 UTC
+Date/Publication: 2022-11-12 16:03:49 UTC
 Encoding: UTF-8
 RoxygenNote: 7.2.1

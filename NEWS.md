@@ -1,9 +1,11 @@
 # mllrnrs NEWS
 
-## Unreleased (2022-11-10)
+## Unreleased (2022-11-12)
 
 #### New features
 
+-   transferred survival learners to new package
+    ([224b53d](https://github.com/kapsner/mllrnrs/tree/224b53de29300d070ed9b91aac87915732f3a350))
 -   added survivalsvm learner
     ([18e35f2](https://github.com/kapsner/mllrnrs/tree/18e35f2d70d90791e0a1b775841fd0c5bafc35eb))
 -   added xgboost aft survival learner
@@ -123,4 +125,4 @@
     ([1f4a6b5](https://github.com/kapsner/mllrnrs/tree/1f4a6b52c1f9a64eb7143e99843618329182ca08))
 
 Full set of changes:
-[`ceea1ce...b356633`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...b356633)
+[`ceea1ce...224b53d`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...224b53d)
