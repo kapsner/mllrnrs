@@ -1,6 +1,6 @@
 # mllrnrs NEWS
 
-## Unreleased (2022-11-08)
+## Unreleased (2022-11-10)
 
 #### New features
 
@@ -68,6 +68,8 @@
 
 #### Docs
 
+-   added and updated vignettes
+    ([b356633](https://github.com/kapsner/mllrnrs/tree/b3566339875dc200b850688564e102163260feba))
 -   added ranger vignettes
     ([9da7bb9](https://github.com/kapsner/mllrnrs/tree/9da7bb90f7467f77f187406a1fbc11f8c1b88042))
 -   working on vignettes
@@ -121,4 +123,4 @@
     ([1f4a6b5](https://github.com/kapsner/mllrnrs/tree/1f4a6b52c1f9a64eb7143e99843618329182ca08))
 
 Full set of changes:
-[`ceea1ce...9da7bb9`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...9da7bb9)
+[`ceea1ce...b356633`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...b356633)
