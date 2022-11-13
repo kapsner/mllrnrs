@@ -10,10 +10,11 @@ feature_cols <- colnames(dataset)[160:180]
 param_list_lightgbm <- expand.grid(
   bagging_fraction = seq(0.6, 1, .2),
   feature_fraction = seq(0.6, 1, .2),
-  min_data_in_leaf = seq(10, 50, 10),
+  min_data_in_leaf = seq(2, 10, 2),
   learning_rate = seq(0.1, 0.2, 0.1),
-  num_leaves = seq(10, 50, 10),
-  max_depth = -1L
+  num_leaves = seq(2, 20, 4),
+  max_depth = -1L,
+  verbose = -1L
 )
 
 if (isTRUE(as.logical(Sys.getenv("_R_CHECK_LIMIT_CORES_")))) {
@@ -106,9 +107,9 @@ test_that(
 lightgbm_bounds <- list(
   bagging_fraction = c(0.2, 1),
   feature_fraction = c(0.2, 1),
-  min_data_in_leaf = c(10L, 50L),
+  min_data_in_leaf = c(2L, 12L),
   learning_rate = c(0.1, 0.2),
-  num_leaves =  c(10L, 50L)
+  num_leaves =  c(2L, 20L)
 )
 optim_args <- list(
   iters.n = ncores,
@@ -133,7 +134,6 @@ test_that(
     lightgbm_tuner$learner_args <- list(
       objective = "multiclass",
       metric = "multi_logloss",
-      verbose = FALSE,
       num_class = 3
     )
     lightgbm_tuner$optim_args <- optim_args
@@ -170,7 +170,6 @@ test_that(
     lightgbm_tuner$learner_args <- list(
       objective = "multiclass",
       metric = "multi_logloss",
-      verbose = FALSE,
       num_class = 3
     )
 
