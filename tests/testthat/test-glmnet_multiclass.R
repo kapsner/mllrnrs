@@ -41,50 +41,6 @@ fold_list <- splitTools::create_folds(
   seed = seed
 )
 
-
-# ###########################################################################
-# %% CV
-# ###########################################################################
-
-test_that(
-  desc = "test cv, multiclass - glmnet",
-  code = {
-
-    glmnet_optimizer <- mlexperiments::MLCrossValidation$new(
-      learner = mllrnrs::LearnerGlmnet$new(
-        metric_optimization_higher_better = FALSE
-      ),
-      fold_list = fold_list,
-      ncores = ncores,
-      seed = seed
-    )
-    glmnet_optimizer$learner_args <- list(
-      alpha = 0.5,
-      lambda = 0.1,
-      family = "multinomial",
-      type.measure = "class",
-      standardize = TRUE
-    )
-    glmnet_optimizer$predict_args <- list(type = "response", reshape = TRUE)
-    glmnet_optimizer$performance_metric <- mlexperiments::metric("bacc")
-
-    # set data
-    glmnet_optimizer$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    cv_results <- glmnet_optimizer$execute()
-    expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 7))
-    expect_true(inherits(
-      x = glmnet_optimizer$results,
-      what = "mlexCV"
-    ))
-  }
-)
-
-
 # ###########################################################################
 # %% TUNING
 # ###########################################################################
@@ -96,82 +52,6 @@ optim_args <- list(
   iters.n = ncores,
   kappa = 3.5,
   acq = "ucb"
-)
-
-test_that(
-  desc = "test bayesian tuner, parameter_grid, multiclass - glmnet",
-  code = {
-
-    glmnet_tuner <- mlexperiments::MLTuneParameters$new(
-      learner = mllrnrs::LearnerGlmnet$new(
-        metric_optimization_higher_better = FALSE
-      ),
-      strategy = "bayesian",
-      ncores = ncores,
-      seed = seed
-    )
-
-    glmnet_tuner$learner_args <- list(
-      family = "multinomial",
-      type.measure = "class",
-      standardize = TRUE
-    )
-
-    glmnet_tuner$parameter_grid <- param_list_glmnet
-    glmnet_tuner$parameter_bounds <- glmnet_bounds
-    glmnet_tuner$optim_args <- optim_args
-
-    # set data
-    glmnet_tuner$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    tune_results <- glmnet_tuner$execute(k = 3)
-
-    expect_type(tune_results, "list")
-    expect_true(inherits(x = glmnet_tuner$results, what = "mlexTune"))
-  }
-)
-
-
-test_that(
-  desc = "test grid tuner, multiclass - glmnet",
-  code = {
-
-    glmnet_tuner <- mlexperiments::MLTuneParameters$new(
-      learner = mllrnrs::LearnerGlmnet$new(
-        metric_optimization_higher_better = FALSE
-      ),
-      strategy = "grid",
-      ncores = ncores,
-      seed = seed
-    )
-
-    glmnet_tuner$learner_args <- list(
-      family = "multinomial",
-      type.measure = "class",
-      standardize = TRUE
-    )
-
-    set.seed(seed)
-    random_grid <- sample(seq_len(nrow(param_list_glmnet)), 10)
-    glmnet_tuner$parameter_grid <- kdry::mlh_subset(
-      param_list_glmnet,
-      random_grid
-    )
-
-    # set data
-    glmnet_tuner$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    tune_results <- glmnet_tuner$execute(k = 3)
-    expect_type(tune_results, "list")
-    expect_equal(dim(tune_results), c(10, 7))
-    expect_true(inherits(x = glmnet_tuner$results, what = "mlexTune"))
-  }
 )
 
 # ###########################################################################

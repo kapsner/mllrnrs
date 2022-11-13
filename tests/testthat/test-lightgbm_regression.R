@@ -49,55 +49,6 @@ fold_list <- splitTools::create_folds(
   seed = seed
 )
 
-
-# ###########################################################################
-# %% CV
-# ###########################################################################
-
-test_that(
-  desc = "test cv, regression - lightgbm",
-  code = {
-
-    lightgbm_optimization <- mlexperiments::MLCrossValidation$new(
-      learner = mllrnrs::LearnerLightgbm$new(
-        metric_optimization_higher_better = FALSE
-      ),
-      fold_list = fold_list,
-      ncores = ncores,
-      seed = seed
-    )
-    lightgbm_optimization$learner_args <- c(
-      as.list(
-        data.table::data.table(
-          param_list_lightgbm[37, ],
-          stringsAsFactors = FALSE
-        ),
-      ),
-      list(
-        objective = "regression",
-        metric = "l2"
-      ),
-      nrounds = 45L
-    )
-    lightgbm_optimization$performance_metric <- mlexperiments::metric("msle")
-
-    # set data
-    lightgbm_optimization$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    cv_results <- lightgbm_optimization$execute()
-    expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 12))
-    expect_true(inherits(
-      x = lightgbm_optimization$results,
-      what = "mlexCV"
-    ))
-  }
-)
-
-
 # ###########################################################################
 # %% TUNING
 # ###########################################################################
@@ -113,73 +64,6 @@ optim_args <- list(
   iters.n = ncores,
   kappa = 3.5,
   acq = "ucb"
-)
-
-test_that(
-  desc = "test bayesian tuner, parameter_grid, regression - lightgbm",
-  code = {
-
-    lightgbm_tuner <- mlexperiments::MLTuneParameters$new(
-      learner = mllrnrs::LearnerLightgbm$new(
-        metric_optimization_higher_better = FALSE
-      ),
-      strategy = "bayesian",
-      ncores = ncores,
-      seed = seed
-    )
-    lightgbm_tuner$parameter_grid <- param_list_lightgbm
-    lightgbm_tuner$parameter_bounds <- lightgbm_bounds
-    lightgbm_tuner$learner_args <- list(
-      objective = "regression",
-      metric = "l2"
-    )
-    lightgbm_tuner$optim_args <- optim_args
-
-    # set data
-    lightgbm_tuner$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    tune_results <- lightgbm_tuner$execute(k = 3)
-
-    expect_type(tune_results, "list")
-    expect_true(inherits(x = lightgbm_tuner$results, what = "mlexTune"))
-  }
-)
-
-
-test_that(
-  desc = "test grid tuner, regression - lightgbm",
-  code = {
-
-    lightgbm_tuner <- mlexperiments::MLTuneParameters$new(
-      learner = mllrnrs::LearnerLightgbm$new(
-        metric_optimization_higher_better = FALSE
-      ),
-      strategy = "grid",
-      ncores = ncores,
-      seed = seed
-    )
-    set.seed(seed)
-    random_grid <- sample(seq_len(nrow(param_list_lightgbm)), 10)
-    lightgbm_tuner$parameter_grid <- param_list_lightgbm[random_grid, ]
-    lightgbm_tuner$learner_args <- list(
-      objective = "regression",
-      metric = "l2"
-    )
-
-    # set data
-    lightgbm_tuner$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    tune_results <- lightgbm_tuner$execute(k = 3)
-    expect_type(tune_results, "list")
-    expect_equal(dim(tune_results), c(10, 12))
-    expect_true(inherits(x = lightgbm_tuner$results, what = "mlexTune"))
-  }
 )
 
 # ###########################################################################

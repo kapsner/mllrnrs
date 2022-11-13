@@ -45,51 +45,8 @@ fold_list <- splitTools::create_folds(
   seed = seed
 )
 
-
 # ###########################################################################
-# %% CV
-# ###########################################################################
-
-test_that(
-  desc = "test cv, regression - ranger",
-  code = {
-
-    ranger_optimizer <- mlexperiments::MLCrossValidation$new(
-      learner = mllrnrs::LearnerRanger$new(),
-      fold_list = fold_list,
-      ncores = ncores,
-      seed = seed
-    )
-    ranger_optimizer$learner_args <- c(
-      as.list(
-        data.table::data.table(
-          param_list_ranger[37, ],
-          stringsAsFactors = FALSE
-        )
-      ),
-      list(classification = TRUE)
-    )
-    ranger_optimizer$performance_metric <- mlexperiments::metric("bacc")
-
-    # set data
-    ranger_optimizer$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    cv_results <- ranger_optimizer$execute()
-    expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 8))
-    expect_true(inherits(
-      x = ranger_optimizer$results,
-      what = "mlexCV"
-    ))
-  }
-)
-
-
-# ###########################################################################
-# %% NESTED CV
+# %% TUNING
 # ###########################################################################
 
 ranger_bounds <- list(
@@ -103,65 +60,6 @@ optim_args <- list(
   iters.n = ncores,
   kappa = 3.5,
   acq = "ucb"
-)
-
-test_that(
-  desc = "test bayesian tuner, parameter_grid, regression - ranger",
-  code = {
-
-    ranger_tuner <- mlexperiments::MLTuneParameters$new(
-      learner = mllrnrs::LearnerRanger$new(),
-      strategy = "bayesian",
-      ncores = ncores,
-      seed = seed
-    )
-    ranger_tuner$parameter_grid <- param_list_ranger
-    ranger_tuner$parameter_bounds <- ranger_bounds
-    ranger_tuner$optim_args <- optim_args
-
-    ranger_tuner$learner_args <- list(classification = TRUE)
-
-    # set data
-    ranger_tuner$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    tune_results <- ranger_tuner$execute(k = 3)
-
-    expect_type(tune_results, "list")
-    expect_true(inherits(x = ranger_tuner$results, what = "mlexTune"))
-  }
-)
-
-
-test_that(
-  desc = "test grid tuner, regression - ranger",
-  code = {
-
-    ranger_tuner <- mlexperiments::MLTuneParameters$new(
-      learner = mllrnrs::LearnerRanger$new(),
-      strategy = "grid",
-      ncores = ncores,
-      seed = seed
-    )
-    set.seed(seed)
-    random_grid <- sample(seq_len(nrow(param_list_ranger)), 10)
-    ranger_tuner$parameter_grid <- param_list_ranger[random_grid, ]
-
-    ranger_tuner$learner_args <- list(classification = TRUE)
-
-    # set data
-    ranger_tuner$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    tune_results <- ranger_tuner$execute(k = 3)
-    expect_type(tune_results, "list")
-    expect_equal(dim(tune_results), c(10, 8))
-    expect_true(inherits(x = ranger_tuner$results, what = "mlexTune"))
-  }
 )
 
 # ###########################################################################

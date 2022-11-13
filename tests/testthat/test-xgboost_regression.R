@@ -47,57 +47,8 @@ fold_list <- splitTools::create_folds(
   seed = seed
 )
 
-
 # ###########################################################################
-# %% CV
-# ###########################################################################
-
-test_that(
-  desc = "test cv, reg:squarederror - xgboost",
-  code = {
-
-    xgboost_optimizer <- mlexperiments::MLCrossValidation$new(
-      learner = mllrnrs::LearnerXgboost$new(
-        metric_optimization_higher_better = FALSE
-      ),
-      fold_list = fold_list,
-      ncores = ncores,
-      seed = seed
-    )
-    xgboost_optimizer$learner_args <- c(
-      as.list(
-        data.table::data.table(
-          param_list_xgboost[37, ],
-          stringsAsFactors = FALSE
-        ),
-      ),
-      list(
-        objective = "reg:squarederror",
-        eval_metric = "rmse"
-      ),
-      nrounds = 45L
-    )
-    xgboost_optimizer$performance_metric <- mlexperiments::metric("msle")
-
-    # set data
-    xgboost_optimizer$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    cv_results <- xgboost_optimizer$execute()
-    expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 10))
-    expect_true(inherits(
-      x = xgboost_optimizer$results,
-      what = "mlexCV"
-    ))
-  }
-)
-
-
-# ###########################################################################
-# %% NESTED CV
+# %% TUNING
 # ###########################################################################
 
 xgboost_bounds <- list(
@@ -111,75 +62,6 @@ optim_args <- list(
   iters.n = ncores,
   kappa = 3.5,
   acq = "ucb"
-)
-
-test_that(
-  desc = "test bayesian tuner, parameter_grid, reg:squarederror - xgboost",
-  code = {
-
-    xgboost_tuner <- mlexperiments::MLTuneParameters$new(
-      learner = mllrnrs::LearnerXgboost$new(
-        metric_optimization_higher_better = FALSE
-      ),
-      strategy = "bayesian",
-      ncores = ncores,
-      seed = seed
-    )
-    xgboost_tuner$parameter_grid <- param_list_xgboost
-    xgboost_tuner$parameter_bounds <- xgboost_bounds
-    xgboost_tuner$learner_args <- list(
-      objective = "reg:squarederror",
-      eval_metric = "rmse",
-      verbose = FALSE
-    )
-    xgboost_tuner$optim_args <- optim_args
-
-    # set data
-    xgboost_tuner$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    tune_results <- xgboost_tuner$execute(k = 3)
-
-    expect_type(tune_results, "list")
-    expect_true(inherits(x = xgboost_tuner$results, what = "mlexTune"))
-  }
-)
-
-
-test_that(
-  desc = "test grid tuner, reg:squarederror - xgboost",
-  code = {
-
-    xgboost_tuner <- mlexperiments::MLTuneParameters$new(
-      learner = mllrnrs::LearnerXgboost$new(
-        metric_optimization_higher_better = FALSE
-      ),
-      strategy = "grid",
-      ncores = ncores,
-      seed = seed
-    )
-    set.seed(seed)
-    random_grid <- sample(seq_len(nrow(param_list_xgboost)), 10)
-    xgboost_tuner$parameter_grid <- param_list_xgboost[random_grid, ]
-    xgboost_tuner$learner_args <- list(
-      objective = "reg:squarederror",
-      eval_metric = "rmse",
-      verbose = FALSE
-    )
-
-    # set data
-    xgboost_tuner$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    tune_results <- xgboost_tuner$execute(k = 3)
-    expect_type(tune_results, "list")
-    expect_equal(dim(tune_results), c(10, 11))
-    expect_true(inherits(x = xgboost_tuner$results, what = "mlexTune"))
-  }
 )
 
 # ###########################################################################

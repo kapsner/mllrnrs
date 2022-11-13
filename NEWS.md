@@ -1,6 +1,6 @@
 # mllrnrs NEWS
 
-## Unreleased (2022-11-12)
+## Unreleased (2022-11-13)
 
 #### New features
 
@@ -51,6 +51,10 @@
 
 #### CI
 
+-   fixed ci
+    ([832c3a3](https://github.com/kapsner/mllrnrs/tree/832c3a3f1ad1e3703b9e00600818fcf45b1a7245))
+-   reduced messages from lgb training
+    ([1d0a7c7](https://github.com/kapsner/mllrnrs/tree/1d0a7c7881065df79274579809e6e307bff40f4b))
 -   removed building of vignettes
     ([8ea1931](https://github.com/kapsner/mllrnrs/tree/8ea193198e556056952db2dbf22fa94e4e16c695))
 -   working on fixing tests
@@ -107,6 +111,8 @@
 
 #### Other changes
 
+-   renamed vignettes filenmaes
+    ([9624681](https://github.com/kapsner/mllrnrs/tree/96246818c6a28b68a9f276fe6b89b0ad694dfabc))
 -   updated description and news.md
     ([26110f2](https://github.com/kapsner/mllrnrs/tree/26110f2560889a8d9b6f9f4abb60bb4439c89db8))
 -   updated docs
@@ -127,4 +133,4 @@
     ([1f4a6b5](https://github.com/kapsner/mllrnrs/tree/1f4a6b52c1f9a64eb7143e99843618329182ca08))
 
 Full set of changes:
-[`ceea1ce...26110f2`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...26110f2)
+[`ceea1ce...832c3a3`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...832c3a3)
