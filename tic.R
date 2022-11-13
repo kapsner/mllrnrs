@@ -6,5 +6,5 @@ do_package_checks(
 )
 
 get_stage("install") %>%
-  add_code_step(remotes::install_github("kapsner/mlexperiments", upgrade = "always", force = TRUE)) %>%
+  add_step(install_cran(c("ParBayesianOptimization", "mlr3measures"))) %>%
   add_code_step(devtools::install(".", upgrade = "always"))
