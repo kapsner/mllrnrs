@@ -95,7 +95,7 @@ test_that(
 
     cv_results <- ranger_optimizer$execute()
     expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 8))
+    expect_equal(dim(cv_results), c(3, 7))
     expect_true(inherits(
       x = ranger_optimizer$results,
       what = "mlexCV"
@@ -133,7 +133,7 @@ test_that(
 
     cv_results <- ranger_optimizer$execute()
     expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 8))
+    expect_equal(dim(cv_results), c(3, 7))
     expect_true(inherits(
       x = ranger_optimizer$results,
       what = "mlexCV"

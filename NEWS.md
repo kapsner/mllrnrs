@@ -1,6 +1,36 @@
 # mllrnrs NEWS
 
-## Unreleased (2022-11-13)
+## Unreleased (2022-11-14)
+
+#### Bug fixes
+
+-   adaptions to cat\_vars
+    ([e9f0eff](https://github.com/kapsner/mllrnrs/tree/e9f0effbc2b1274f8f32a86c12b4a68ece9163de))
+
+#### CI
+
+-   moving to code\_step
+    ([2e4d11a](https://github.com/kapsner/mllrnrs/tree/2e4d11a96f5f91f62e05772f77237ac384f7e130))
+-   update coverage installing packages
+    ([a2aec56](https://github.com/kapsner/mllrnrs/tree/a2aec569a52d66c2ba9feb2c6ae825c1afb3be92))
+-   shorter ci runtimes
+    ([2382057](https://github.com/kapsner/mllrnrs/tree/2382057f7827370c7e4f7a5cb575fe0d663f026a))
+-   explicitly installing suggests
+    ([46a657c](https://github.com/kapsner/mllrnrs/tree/46a657c03da03110917dcc3654d7b9967af5d97a))
+-   updated tic.r
+    ([de4feaf](https://github.com/kapsner/mllrnrs/tree/de4feaf376eb6d0af75cce19d0bc4cd50b223275))
+
+#### Other changes
+
+-   fixed typo
+    ([df54b3d](https://github.com/kapsner/mllrnrs/tree/df54b3d69207dba0893a4dedaa97f0f843178390))
+-   updated wiki.r
+    ([af08974](https://github.com/kapsner/mllrnrs/tree/af0897471d09d71b29a10218030ad573a1b303c0))
+
+Full set of changes:
+[`v0.0.1...e9f0eff`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...e9f0eff)
+
+## v0.0.1 (2022-11-13)
 
 #### New features
 
@@ -51,6 +81,8 @@
 
 #### CI
 
+-   shortended ci to only nested cv testings
+    ([981b6f2](https://github.com/kapsner/mllrnrs/tree/981b6f2015c1afc3622ddc407874da61c04fc75a))
 -   fixed ci
     ([832c3a3](https://github.com/kapsner/mllrnrs/tree/832c3a3f1ad1e3703b9e00600818fcf45b1a7245))
 -   reduced messages from lgb training
@@ -133,4 +165,4 @@
     ([1f4a6b5](https://github.com/kapsner/mllrnrs/tree/1f4a6b52c1f9a64eb7143e99843618329182ca08))
 
 Full set of changes:
-[`ceea1ce...832c3a3`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...832c3a3)
+[`ceea1ce...v0.0.1`](https://github.com/kapsner/mllrnrs/compare/ceea1ce...v0.0.1)

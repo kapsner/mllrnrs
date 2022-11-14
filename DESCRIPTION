@@ -1,6 +1,6 @@
 Package: mllrnrs
 Title: R6-Based ML Learners for 'mlexperiments'
-Version: 0.0.1
+Version: 0.0.1.9001
 Authors@R: 
     person("Lorenz A.", "Kapsner", , "lorenz.kapsner@gmail.com", role = c("cre", "aut", "cph"),
            comment = c(ORCID = "0000-0003-1866-860X"))
@@ -34,6 +34,5 @@ Remotes:
     github::kapsner/mlexperiments@main
 Config/testthat/edition: 3
 Config/testthat/parallel: false
-Date/Publication: 2022-11-13 07:27:43 UTC
+Date/Publication: 2022-11-14 20:23:48 UTC
 Encoding: UTF-8
-RoxygenNote: 7.2.1
