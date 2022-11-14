@@ -119,6 +119,11 @@ ranger_bsF <- function(...) { # nolint
 
   params <- list(...)
 
+  params <- kdry::list.append(
+    main_list = params,
+    append_list = method_helper$execute_params["cat_vars"]
+  )
+
   set.seed(seed)#, kind = "L'Ecuyer-CMRG")
   bayes_opt_ranger <- ranger_optimization(
     x = x,
@@ -233,8 +238,8 @@ ranger_optimization <- function(
     pred_args <- list(
       model = cvfit,
       newdata = kdry::mlh_subset(x, -ranger_train_idx),
-      cat_vars = params[["cat_vars"]],
-      ncores = ncores
+      ncores = ncores,
+      cat_vars = params[["cat_vars"]]
     )
 
     # if probability = TRUE (in case of classification),
@@ -285,15 +290,11 @@ ranger_optimization <- function(
 
 # pass parameters as ...
 ranger_fit <- function(x, y, ncores, seed, ...) {
-  params <- list(...)
+  kwargs <- list(...)
 
-  if ("cat_vars" %in% names(params)) {
-    cat_vars <- params[["cat_vars"]]
-    ranger_params <- params[names(params) != "cat_vars"]
-  } else {
-    cat_vars <- NULL
-    ranger_params <- params
-  }
+  var_handler <- mlexperiments::handle_cat_vars(kwargs)
+  cat_vars <- var_handler$cat_vars
+  ranger_params <- var_handler$params
 
   x <- kdry::dtr_matrix2df(matrix = x, cat_vars = cat_vars)
 
@@ -315,15 +316,11 @@ ranger_fit <- function(x, y, ncores, seed, ...) {
 
 ranger_predict_base <- function(model, newdata, ncores, ...) {
 
-  params <- list(...)
+  kwargs <- list(...)
 
-  if ("cat_vars" %in% names(params)) {
-    cat_vars <- params[["cat_vars"]]
-    ranger_params <- params[names(params) != "cat_vars"]
-  } else {
-    cat_vars <- NULL
-    ranger_params <- params
-  }
+  var_handler <- mlexperiments::handle_cat_vars(kwargs)
+  cat_vars <- var_handler$cat_vars
+  ranger_params <- var_handler$params
 
   predict_args <- kdry::list.append(
     list(

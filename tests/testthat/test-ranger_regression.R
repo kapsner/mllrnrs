@@ -6,6 +6,7 @@ dataset <- BostonHousing |>
 
 seed <- 123
 feature_cols <- colnames(dataset)[1:13]
+cat_vars <- "chas"
 
 param_list_ranger <- expand.grid(
   num.trees = seq(500, 1000, 500),
@@ -30,8 +31,7 @@ if (isTRUE(as.logical(Sys.getenv("_R_CHECK_LIMIT_CORES_")))) {
   )
 }
 
-train_x <- model.matrix(
-  ~ -1 + .,
+train_x <- data.matrix(
   dataset[, .SD, .SDcols = feature_cols]
 )
 train_y <- dataset[, get("medv")]
@@ -89,12 +89,13 @@ test_that(
     # set data
     ranger_optimizer$set_data(
       x = train_x,
-      y = train_y
+      y = train_y,
+      cat_vars = cat_vars
     )
 
     cv_results <- ranger_optimizer$execute()
     expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 7))
+    expect_equal(dim(cv_results), c(3, 8))
     expect_true(inherits(
       x = ranger_optimizer$results,
       what = "mlexCV"
@@ -126,12 +127,13 @@ test_that(
     # set data
     ranger_optimizer$set_data(
       x = train_x,
-      y = train_y
+      y = train_y,
+      cat_vars = cat_vars
     )
 
     cv_results <- ranger_optimizer$execute()
     expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 7))
+    expect_equal(dim(cv_results), c(3, 8))
     expect_true(inherits(
       x = ranger_optimizer$results,
       what = "mlexCV"
