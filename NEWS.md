@@ -1,11 +1,16 @@
 # mllrnrs NEWS
 
-## Unreleased (2022-11-14)
+## Unreleased (2023-07-08)
 
 #### Bug fixes
 
 -   adaptions to cat\_vars
     ([e9f0eff](https://github.com/kapsner/mllrnrs/tree/e9f0effbc2b1274f8f32a86c12b4a68ece9163de))
+
+#### Tests
+
+-   reducing runtime of unit-tests
+    ([e8b42e7](https://github.com/kapsner/mllrnrs/tree/e8b42e7bed2392900d1495e666ce0363cfe0a3e4))
 
 #### CI
 
@@ -30,7 +35,7 @@
     ([af08974](https://github.com/kapsner/mllrnrs/tree/af0897471d09d71b29a10218030ad573a1b303c0))
 
 Full set of changes:
-[`v0.0.1...1b9d9dd`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...1b9d9dd)
+[`v0.0.1...e8b42e7`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...e8b42e7)
 
 ## v0.0.1 (2022-11-13)
 

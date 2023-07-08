@@ -10,6 +10,7 @@ editor_options:
 ---
 
 ```{r, include = FALSE}
+# nolint start
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -561,7 +562,6 @@ head(validator_results)
 #> 3: regression     l2
 ```
 
-
 ## Holdout Test Dataset Performance
 
 ### Predict Outcome in Holdout Test Dataset
@@ -587,4 +587,8 @@ perf_lightgbm
 #> 1: Fold1   0.1593611 16.258140 0.02539596 2.700096 0.1230206 4.032138 0.1593611 0.7945966 2520.012
 #> 2: Fold2   0.1720557 12.614833 0.02960318 2.629003 0.1329465 3.551737 0.1720557 0.8406257 1955.299
 #> 3: Fold3   0.1424064  9.666178 0.02027958 2.226562 0.1101779 3.109048 0.1424064 0.8778787 1498.258
+```
+
+```{r include=FALSE}
+# nolint end
 ```

@@ -10,6 +10,7 @@ editor_options:
 ---
 
 ```{r, include = FALSE}
+# nolint start
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -325,4 +326,8 @@ perf_xgboost <- mlexperiments::performance(
   y_ground_truth = test_y
 )
 perf_xgboost
+```
+
+```{r include=FALSE}
+# nolint end
 ```

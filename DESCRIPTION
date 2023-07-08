@@ -1,11 +1,10 @@
 Package: mllrnrs
 Title: R6-Based ML Learners for 'mlexperiments'
-Version: 0.0.1.9001
+Version: 0.0.1.9002
 Authors@R: 
     person("Lorenz A.", "Kapsner", , "lorenz.kapsner@gmail.com", role = c("cre", "aut", "cph"),
            comment = c(ORCID = "0000-0003-1866-860X"))
-Description: A set of ML learners for use with the 'mlexperiments' R
-    package.
+Description: Additional ML learners for the 'mlexperiments' R package.
 License: GPL (>= 3)
 URL: https://github.com/kapsner/mllrnrs
 BugReports: https://github.com/kapsner/mllrnrs/issues
@@ -31,6 +30,6 @@ VignetteBuilder:
     knitr
 Config/testthat/edition: 3
 Config/testthat/parallel: false
-Date/Publication: 2023-07-08 05:13:27.064311 UTC
+Date/Publication: 2023-07-08 16:09:20.921291 UTC
 Encoding: UTF-8
 RoxygenNote: 7.2.3

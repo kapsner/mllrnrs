@@ -10,6 +10,7 @@ editor_options:
 ---
 
 ```{r, include = FALSE}
+# nolint start
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -426,4 +427,8 @@ perf_glmnet
 #> 1: Fold1   0.3606304
 #> 2: Fold2   0.3603913
 #> 3: Fold3   0.3529292
+```
+
+```{r include=FALSE}
+# nolint end
 ```

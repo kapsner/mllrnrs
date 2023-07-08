@@ -10,6 +10,7 @@ editor_options:
 ---
 
 ```{r, include = FALSE}
+# nolint start
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -734,4 +735,8 @@ perf_lightgbm
 #> 1: 0.1392405 0.1632361 0.7372881 0.2627119 0.5507246
 #> 2: 0.1012658 0.1851544 0.7288136 0.2711864 0.4838710
 #> 3: 0.1265823 0.1741526 0.7372881 0.2627119 0.5373134
+```
+
+```{r include=FALSE}
+# nolint end
 ```

@@ -10,6 +10,7 @@ editor_options:
 ---
 
 ```{r, include = FALSE}
+# nolint start
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -431,4 +432,9 @@ perf_glmnet
 #> 1: 0.1139241 0.1831706 0.7033898 0.2966102 0.4262295
 #> 2: 0.1139241 0.1786208 0.7203390 0.2796610 0.4761905
 #> 3: 0.1392405 0.1861673 0.6949153 0.3050847 0.4375000
+#>
+```
+
+```{r include=FALSE}
+# nolint end
 ```
