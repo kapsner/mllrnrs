@@ -12,7 +12,8 @@ editor_options:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
 ```
 
@@ -172,7 +173,64 @@ tuner$set_data(
 )
 
 tuner_results_grid <- tuner$execute(k = 3)
+#> [LightGBM] [Info] Start training from score 22.450000
+#> [LightGBM] [Info] Start training from score 22.655319
+#> [LightGBM] [Info] Start training from score 22.592704
+#> [LightGBM] [Info] Start training from score 22.450000
+#> [LightGBM] [Info] Start training from score 22.655319
+#> [LightGBM] [Info] Start training from score 22.592704
+#> [LightGBM] [Info] Start training from score 22.450000
+#> [LightGBM] [Info] Start training from score 22.655319
+#> [LightGBM] [Info] Start training from score 22.592704
+#> [LightGBM] [Info] Start training from score 22.450000
+#> [LightGBM] [Info] Start training from score 22.655319
+#> [LightGBM] [Info] Start training from score 22.592704
+#> 
+#> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
+#> [LightGBM] [Info] Start training from score 22.450000
+#> [LightGBM] [Info] Start training from score 22.655319
+#> [LightGBM] [Info] Start training from score 22.592704
+#> 
+#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
+#> [LightGBM] [Info] Start training from score 22.450000
+#> [LightGBM] [Info] Start training from score 22.655319
+#> [LightGBM] [Info] Start training from score 22.592704
+#> 
+#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
+#> [LightGBM] [Info] Start training from score 22.450000
+#> [LightGBM] [Info] Start training from score 22.655319
+#> [LightGBM] [Info] Start training from score 22.592704
+#> 
+#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
+#> [LightGBM] [Info] Start training from score 22.450000
+#> [LightGBM] [Info] Start training from score 22.655319
+#> [LightGBM] [Info] Start training from score 22.592704
+#> 
+#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
+#> [LightGBM] [Info] Start training from score 22.450000
+#> [LightGBM] [Info] Start training from score 22.655319
+#> [LightGBM] [Info] Start training from score 22.592704
+#> 
+#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+#> [LightGBM] [Info] Start training from score 22.450000
+#> [LightGBM] [Info] Start training from score 22.655319
+#> [LightGBM] [Info] Start training from score 22.592704
+
 head(tuner_results_grid)
+#>    setting_id metric_optim_mean nrounds bagging_fraction feature_fraction min_data_in_leaf learning_rate num_leaves max_depth
+#> 1:          1          13.59085      85              0.6              0.6                4           0.2         18        -1
+#> 2:          2          13.75483      55              0.8              1.0               10           0.2          6        -1
+#> 3:          3          21.08526      58              0.8              0.8                4           0.1          2        -1
+#> 4:          4          13.31343      92              1.0              0.8                4           0.1         10        -1
+#> 5:          5          13.86649      80              1.0              0.6                6           0.2         18        -1
+#> 6:          6          14.58646     100              1.0              1.0                8           0.1         14        -1
+#>    verbose  objective metric
+#> 1:      -1 regression     l2
+#> 2:      -1 regression     l2
+#> 3:      -1 regression     l2
+#> 4:      -1 regression     l2
+#> 5:      -1 regression     l2
+#> 6:      -1 regression     l2
 ```
 
 
@@ -202,7 +260,24 @@ tuner$set_data(
 )
 
 tuner_results_bayesian <- tuner$execute(k = 3)
+#> 
+#> Registering parallel backend using 4 cores.
+
 head(tuner_results_bayesian)
+#>    Epoch setting_id bagging_fraction feature_fraction min_data_in_leaf learning_rate num_leaves gpUtility acqOptimum inBounds
+#> 1:     0          1              0.6              0.6                4           0.2         18        NA      FALSE     TRUE
+#> 2:     0          2              0.8              1.0               10           0.2          6        NA      FALSE     TRUE
+#> 3:     0          3              0.8              0.8                4           0.1          2        NA      FALSE     TRUE
+#> 4:     0          4              1.0              0.8                4           0.1         10        NA      FALSE     TRUE
+#> 5:     0          5              1.0              0.6                6           0.2         18        NA      FALSE     TRUE
+#> 6:     0          6              1.0              1.0                8           0.1         14        NA      FALSE     TRUE
+#>    Elapsed     Score metric_optim_mean nrounds errorMessage max_depth verbose  objective metric
+#> 1:   1.081 -13.59085          13.59085      85           NA        -1      -1 regression     l2
+#> 2:   1.072 -13.75483          13.75483      55           NA        -1      -1 regression     l2
+#> 3:   1.044 -21.08526          21.08526      58           NA        -1      -1 regression     l2
+#> 4:   1.126 -13.31343          13.31343      92           NA        -1      -1 regression     l2
+#> 5:   0.104 -13.86649          13.86649      80           NA        -1      -1 regression     l2
+#> 6:   0.106 -14.58646          14.58646     100           NA        -1      -1 regression     l2
 ```
 
 ## k-Fold Cross Validation
@@ -230,7 +305,22 @@ validator$set_data(
 )
 
 validator_results <- validator$execute()
+#> 
+#> CV fold: Fold1
+#> 
+#> CV fold: Fold2
+#> 
+#> CV fold: Fold3
+
 head(validator_results)
+#>     fold performance bagging_fraction feature_fraction min_data_in_leaf learning_rate num_leaves nrounds max_depth verbose
+#> 1: Fold1   0.1572748              0.6              0.8                2           0.2         10      34        -1      -1
+#> 2: Fold2   0.1770563              0.6              0.8                2           0.2         10      34        -1      -1
+#> 3: Fold3   0.1439331              0.6              0.8                2           0.2         10      34        -1      -1
+#>     objective metric
+#> 1: regression     l2
+#> 2: regression     l2
+#> 3: regression     l2
 ```
 
 
@@ -265,7 +355,150 @@ validator$set_data(
 )
 
 validator_results <- validator$execute()
+#> 
+#> CV fold: Fold1
+#> [LightGBM] [Info] Start training from score 22.387821
+#> [LightGBM] [Info] Start training from score 22.485257
+#> [LightGBM] [Info] Start training from score 22.476923
+#> [LightGBM] [Info] Start training from score 22.387821
+#> [LightGBM] [Info] Start training from score 22.485257
+#> [LightGBM] [Info] Start training from score 22.476923
+#> [LightGBM] [Info] Start training from score 22.387821
+#> [LightGBM] [Info] Start training from score 22.485257
+#> [LightGBM] [Info] Start training from score 22.476923
+#> [LightGBM] [Info] Start training from score 22.387821
+#> [LightGBM] [Info] Start training from score 22.485257
+#> [LightGBM] [Info] Start training from score 22.476923
+#> [LightGBM] [Info] Start training from score 22.387821
+#> [LightGBM] [Info] Start training from score 22.485257
+#> [LightGBM] [Info] Start training from score 22.476923
+#> 
+#> 
+#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
+#> [LightGBM] [Info] Start training from score 22.387821
+#> [LightGBM] [Info] Start training from score 22.485257
+#> [LightGBM] [Info] Start training from score 22.476923
+#> 
+#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
+#> [LightGBM] [Info] Start training from score 22.387821
+#> [LightGBM] [Info] Start training from score 22.485257
+#> [LightGBM] [Info] Start training from score 22.476923
+#> 
+#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
+#> [LightGBM] [Info] Start training from score 22.387821
+#> [LightGBM] [Info] Start training from score 22.485257
+#> [LightGBM] [Info] Start training from score 22.476923
+#> 
+#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
+#> [LightGBM] [Info] Start training from score 22.387821
+#> [LightGBM] [Info] Start training from score 22.485257
+#> [LightGBM] [Info] Start training from score 22.476923
+#> 
+#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+#> [LightGBM] [Info] Start training from score 22.387821
+#> [LightGBM] [Info] Start training from score 22.485257
+#> [LightGBM] [Info] Start training from score 22.476923
+#> 
+#> CV fold: Fold2
+#> CV progress [====================================================================>-----------------------------------] 2/3 ( 67%)
+#> [LightGBM] [Info] Start training from score 22.517722
+#> [LightGBM] [Info] Start training from score 22.641401
+#> [LightGBM] [Info] Start training from score 22.809677
+#> [LightGBM] [Info] Start training from score 22.517722
+#> [LightGBM] [Info] Start training from score 22.641401
+#> [LightGBM] [Info] Start training from score 22.809677
+#> [LightGBM] [Info] Start training from score 22.517722
+#> [LightGBM] [Info] Start training from score 22.641401
+#> [LightGBM] [Info] Start training from score 22.809677
+#> 
+#> Parameter settings [=====================================>----------------------------------------------------------] 4/10 ( 40%)
+#> [LightGBM] [Info] Start training from score 22.517722
+#> [LightGBM] [Info] Start training from score 22.641401
+#> [LightGBM] [Info] Start training from score 22.809677
+#> 
+#> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
+#> [LightGBM] [Info] Start training from score 22.517722
+#> [LightGBM] [Info] Start training from score 22.641401
+#> [LightGBM] [Info] Start training from score 22.809677
+#> 
+#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
+#> [LightGBM] [Info] Start training from score 22.517722
+#> [LightGBM] [Info] Start training from score 22.641401
+#> [LightGBM] [Info] Start training from score 22.809677
+#> 
+#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
+#> [LightGBM] [Info] Start training from score 22.517722
+#> [LightGBM] [Info] Start training from score 22.641401
+#> [LightGBM] [Info] Start training from score 22.809677
+#> 
+#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
+#> [LightGBM] [Info] Start training from score 22.517722
+#> [LightGBM] [Info] Start training from score 22.641401
+#> [LightGBM] [Info] Start training from score 22.809677
+#> 
+#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
+#> [LightGBM] [Info] Start training from score 22.517722
+#> [LightGBM] [Info] Start training from score 22.641401
+#> [LightGBM] [Info] Start training from score 22.809677
+#> 
+#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+#> [LightGBM] [Info] Start training from score 22.517722
+#> [LightGBM] [Info] Start training from score 22.641401
+#> [LightGBM] [Info] Start training from score 22.809677
+#> 
+#> CV fold: Fold3
+#> CV progress [========================================================================================================] 3/3 (100%)
+#>                                                                                                                                   
+#> [LightGBM] [Info] Start training from score 22.496129
+#> [LightGBM] [Info] Start training from score 22.728387
+#> [LightGBM] [Info] Start training from score 22.553846
+#> [LightGBM] [Info] Start training from score 22.496129
+#> [LightGBM] [Info] Start training from score 22.728387
+#> [LightGBM] [Info] Start training from score 22.553846
+#> [LightGBM] [Info] Start training from score 22.496129
+#> [LightGBM] [Info] Start training from score 22.728387
+#> [LightGBM] [Info] Start training from score 22.553846
+#> [LightGBM] [Info] Start training from score 22.496129
+#> [LightGBM] [Info] Start training from score 22.728387
+#> [LightGBM] [Info] Start training from score 22.553846
+#> [LightGBM] [Info] Start training from score 22.496129
+#> [LightGBM] [Info] Start training from score 22.728387
+#> [LightGBM] [Info] Start training from score 22.553846
+#> [LightGBM] [Info] Start training from score 22.496129
+#> [LightGBM] [Info] Start training from score 22.728387
+#> [LightGBM] [Info] Start training from score 22.553846
+#> [LightGBM] [Warning] No further splits with positive gain, best gain: -inf
+#> 
+#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
+#> [LightGBM] [Info] Start training from score 22.496129
+#> [LightGBM] [Info] Start training from score 22.728387
+#> [LightGBM] [Info] Start training from score 22.553846
+#> 
+#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
+#> [LightGBM] [Info] Start training from score 22.496129
+#> [LightGBM] [Info] Start training from score 22.728387
+#> [LightGBM] [Info] Start training from score 22.553846
+#> [LightGBM] [Warning] No further splits with positive gain, best gain: -inf
+#> 
+#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
+#> [LightGBM] [Info] Start training from score 22.496129
+#> [LightGBM] [Info] Start training from score 22.728387
+#> [LightGBM] [Info] Start training from score 22.553846
+#> 
+#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+#> [LightGBM] [Info] Start training from score 22.496129
+#> [LightGBM] [Info] Start training from score 22.728387
+#> [LightGBM] [Info] Start training from score 22.553846
+
 head(validator_results)
+#>     fold performance nrounds bagging_fraction feature_fraction min_data_in_leaf learning_rate num_leaves max_depth verbose
+#> 1: Fold1   0.1856914      99              0.8              0.8                4           0.1          2        -1      -1
+#> 2: Fold2   0.1842789      37              0.8              0.6                8           0.1         14        -1      -1
+#> 3: Fold3   0.1516625      17              0.6              0.6                4           0.2         18        -1      -1
+#>     objective metric
+#> 1: regression     l2
+#> 2: regression     l2
+#> 3: regression     l2
 ```
 
 
@@ -302,7 +535,30 @@ validator$set_data(
 )
 
 validator_results <- validator$execute()
+#> 
+#> CV fold: Fold1
+#> 
+#> Registering parallel backend using 4 cores.
+#> 
+#> CV fold: Fold2
+#> CV progress [====================================================================>-----------------------------------] 2/3 ( 67%)
+#> 
+#> Registering parallel backend using 4 cores.
+#> 
+#> CV fold: Fold3
+#> CV progress [========================================================================================================] 3/3 (100%)
+#>                                                                                                                                   
+#> Registering parallel backend using 4 cores.
+
 head(validator_results)
+#>     fold performance bagging_fraction feature_fraction min_data_in_leaf learning_rate num_leaves nrounds max_depth verbose
+#> 1: Fold1   0.1972673        1.0000000        0.2000000                7     0.1000000          2     100        -1      -1
+#> 2: Fold2   0.1934754        0.5029800        0.4977050                7     0.1195995          4      52        -1      -1
+#> 3: Fold3   0.1391255        0.8050493        0.5902201                2     0.1458152         20      44        -1      -1
+#>     objective metric
+#> 1: regression     l2
+#> 2: regression     l2
+#> 3: regression     l2
 ```
 
 
@@ -327,4 +583,8 @@ perf_lightgbm <- mlexperiments::performance(
   type = "regression"
 )
 perf_lightgbm
+#>    model performance       mse       msle      mae      mape     rmse     rmsle       rsq      sse
+#> 1: Fold1   0.1593611 16.258140 0.02539596 2.700096 0.1230206 4.032138 0.1593611 0.7945966 2520.012
+#> 2: Fold2   0.1720557 12.614833 0.02960318 2.629003 0.1329465 3.551737 0.1720557 0.8406257 1955.299
+#> 3: Fold3   0.1424064  9.666178 0.02027958 2.226562 0.1101779 3.109048 0.1424064 0.8778787 1498.258
 ```

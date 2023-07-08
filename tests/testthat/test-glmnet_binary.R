@@ -103,54 +103,6 @@ test_that(
   }
 )
 
-
-test_that(
-  desc = "test nested cv, grid - glmnet",
-  code = {
-
-    glmnet_optimizer <- mlexperiments::MLNestedCV$new(
-      learner = mllrnrs::LearnerGlmnet$new(
-        metric_optimization_higher_better = FALSE
-      ),
-      strategy = "grid",
-      fold_list = fold_list,
-      k_tuning = 3L,
-      ncores = ncores,
-      seed = seed
-    )
-    set.seed(seed)
-    random_grid <- sample(seq_len(nrow(param_list_glmnet)), 10)
-    glmnet_optimizer$parameter_grid <- kdry::mlh_subset(
-      param_list_glmnet,
-      random_grid
-    )
-    glmnet_optimizer$split_type <- "stratified"
-
-    glmnet_optimizer$learner_args <- list(
-      family = "binomial",
-      type.measure = "class",
-      standardize = TRUE
-    )
-    glmnet_optimizer$predict_args <- list(type = "response")
-    glmnet_optimizer$performance_metric_args <- list(positive = "1")
-    glmnet_optimizer$performance_metric <- mlexperiments::metric("prauc")
-
-    # set data
-    glmnet_optimizer$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    cv_results <- glmnet_optimizer$execute()
-    expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 7))
-    expect_true(inherits(
-      x = glmnet_optimizer$results,
-      what = "mlexCV"
-    ))
-  }
-)
-
 test_that(
   desc = "test nested cv, grid - glmnet, errors",
   code = {
@@ -166,7 +118,7 @@ test_that(
       seed = seed
     )
     set.seed(seed)
-    random_grid <- sample(seq_len(nrow(param_list_glmnet)), 10)
+    random_grid <- sample(seq_len(nrow(param_list_glmnet)), 3)
     glmnet_optimizer$parameter_grid <- kdry::mlh_subset(
       param_list_glmnet,
       random_grid

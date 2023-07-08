@@ -22,13 +22,15 @@
 
 #### Other changes
 
+-   updated ranger tests
+    ([1b9d9dd](https://github.com/kapsner/mllrnrs/tree/1b9d9ddaf89b50e7b19f6d701e1e3b6826f05b0a))
 -   fixed typo
     ([df54b3d](https://github.com/kapsner/mllrnrs/tree/df54b3d69207dba0893a4dedaa97f0f843178390))
 -   updated wiki.r
     ([af08974](https://github.com/kapsner/mllrnrs/tree/af0897471d09d71b29a10218030ad573a1b303c0))
 
 Full set of changes:
-[`v0.0.1...e9f0eff`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...e9f0eff)
+[`v0.0.1...1b9d9dd`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...1b9d9dd)
 
 ## v0.0.1 (2022-11-13)
 

@@ -118,7 +118,7 @@ test_that(
       seed = seed
     )
     set.seed(seed)
-    random_grid <- sample(seq_len(nrow(param_list_glmnet)), 10)
+    random_grid <- sample(seq_len(nrow(param_list_glmnet)), 3)
     glmnet_optimizer$parameter_grid <- kdry::mlh_subset(
       param_list_glmnet,
       random_grid

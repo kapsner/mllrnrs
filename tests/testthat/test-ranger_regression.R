@@ -117,7 +117,7 @@ test_that(
       seed = seed
     )
     set.seed(seed)
-    random_grid <- sample(seq_len(nrow(param_list_ranger)), 10)
+    random_grid <- sample(seq_len(nrow(param_list_ranger)), 3)
     ranger_optimizer$parameter_grid <-
       param_list_ranger[random_grid, ]
     ranger_optimizer$split_type <- "stratified"

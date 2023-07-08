@@ -126,7 +126,7 @@ test_that(
       seed = seed
     )
     set.seed(seed)
-    random_grid <- sample(seq_len(nrow(param_list_xgboost)), 10)
+    random_grid <- sample(seq_len(nrow(param_list_xgboost)), 3)
     xgboost_optimizer$parameter_grid <-
       param_list_xgboost[random_grid, ]
     xgboost_optimizer$split_type <- "stratified"

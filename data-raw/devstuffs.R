@@ -24,7 +24,7 @@ my_desc$set_version("0.0.1.9001")
 my_desc$set(Title = "R6-Based ML Learners for 'mlexperiments'")
 # The description of your package
 my_desc$set(Description = paste0(
-  "A set of ML learners to be used with the R package 'mlexperiments'."
+  "Additional ML learners for the 'mlexperiments' R package."
 ))
 # The description of your package
 my_desc$set("Date/Publication" = paste(as.character(Sys.time()), "UTC"))
@@ -75,7 +75,7 @@ usethis::use_package("mlbench", type = "Suggests")
 remotes_append_vector <- NULL
 
 # Development package 1
-tag1 <- "main" # e.g. "v0.1.7", "development" or "cran"
+tag1 <- "cran" # e.g. "v0.1.7", "development" or "cran"
 if (tag1 == "cran") {
   install.packages("mlexperiments")
 } else{
@@ -97,7 +97,7 @@ if (tag1 == "cran") {
   }
 }
 
-tag2 <- "main" # e.g. "v0.1.7", "development" or "cran"
+tag2 <- "cran" # e.g. "v0.1.7", "development" or "cran"
 if (tag2 == "cran") {
   install.packages("kdry")
 } else{
@@ -168,7 +168,7 @@ badger::badge_github_actions(action = "test-coverage")
 # )
 an <- autonewsmd::autonewsmd$new(repo_name = packagename)
 an$generate()
-an$write()
+an$write(force = TRUE)
 
 # rcmdcheck::rcmdcheck(
 #   args = c("--as-cran", "--no-vignettes"),

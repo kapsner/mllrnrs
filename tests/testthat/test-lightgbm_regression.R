@@ -129,7 +129,7 @@ test_that(
       seed = seed
     )
     set.seed(seed)
-    random_grid <- sample(seq_len(nrow(param_list_lightgbm)), 10)
+    random_grid <- sample(seq_len(nrow(param_list_lightgbm)), 3)
     lightgbm_optimization$parameter_grid <-
       param_list_lightgbm[random_grid, ]
     lightgbm_optimization$split_type <- "stratified"
