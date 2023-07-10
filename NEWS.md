@@ -34,6 +34,8 @@
 
 #### Other changes
 
+-   preparing initial cran submission
+    ([6550826](https://github.com/kapsner/mllrnrs/tree/6550826ec135e19882c746b5ec20705a5f31e15c))
 -   fixed typo
     ([eaa42a2](https://github.com/kapsner/mllrnrs/tree/eaa42a2bddf0b3c263c72ec22fc6f92132d24ee6))
 -   updated ranger tests
@@ -44,7 +46,7 @@
     ([af08974](https://github.com/kapsner/mllrnrs/tree/af0897471d09d71b29a10218030ad573a1b303c0))
 
 Full set of changes:
-[`v0.0.1...eaa42a2`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...eaa42a2)
+[`v0.0.1...6550826`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...6550826)
 
 ## v0.0.1 (2022-11-13)
 

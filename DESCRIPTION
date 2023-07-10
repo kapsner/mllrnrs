@@ -22,6 +22,8 @@ Suggests:
     lightgbm,
     lintr,
     mlbench,
+    mlr3measures,
+    ParBayesianOptimization,
     ranger,
     splitTools,
     testthat (>= 3.0.1),
@@ -30,6 +32,6 @@ VignetteBuilder:
     knitr
 Config/testthat/edition: 3
 Config/testthat/parallel: false
-Date/Publication: 2023-07-10 06:56:50.126612 UTC
+Date/Publication: 2023-07-10 07:06:57.760607 UTC
 Encoding: UTF-8
 RoxygenNote: 7.2.3

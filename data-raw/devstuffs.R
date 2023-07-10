@@ -69,6 +69,8 @@ usethis::use_package("lightgbm", type = "Suggests")
 usethis::use_package("ranger", type = "Suggests")
 usethis::use_package("splitTools", type = "Suggests")
 usethis::use_package("mlbench", type = "Suggests")
+usethis::use_package("mlr3measures", type = "Suggests")
+usethis::use_package("ParBayesianOptimization", type = "Suggests")
 
 
 # define remotes
