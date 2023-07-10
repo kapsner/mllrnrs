@@ -13,7 +13,8 @@ editor_options:
 # nolint start
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
 ```
 
@@ -171,7 +172,30 @@ tuner$set_data(
 )
 
 tuner_results_grid <- tuner$execute(k = 3)
+#> 
+#> Parameter settings [=====================================>----------------------------------------------------------] 4/10 ( 40%)
+#> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
+#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
+#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
+#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
+#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
+#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+
 head(tuner_results_grid)
+#>    setting_id metric_optim_mean nrounds subsample colsample_bytree min_child_weight learning_rate max_depth        objective
+#> 1:          1         0.1865926      77       0.6              0.8                5           0.2         1 reg:squarederror
+#> 2:          2         0.1612372      98       1.0              0.8                5           0.1         5 reg:squarederror
+#> 3:          3         0.1933602      93       0.8              0.8                5           0.1         1 reg:squarederror
+#> 4:          4         0.1615993      78       0.6              0.8                5           0.2         5 reg:squarederror
+#> 5:          5         0.1648096      99       1.0              0.8                1           0.1         5 reg:squarederror
+#> 6:          6         0.1573879     100       0.8              0.8                5           0.1         5 reg:squarederror
+#>    eval_metric
+#> 1:        rmse
+#> 2:        rmse
+#> 3:        rmse
+#> 4:        rmse
+#> 5:        rmse
+#> 6:        rmse
 ```
 
 
@@ -201,7 +225,24 @@ tuner$set_data(
 )
 
 tuner_results_bayesian <- tuner$execute(k = 3)
+#> 
+#> Registering parallel backend using 4 cores.
+
 head(tuner_results_bayesian)
+#>    Epoch setting_id subsample colsample_bytree min_child_weight learning_rate max_depth gpUtility acqOptimum inBounds Elapsed
+#> 1:     0          1       0.6              0.8                5           0.2         1        NA      FALSE     TRUE   1.569
+#> 2:     0          2       1.0              0.8                5           0.1         5        NA      FALSE     TRUE   1.663
+#> 3:     0          3       0.8              0.8                5           0.1         1        NA      FALSE     TRUE   1.611
+#> 4:     0          4       0.6              0.8                5           0.2         5        NA      FALSE     TRUE   1.611
+#> 5:     0          5       1.0              0.8                1           0.1         5        NA      FALSE     TRUE   0.941
+#> 6:     0          6       0.8              0.8                5           0.1         5        NA      FALSE     TRUE   0.906
+#>         Score metric_optim_mean nrounds errorMessage        objective eval_metric
+#> 1: -0.1865024         0.1865024      56           NA reg:squarederror        rmse
+#> 2: -0.1607242         0.1607242      89           NA reg:squarederror        rmse
+#> 3: -0.1913163         0.1913163     100           NA reg:squarederror        rmse
+#> 4: -0.1609879         0.1609879      66           NA reg:squarederror        rmse
+#> 5: -0.1573682         0.1573682     100           NA reg:squarederror        rmse
+#> 6: -0.1635603         0.1635603      92           NA reg:squarederror        rmse
 ```
 
 ## k-Fold Cross Validation
@@ -229,7 +270,18 @@ validator$set_data(
 )
 
 validator_results <- validator$execute()
+#> 
+#> CV fold: Fold1
+#> 
+#> CV fold: Fold2
+#> 
+#> CV fold: Fold3
+
 head(validator_results)
+#>     fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds        objective eval_metric
+#> 1: Fold1  0.04193925       0.6                1                1           0.1         5      92 reg:squarederror        rmse
+#> 2: Fold2  0.05079392       0.6                1                1           0.1         5      92 reg:squarederror        rmse
+#> 3: Fold3  0.03915493       0.6                1                1           0.1         5      92 reg:squarederror        rmse
 ```
 
 
@@ -264,7 +316,42 @@ validator$set_data(
 )
 
 validator_results <- validator$execute()
+#> 
+#> CV fold: Fold1
+#> 
+#> Parameter settings [=====================================>----------------------------------------------------------] 4/10 ( 40%)
+#> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
+#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
+#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
+#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
+#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
+#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+#> CV fold: Fold2
+#> CV progress [====================================================================>-----------------------------------] 2/3 ( 67%)
+#> 
+#> Parameter settings [============================>-------------------------------------------------------------------] 3/10 ( 30%)
+#> Parameter settings [=====================================>----------------------------------------------------------] 4/10 ( 40%)
+#> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
+#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
+#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
+#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
+#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
+#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+#> CV fold: Fold3
+#> CV progress [========================================================================================================] 3/3 (100%)
+#>                                                                                                                                   
+#> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
+#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
+#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
+#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
+#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
+#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+
 head(validator_results)
+#>     fold performance nrounds subsample colsample_bytree min_child_weight learning_rate max_depth        objective eval_metric
+#> 1: Fold1  0.04291802      64       0.8              0.8                5           0.1         5 reg:squarederror        rmse
+#> 2: Fold2  0.05138479      76       0.6              1.0                1           0.1         5 reg:squarederror        rmse
+#> 3: Fold3  0.03818053      36       0.6              0.8                5           0.2         5 reg:squarederror        rmse
 ```
 
 
@@ -301,7 +388,26 @@ validator$set_data(
 )
 
 validator_results <- validator$execute()
+#> 
+#> CV fold: Fold1
+#> 
+#> Registering parallel backend using 4 cores.
+#> 
+#> CV fold: Fold2
+#> CV progress [====================================================================>-----------------------------------] 2/3 ( 67%)
+#> 
+#> Registering parallel backend using 4 cores.
+#> 
+#> CV fold: Fold3
+#> CV progress [========================================================================================================] 3/3 (100%)
+#>                                                                                                                                   
+#> Registering parallel backend using 4 cores.
+
 head(validator_results)
+#>     fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds        objective eval_metric
+#> 1: Fold1  0.04147964 0.6225939        0.9208933                5     0.1326066         5      59 reg:squarederror        rmse
+#> 2: Fold2  0.05881907 1.0000000        0.8000000                1     0.1000000         5      94 reg:squarederror        rmse
+#> 3: Fold3  0.03890190 0.6000000        1.0000000                5     0.2000000         5      37 reg:squarederror        rmse
 ```
 
 
@@ -326,6 +432,10 @@ perf_xgboost <- mlexperiments::performance(
   type = "regression"
 )
 perf_xgboost
+#>    model performance        mse        msle       mae       mape      rmse      rmsle       rsq      sse
+#> 1: Fold1  0.04322328 0.02725729 0.001868252 0.1188479 0.04074989 0.1650978 0.04322328 0.8227146 4.224880
+#> 2: Fold2  0.04730978 0.03081692 0.002238216 0.1235033 0.04247960 0.1755475 0.04730978 0.7995622 4.776623
+#> 3: Fold3  0.03977942 0.02204549 0.001582402 0.1090010 0.03781531 0.1484773 0.03977942 0.8566129 3.417052
 ```
 
 ```{r include=FALSE}

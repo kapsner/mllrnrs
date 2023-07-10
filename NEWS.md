@@ -25,6 +25,11 @@
 -   updated tic.r
     ([de4feaf](https://github.com/kapsner/mllrnrs/tree/de4feaf376eb6d0af75cce19d0bc4cd50b223275))
 
+#### Docs
+
+-   working on making vignettes static
+    ([e68cbdf](https://github.com/kapsner/mllrnrs/tree/e68cbdf55304832c6843e5c9a427f527a5250ffa))
+
 #### Other changes
 
 -   updated ranger tests
@@ -35,7 +40,7 @@
     ([af08974](https://github.com/kapsner/mllrnrs/tree/af0897471d09d71b29a10218030ad573a1b303c0))
 
 Full set of changes:
-[`v0.0.1...e8b42e7`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...e8b42e7)
+[`v0.0.1...e68cbdf`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...e68cbdf)
 
 ## v0.0.1 (2022-11-13)
 
