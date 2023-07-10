@@ -34,6 +34,8 @@
 
 #### Other changes
 
+-   adding parbayesianoptimization and mlr3measures to suggests
+    ([895e483](https://github.com/kapsner/mllrnrs/tree/895e4830a5ff659883f37265b304be718973ca31))
 -   preparing initial cran submission
     ([6550826](https://github.com/kapsner/mllrnrs/tree/6550826ec135e19882c746b5ec20705a5f31e15c))
 -   fixed typo
@@ -46,7 +48,7 @@
     ([af08974](https://github.com/kapsner/mllrnrs/tree/af0897471d09d71b29a10218030ad573a1b303c0))
 
 Full set of changes:
-[`v0.0.1...6550826`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...6550826)
+[`v0.0.1...895e483`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...895e483)
 
 ## v0.0.1 (2022-11-13)
 
