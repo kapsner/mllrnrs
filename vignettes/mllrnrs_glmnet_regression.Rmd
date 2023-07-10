@@ -40,7 +40,7 @@ feature_cols <- colnames(dataset)[1:13]
 target_col <- "medv"
 ```
 
-## General Configurarions
+## General Configurations
 
 ```{r}
 seed <- 123
