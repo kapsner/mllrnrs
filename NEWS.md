@@ -1,6 +1,6 @@
 # mllrnrs NEWS
 
-## Unreleased (2023-07-08)
+## Unreleased (2023-07-10)
 
 #### Bug fixes
 
@@ -27,11 +27,15 @@
 
 #### Docs
 
+-   making vignettes static 2
+    ([0dd73e6](https://github.com/kapsner/mllrnrs/tree/0dd73e646ea7270eecd1c9747d643ede2e1b5e5a))
 -   working on making vignettes static
     ([e68cbdf](https://github.com/kapsner/mllrnrs/tree/e68cbdf55304832c6843e5c9a427f527a5250ffa))
 
 #### Other changes
 
+-   fixed typo
+    ([eaa42a2](https://github.com/kapsner/mllrnrs/tree/eaa42a2bddf0b3c263c72ec22fc6f92132d24ee6))
 -   updated ranger tests
     ([1b9d9dd](https://github.com/kapsner/mllrnrs/tree/1b9d9ddaf89b50e7b19f6d701e1e3b6826f05b0a))
 -   fixed typo
@@ -40,7 +44,7 @@
     ([af08974](https://github.com/kapsner/mllrnrs/tree/af0897471d09d71b29a10218030ad573a1b303c0))
 
 Full set of changes:
-[`v0.0.1...e68cbdf`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...e68cbdf)
+[`v0.0.1...eaa42a2`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...eaa42a2)
 
 ## v0.0.1 (2022-11-13)
 

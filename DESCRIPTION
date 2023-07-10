@@ -1,6 +1,6 @@
 Package: mllrnrs
 Title: R6-Based ML Learners for 'mlexperiments'
-Version: 0.0.1.9003
+Version: 0.0.1.9004
 Authors@R: 
     person("Lorenz A.", "Kapsner", , "lorenz.kapsner@gmail.com", role = c("cre", "aut", "cph"),
            comment = c(ORCID = "0000-0003-1866-860X"))
@@ -30,6 +30,6 @@ VignetteBuilder:
     knitr
 Config/testthat/edition: 3
 Config/testthat/parallel: false
-Date/Publication: 2023-07-10 06:23:48.326234 UTC
+Date/Publication: 2023-07-10 06:56:50.126612 UTC
 Encoding: UTF-8
 RoxygenNote: 7.2.3
