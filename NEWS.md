@@ -1,6 +1,6 @@
 # mllrnrs NEWS
 
-## Unreleased (2023-07-10)
+## Unreleased (2023-07-13)
 
 #### Bug fixes
 
@@ -27,6 +27,8 @@
 
 #### Docs
 
+-   fixing issues for cran submission
+    ([15cbeda](https://github.com/kapsner/mllrnrs/tree/15cbedab83d2676abd08716209e92ba606bfb751))
 -   making vignettes static 2
     ([0dd73e6](https://github.com/kapsner/mllrnrs/tree/0dd73e646ea7270eecd1c9747d643ede2e1b5e5a))
 -   working on making vignettes static
@@ -52,7 +54,7 @@
     ([af08974](https://github.com/kapsner/mllrnrs/tree/af0897471d09d71b29a10218030ad573a1b303c0))
 
 Full set of changes:
-[`v0.0.1...af0dc5f`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...af0dc5f)
+[`v0.0.1...15cbeda`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...15cbeda)
 
 ## v0.0.1 (2022-11-13)
 
