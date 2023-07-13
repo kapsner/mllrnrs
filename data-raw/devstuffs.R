@@ -24,7 +24,14 @@ my_desc$set_version("0.0.2")
 my_desc$set(Title = "R6-Based ML Learners for 'mlexperiments'")
 # The description of your package
 my_desc$set(Description = paste0(
-  "Additional ML learners for the 'mlexperiments' R package."
+  "Enhances 'mlexperiments' <https://CRAN.R-project.org/package=mlexperiments> ",
+  "with additional machine learning ('ML') learners. ",
+  "The package provides R6-based learners for the following algorithms: ",
+  "'glmnet' <https://CRAN.R-project.org/package=glmnet>, ",
+  "'ranger' <https://CRAN.R-project.org/package=ranger>, ",
+  "'xgboost' <https://CRAN.R-project.org/package=xgboost>, and ",
+  "'lightgbm' <https://CRAN.R-project.org/package=lightgbm>. These can be ",
+  "used directly with the 'mlexperiments' R package."
 ))
 # The description of your package
 my_desc$set("Date/Publication" = paste(as.character(Sys.time()), "UTC"))
@@ -42,6 +49,7 @@ my_desc$set("Config/testthat/edition" = "3")
 
 # License
 my_desc$set("License", "GPL-3")
+my_desc$set("Roxygen", "list(markdown = TRUE)")
 # Save everyting
 my_desc$write(file = "DESCRIPTION")
 

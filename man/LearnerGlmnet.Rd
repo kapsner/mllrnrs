@@ -4,18 +4,68 @@
 \alias{LearnerGlmnet}
 \title{R6 Class to construct a Glmnet learner}
 \description{
-The `LearnerGlmnet` class is the interface to the `glmnet` R package for use
-  with the `mlexperiments` package.
+The \code{LearnerGlmnet} class is the interface to the \code{glmnet} R package for use
+with the \code{mlexperiments} package.
 }
 \details{
 Optimization metric:
 Can be used with
-* [mlexperiments::MLTuneParameters]
-* [mlexperiments::MLCrossValidation]
-* [mlexperiments::MLNestedCVs]
+\itemize{
+\item \link[mlexperiments:MLTuneParameters]{mlexperiments::MLTuneParameters}
+\item \link[mlexperiments:MLCrossValidation]{mlexperiments::MLCrossValidation}
+\item \link[mlexperiments:MLNestedCV]{mlexperiments::MLNestedCV}
+}
 }
 \examples{
-LearnerGlmnet$new(metric_optimization_higher_better = FALSE)
+# binary classification
+
+library(mlbench)
+data("PimaIndiansDiabetes2")
+dataset <- PimaIndiansDiabetes2 |>
+  data.table::as.data.table() |>
+  na.omit()
+
+seed <- 123
+feature_cols <- colnames(dataset)[1:8]
+
+train_x <- model.matrix(
+  ~ -1 + .,
+  dataset[, .SD, .SDcols = feature_cols]
+)
+train_y <- as.integer(dataset[, get("diabetes")]) - 1L
+
+fold_list <- splitTools::create_folds(
+  y = train_y,
+  k = 3,
+  type = "stratified",
+  seed = seed
+)
+glmnet_cv <- mlexperiments::MLCrossValidation$new(
+  learner = mllrnrs::LearnerGlmnet$new(
+    metric_optimization_higher_better = FALSE
+  ),
+  fold_list = fold_list,
+  ncores = 2,
+  seed = 123
+)
+glmnet_cv$learner_args <- list(
+  alpha = 1,
+  lambda = 0.1,
+  family = "binomial",
+  type.measure = "class",
+  standardize = TRUE
+)
+glmnet_cv$predict_args <- list(type = "response")
+glmnet_cv$performance_metric_args <- list(positive = "1")
+glmnet_cv$performance_metric <- mlexperiments::metric("auc")
+
+# set data
+glmnet_cv$set_data(
+  x = train_x,
+  y = train_y
+)
+
+glmnet_cv$execute()
 
 ## ------------------------------------------------
 ## Method `LearnerGlmnet$new`
@@ -25,7 +75,7 @@ LearnerGlmnet$new(metric_optimization_higher_better = FALSE)
 
 }
 \seealso{
-[glmnet::glmnet()], [glmnet::cv.glmnet()]
+\code{\link[glmnet:glmnet]{glmnet::glmnet()}}, \code{\link[glmnet:cv.glmnet]{glmnet::cv.glmnet()}}
 }
 \section{Super class}{
 \code{\link[mlexperiments:MLLearnerBase]{mlexperiments::MLLearnerBase}} -> \code{LearnerGlmnet}
@@ -51,7 +101,7 @@ LearnerGlmnet$new(metric_optimization_higher_better = FALSE)
 \if{html}{\out{<a id="method-LearnerGlmnet-new"></a>}}
 \if{latex}{\out{\hypertarget{method-LearnerGlmnet-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `LearnerGlmnet` object.
+Create a new \code{LearnerGlmnet} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{LearnerGlmnet$new(metric_optimization_higher_better)}\if{html}{\out{</div>}}
 }
@@ -66,7 +116,7 @@ optimization.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `LearnerGlmnet` R6 object.
+A new \code{LearnerGlmnet} R6 object.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}

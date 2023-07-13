@@ -4,16 +4,25 @@
 \alias{LearnerXgboost}
 \title{R6 Class to construct a Xgboost learner}
 \description{
-The `LearnerXgboost` class is the interface to the `xgboost` R package for
-  use with the `mlexperiments` package.
+The \code{LearnerXgboost} class is the interface to the \code{xgboost} R package for
+use with the \code{mlexperiments} package.
 }
 \details{
 Optimization metric: needs to be specified with the learner parameter
-  `eval_metric`.
-Can be used with
-* [mlexperiments::MLTuneParameters]
-* [mlexperiments::MLCrossValidation]
-* [mlexperiments::MLNestedCVs]
+\code{eval_metric}. The following options can be set via \code{options()}:
+\itemize{
+\item "mlexperiments.optim.xgb.nrounds" (default: \code{5000L})
+\item "mlexperiments.optim.xgb.early_stopping_rounds" (default: \code{500L})
+\item "mlexperiments.xgb.print_every_n" (default: \code{50L})
+\item "mlexperiments.xgb.verbose" (default: \code{FALSE})
+}
+
+\code{LearnerXgboost} can be used with
+\itemize{
+\item \link[mlexperiments:MLTuneParameters]{mlexperiments::MLTuneParameters}
+\item \link[mlexperiments:MLCrossValidation]{mlexperiments::MLCrossValidation}
+\item \link[mlexperiments:MLNestedCV]{mlexperiments::MLNestedCV}
+}
 }
 \examples{
 # binary classification
@@ -88,7 +97,7 @@ LearnerXgboost$new(metric_optimization_higher_better = FALSE)
 
 }
 \seealso{
-[xgboost::xgb.train()], [xgboost::xgb.cv()]
+\code{\link[xgboost:xgb.train]{xgboost::xgb.train()}}, \code{\link[xgboost:xgb.cv]{xgboost::xgb.cv()}}
 }
 \section{Super class}{
 \code{\link[mlexperiments:MLLearnerBase]{mlexperiments::MLLearnerBase}} -> \code{LearnerXgboost}
@@ -114,7 +123,7 @@ LearnerXgboost$new(metric_optimization_higher_better = FALSE)
 \if{html}{\out{<a id="method-LearnerXgboost-new"></a>}}
 \if{latex}{\out{\hypertarget{method-LearnerXgboost-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `LearnerXgboost` object.
+Create a new \code{LearnerXgboost} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{LearnerXgboost$new(metric_optimization_higher_better)}\if{html}{\out{</div>}}
 }
@@ -129,7 +138,7 @@ optimization.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `LearnerXgboost` R6 object.
+A new \code{LearnerXgboost} R6 object.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}

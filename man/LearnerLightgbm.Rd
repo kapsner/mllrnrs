@@ -4,16 +4,25 @@
 \alias{LearnerLightgbm}
 \title{R6 Class to construct a LightGBM learner}
 \description{
-The `LearnerLightgbm` class is the interface to the `lightgbm` R package for
-  use with the `mlexperiments` package.
+The \code{LearnerLightgbm} class is the interface to the \code{lightgbm} R package for
+use with the \code{mlexperiments} package.
 }
 \details{
 Optimization metric: needs to be specified with the learner parameter
-  `metric`.
-Can be used with
-* [mlexperiments::MLTuneParameters]
-* [mlexperiments::MLCrossValidation]
-* [mlexperiments::MLNestedCVs]
+\code{metric}. The following options can be set via \code{options()}:
+\itemize{
+\item "mlexperiments.optim.lgb.nrounds" (default: \code{5000L})
+\item "mlexperiments.optim.lgb.early_stopping_rounds" (default: \code{500L})
+\item "mlexperiments.lgb.print_every_n" (default: \code{50L})
+\item "mlexperiments.lgb.verbose" (default: \code{-1L})
+}
+
+\code{LearnerLightgbm} can be used with
+\itemize{
+\item \link[mlexperiments:MLTuneParameters]{mlexperiments::MLTuneParameters}
+\item \link[mlexperiments:MLCrossValidation]{mlexperiments::MLCrossValidation}
+\item \link[mlexperiments:MLNestedCV]{mlexperiments::MLNestedCV}
+}
 }
 \examples{
 # binary classification
@@ -89,7 +98,7 @@ LearnerLightgbm$new(metric_optimization_higher_better = FALSE)
 
 }
 \seealso{
-[lightgbm::lgb.train()], [lightgbm::lgb.cv()]
+\code{\link[lightgbm:lgb.train]{lightgbm::lgb.train()}}, \code{\link[lightgbm:lgb.cv]{lightgbm::lgb.cv()}}
 }
 \section{Super class}{
 \code{\link[mlexperiments:MLLearnerBase]{mlexperiments::MLLearnerBase}} -> \code{LearnerLightgbm}
@@ -115,7 +124,7 @@ LearnerLightgbm$new(metric_optimization_higher_better = FALSE)
 \if{html}{\out{<a id="method-LearnerLightgbm-new"></a>}}
 \if{latex}{\out{\hypertarget{method-LearnerLightgbm-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `LearnerLightgbm` object.
+Create a new \code{LearnerLightgbm} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{LearnerLightgbm$new(metric_optimization_higher_better)}\if{html}{\out{</div>}}
 }
@@ -130,7 +139,7 @@ optimization.}
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-A new `LearnerLightgbm` R6 object.
+A new \code{LearnerLightgbm} R6 object.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}

@@ -4,7 +4,15 @@ Version: 0.0.2
 Authors@R: 
     person("Lorenz A.", "Kapsner", , "lorenz.kapsner@gmail.com", role = c("cre", "aut", "cph"),
            comment = c(ORCID = "0000-0003-1866-860X"))
-Description: Additional ML learners for the 'mlexperiments' R package.
+Description: Enhances 'mlexperiments'
+    <https://CRAN.R-project.org/package=mlexperiments> with additional
+    machine learning ('ML') learners. The package provides R6-based
+    learners for the following algorithms: 'glmnet'
+    <https://CRAN.R-project.org/package=glmnet>, 'ranger'
+    <https://CRAN.R-project.org/package=ranger>, 'xgboost'
+    <https://CRAN.R-project.org/package=xgboost>, and 'lightgbm'
+    <https://CRAN.R-project.org/package=lightgbm>. These can be used
+    directly with the 'mlexperiments' R package.
 License: GPL (>= 3)
 URL: https://github.com/kapsner/mllrnrs
 BugReports: https://github.com/kapsner/mllrnrs/issues
@@ -32,5 +40,7 @@ VignetteBuilder:
     knitr
 Config/testthat/edition: 3
 Config/testthat/parallel: false
-Date/Publication: 2023-07-10 07:34:22.903174 UTC
+Date/Publication: 2023-07-13 12:54:16.409573 UTC
 Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3

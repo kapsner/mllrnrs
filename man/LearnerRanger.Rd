@@ -4,17 +4,19 @@
 \alias{LearnerRanger}
 \title{R6 Class to construct a Ranger learner}
 \description{
-The `LearnerRanger` class is the interface to the `ranger` R package for use
-  with the `mlexperiments` package.
+The \code{LearnerRanger} class is the interface to the \code{ranger} R package for use
+with the \code{mlexperiments} package.
 }
 \details{
 Optimization metric:
-* classification: classification error rate
-* regression: mean squared error
+\itemize{
+\item classification: classification error rate
+\item regression: mean squared error
 Can be used with
-* [mlexperiments::MLTuneParameters]
-* [mlexperiments::MLCrossValidation]
-* [mlexperiments::MLNestedCVs]
+\item \link[mlexperiments:MLTuneParameters]{mlexperiments::MLTuneParameters}
+\item \link[mlexperiments:MLCrossValidation]{mlexperiments::MLCrossValidation}
+\item \link[mlexperiments:MLNestedCV]{mlexperiments::MLNestedCV}
+}
 }
 \examples{
 # binary classification
@@ -83,7 +85,7 @@ LearnerRanger$new()
 
 }
 \seealso{
-[ranger::ranger()]
+\code{\link[ranger:ranger]{ranger::ranger()}}
 }
 \section{Super class}{
 \code{\link[mlexperiments:MLLearnerBase]{mlexperiments::MLLearnerBase}} -> \code{LearnerRanger}
@@ -109,13 +111,13 @@ LearnerRanger$new()
 \if{html}{\out{<a id="method-LearnerRanger-new"></a>}}
 \if{latex}{\out{\hypertarget{method-LearnerRanger-new}{}}}
 \subsection{Method \code{new()}}{
-Create a new `LearnerRanger` object.
+Create a new \code{LearnerRanger} object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{LearnerRanger$new()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-A new `LearnerRanger` R6 object.
+A new \code{LearnerRanger} R6 object.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}

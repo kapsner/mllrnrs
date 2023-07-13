@@ -34,6 +34,10 @@
 
 #### Other changes
 
+-   appended rbuildignore
+    ([af0dc5f](https://github.com/kapsner/mllrnrs/tree/af0dc5ffbf064274e313d2115a5dbcdd41b97581))
+-   preparing initial cran submission
+    ([39b1e94](https://github.com/kapsner/mllrnrs/tree/39b1e94d5a3989b0189ce10471dd9d964a7ed549))
 -   adding parbayesianoptimization and mlr3measures to suggests
     ([895e483](https://github.com/kapsner/mllrnrs/tree/895e4830a5ff659883f37265b304be718973ca31))
 -   preparing initial cran submission
@@ -48,7 +52,7 @@
     ([af08974](https://github.com/kapsner/mllrnrs/tree/af0897471d09d71b29a10218030ad573a1b303c0))
 
 Full set of changes:
-[`v0.0.1...895e483`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...895e483)
+[`v0.0.1...af0dc5f`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...af0dc5f)
 
 ## v0.0.1 (2022-11-13)
 

@@ -6,11 +6,16 @@
 #'
 #' @details
 #' Optimization metric: needs to be specified with the learner parameter
-#'   `metric`.
-#' Can be used with
+#'   `metric`. The following options can be set via `options()`:
+#'   * "mlexperiments.optim.lgb.nrounds" (default: `5000L`)
+#'   * "mlexperiments.optim.lgb.early_stopping_rounds" (default: `500L`)
+#'   * "mlexperiments.lgb.print_every_n" (default: `50L`)
+#'   * "mlexperiments.lgb.verbose" (default: `-1L`)
+#'
+#' `LearnerLightgbm` can be used with
 #' * [mlexperiments::MLTuneParameters]
 #' * [mlexperiments::MLCrossValidation]
-#' * [mlexperiments::MLNestedCVs]
+#' * [mlexperiments::MLNestedCV]
 #'
 #' @seealso [lightgbm::lgb.train()], [lightgbm::lgb.cv()]
 #'

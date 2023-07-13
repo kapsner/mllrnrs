@@ -6,11 +6,16 @@
 #'
 #' @details
 #' Optimization metric: needs to be specified with the learner parameter
-#'   `eval_metric`.
-#' Can be used with
+#'   `eval_metric`. The following options can be set via `options()`:
+#'   * "mlexperiments.optim.xgb.nrounds" (default: `5000L`)
+#'   * "mlexperiments.optim.xgb.early_stopping_rounds" (default: `500L`)
+#'   * "mlexperiments.xgb.print_every_n" (default: `50L`)
+#'   * "mlexperiments.xgb.verbose" (default: `FALSE`)
+#'
+#' `LearnerXgboost` can be used with
 #' * [mlexperiments::MLTuneParameters]
 #' * [mlexperiments::MLCrossValidation]
-#' * [mlexperiments::MLNestedCVs]
+#' * [mlexperiments::MLNestedCV]
 #'
 #' @seealso [xgboost::xgb.train()], [xgboost::xgb.cv()]
 #'
