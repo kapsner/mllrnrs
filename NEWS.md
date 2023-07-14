@@ -1,6 +1,6 @@
 # mllrnrs NEWS
 
-## Unreleased (2023-07-13)
+## v0.0.2 (2023-07-13)
 
 #### Bug fixes
 
@@ -36,6 +36,8 @@
 
 #### Other changes
 
+-   updated description and news.md
+    ([2db2e9b](https://github.com/kapsner/mllrnrs/tree/2db2e9bcf3525b872e5dce57ec00e517f6f3be5e))
 -   appended rbuildignore
     ([af0dc5f](https://github.com/kapsner/mllrnrs/tree/af0dc5ffbf064274e313d2115a5dbcdd41b97581))
 -   preparing initial cran submission
@@ -54,7 +56,7 @@
     ([af08974](https://github.com/kapsner/mllrnrs/tree/af0897471d09d71b29a10218030ad573a1b303c0))
 
 Full set of changes:
-[`v0.0.1...15cbeda`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...15cbeda)
+[`v0.0.1...v0.0.2`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...v0.0.2)
 
 ## v0.0.1 (2022-11-13)
 
