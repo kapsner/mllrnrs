@@ -1,9 +1,11 @@
 # mllrnrs NEWS
 
-## v0.0.2 (2023-07-13)
+## Unreleased (2023-07-17)
 
 #### Bug fixes
 
+-   temporary fix for compatibility with lightgbm
+    ([7a9ef30](https://github.com/kapsner/mllrnrs/tree/7a9ef307926c07ca6f2b33c2d93f4431d2a0a8c8))
 -   adaptions to cat\_vars
     ([e9f0eff](https://github.com/kapsner/mllrnrs/tree/e9f0effbc2b1274f8f32a86c12b4a68ece9163de))
 
@@ -36,6 +38,10 @@
 
 #### Other changes
 
+-   updated cran-comments
+    ([9be58ff](https://github.com/kapsner/mllrnrs/tree/9be58ffe0b30afa956dc8ad9732e2a7fdac65ab5))
+-   updated news.md
+    ([000073f](https://github.com/kapsner/mllrnrs/tree/000073f2cddbe5671bc448e8d9d6b0e0bc2e3f99))
 -   updated description and news.md
     ([2db2e9b](https://github.com/kapsner/mllrnrs/tree/2db2e9bcf3525b872e5dce57ec00e517f6f3be5e))
 -   appended rbuildignore
@@ -56,7 +62,7 @@
     ([af08974](https://github.com/kapsner/mllrnrs/tree/af0897471d09d71b29a10218030ad573a1b303c0))
 
 Full set of changes:
-[`v0.0.1...v0.0.2`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...v0.0.2)
+[`v0.0.1...7a9ef30`](https://github.com/kapsner/mllrnrs/compare/v0.0.1...7a9ef30)
 
 ## v0.0.1 (2022-11-13)
 
