@@ -41,6 +41,8 @@
 #### Other changes
 
 -   updated news.md and description
+    ([9d23524](https://github.com/kapsner/mllrnrs/tree/9d23524cc0422f381be74ac854c128ec69bfd468))
+-   updated news.md and description
     ([47aeca9](https://github.com/kapsner/mllrnrs/tree/47aeca9df9197de14eb8c4b7a37a7579e3f55b33))
 -   updated cran-comments
     ([9be58ff](https://github.com/kapsner/mllrnrs/tree/9be58ffe0b30afa956dc8ad9732e2a7fdac65ab5))

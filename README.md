@@ -2,6 +2,11 @@
 
 <!-- badges: start -->
 [![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![](https://www.r-pkg.org/badges/version/mllrnrs)](https://cran.r-project.org/package=mllrnrs)
+[![CRAN checks](https://badges.cranchecks.info/worst/mllrnrs.svg)](https://cran.r-project.org/web/checks/check_results_mllrnrs.html)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/mllrnrs?color=blue)](https://cran.r-project.org/package=mllrnrs)
+[![](http://cranlogs.r-pkg.org/badges/last-month/mllrnrs?color=blue)](https://cran.r-project.org/package=mllrnrs)
+[![Dependencies](https://tinyverse.netlify.com/badge/mllrnrs)](https://cran.r-project.org/package=mllrnrs)
 [![R build status](https://github.com/kapsner/mllrnrs/workflows/R%20CMD%20Check%20via%20{tic}/badge.svg?branch=main)](https://github.com/kapsner/mllrnrs/actions)
 [![R build status](https://github.com/kapsner/mllrnrs/workflows/lint/badge.svg?branch=main)](https://github.com/kapsner/mllrnrs/actions)
 [![R build status](https://github.com/kapsner/mllrnrs/workflows/test-coverage/badge.svg?branch=main)](https://github.com/kapsner/mllrnrs/actions)
@@ -24,6 +29,12 @@ For a short introduction on how to use the learners together with the `mlexperim
 Some learner for survival tasks are implemented in the [`mlsurvlrnrs`](https://github.com/kapsner/mlsurvlrnrs) R package.
 
 ## Installation
+
+`mllrnrs` can be installed directly from CRAN:
+
+```r
+install.packages("mllrnrs")
+```
 
 To install the development version, run
 
