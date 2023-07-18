@@ -296,6 +296,8 @@ lightgbm_predict <- function(model, newdata, ncores, ...) {
     args$data <- newdata
   } else {
     args$newdata <- newdata
+    # remove also reshape argument (https://github.com/microsoft/LightGBM/pull/4971)
+    args$reshape <- NULL
   }
 
   preds <- do.call(stats::predict, args)
