@@ -1,9 +1,11 @@
 # mllrnrs NEWS
 
-## v0.0.2 (2023-07-17)
+## v0.0.2 (2023-07-18)
 
 #### Bug fixes
 
+-   also removed reshape argument for prediction
+    ([09cde9d](https://github.com/kapsner/mllrnrs/tree/09cde9d8eb6e38310d405ce4f669eb6fb64a1b37))
 -   temporary fix for compatibility with lightgbm
     ([7a9ef30](https://github.com/kapsner/mllrnrs/tree/7a9ef307926c07ca6f2b33c2d93f4431d2a0a8c8))
 -   adaptions to cat\_vars
