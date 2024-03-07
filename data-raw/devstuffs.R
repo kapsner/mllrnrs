@@ -19,7 +19,7 @@ my_desc$set_authors(c(
 # Remove some author fields
 my_desc$del("Maintainer")
 # Set the version
-my_desc$set_version("0.0.2.9001")
+my_desc$set_version("0.0.3")
 # The title of your package
 my_desc$set(Title = "R6-Based ML Learners for 'mlexperiments'")
 # The description of your package
@@ -73,7 +73,7 @@ usethis::use_package("lintr", type = "Suggests")
 usethis::use_package("knitr", type = "Suggests")
 usethis::use_package("glmnet", type = "Suggests")
 usethis::use_package("xgboost", type = "Suggests")
-usethis::use_package("lightgbm", type = "Suggests")
+usethis::use_package("lightgbm", type = "Suggests", min_version = "4.0.0")
 usethis::use_package("ranger", type = "Suggests")
 usethis::use_package("splitTools", type = "Suggests")
 usethis::use_package("mlbench", type = "Suggests")

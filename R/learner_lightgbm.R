@@ -287,20 +287,14 @@ lightgbm_predict <- function(model, newdata, ncores, ...) {
     kwargs
   )
 
-  # temporary fix due to API change of lightgbm's predict-method:
-  # - https://lightgbm.readthedocs.io/en/v3.3.5/R/reference/predict.lgb.Booster.html
-  # - https://lightgbm.readthedocs.io/en/v4.0.0/R/reference/predict.lgb.Booster.html
-  # this can be removed, once new version is out on cran, but then also
-  # add lightgbm>=4.0.0 as a requirement to the package description
-  if (utils::packageVersion("lightgbm") <= package_version("3.3.5")) {
-    args$data <- newdata
-  } else {
-    args$newdata <- newdata
-    # remove also reshape argument (https://github.com/microsoft/LightGBM/pull/4971)
-    args$reshape <- NULL
-  }
+  args$newdata <- newdata
+  # remove also reshape argument (https://github.com/microsoft/LightGBM/pull/4971)
+  # by default, multiclass now outputs a matrix
+  args$reshape <- NULL
 
   preds <- do.call(stats::predict, args)
+
+  # important for predict-args in order to return a vector of classes for some metrics
   if (!is.null(kwargs$reshape)) {
     if (isTRUE(kwargs$reshape)) {
       preds <- kdry::mlh_reshape(preds)

@@ -1,5 +1,12 @@
 # mllrnrs NEWS
 
+## Unreleased (2023-07-18)
+
+#### Other changes
+
+-   added cran installation note
+    ([a1aa854](https://github.com/kapsner/mllrnrs/tree/a1aa854b479d78e67a7eb76b71b7d5a4500171fd))
+
 ## v0.0.2 (2023-07-18)
 
 #### Bug fixes

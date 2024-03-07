@@ -1,6 +1,6 @@
 Package: mllrnrs
 Title: R6-Based ML Learners for 'mlexperiments'
-Version: 0.0.2.9001
+Version: 0.0.3
 Authors@R: 
     person("Lorenz A.", "Kapsner", , "lorenz.kapsner@gmail.com", role = c("cre", "aut", "cph"),
            comment = c(ORCID = "0000-0003-1866-860X"))
@@ -27,7 +27,7 @@ Imports:
 Suggests: 
     glmnet,
     knitr,
-    lightgbm,
+    lightgbm (>= 4.0.0),
     lintr,
     mlbench,
     mlr3measures,
@@ -40,7 +40,7 @@ VignetteBuilder:
     knitr
 Config/testthat/edition: 3
 Config/testthat/parallel: false
-Date/Publication: 2023-07-18 18:11:47.228829 UTC
+Date/Publication: 2024-03-07 15:19:39.657389 UTC
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
