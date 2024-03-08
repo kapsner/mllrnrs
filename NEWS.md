@@ -1,5 +1,12 @@
 # mllrnrs NEWS
 
+## Unreleased (2024-03-08)
+
+#### Other changes
+
+-   updated news.md
+    ([323f9cb](https://github.com/kapsner/mllrnrs/tree/323f9cb0dc0e38213154669dccff7a700f5071c2))
+
 ## v0.0.3 (2024-03-07)
 
 #### New features
