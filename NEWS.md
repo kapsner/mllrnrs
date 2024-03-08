@@ -1,11 +1,19 @@
 # mllrnrs NEWS
 
-## Unreleased (2023-07-18)
+## v0.0.3 (2024-03-07)
+
+#### New features
+
+-   preparing v0.0.3
+    ([a6b04fc](https://github.com/kapsner/mllrnrs/tree/a6b04fc8c110864418bf201d2d77e0c30218c4ac))
 
 #### Other changes
 
 -   added cran installation note
     ([a1aa854](https://github.com/kapsner/mllrnrs/tree/a1aa854b479d78e67a7eb76b71b7d5a4500171fd))
+
+Full set of changes:
+[`v0.0.2...v0.0.3`](https://github.com/kapsner/mllrnrs/compare/v0.0.2...v0.0.3)
 
 ## v0.0.2 (2023-07-18)
 
