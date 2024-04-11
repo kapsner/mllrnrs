@@ -4,8 +4,13 @@
 
 #### Other changes
 
+-   updated dev-version
+    ([4b1625c](https://github.com/kapsner/mllrnrs/tree/4b1625cc389701ce114b44ee8565f0b147362483))
 -   updated news.md
     ([323f9cb](https://github.com/kapsner/mllrnrs/tree/323f9cb0dc0e38213154669dccff7a700f5071c2))
+
+Full set of changes:
+[`v0.0.3...4b1625c`](https://github.com/kapsner/mllrnrs/compare/v0.0.3...4b1625c)
 
 ## v0.0.3 (2024-03-07)
 

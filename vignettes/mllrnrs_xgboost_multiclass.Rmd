@@ -216,7 +216,10 @@ tuner <- mlexperiments::MLTuneParameters$new(
 tuner$parameter_grid <- parameter_grid
 tuner$parameter_bounds <- parameter_bounds
 
-tuner$learner_args <- learner_args
+tuner$learner_args <- c(
+  learner_args,
+  list(target_weights = y_weights)
+)
 tuner$optim_args <- optim_args
 
 tuner$split_type <- "stratified"
@@ -454,6 +457,122 @@ perf_xgboost
 #> 1: Fold1   0.4628262
 #> 2: Fold2   0.4503222
 #> 3: Fold3   0.4535445
+```
+
+
+## Appendix I: Grid-Search with Target Weigths
+
+Here, `xgboost`'s [`weight`-argument](https://rdrr.io/cran/xgboost/man/setinfo.html) is used to rescale the class-weights during the training.
+
+```{r}
+# define the target weights
+y_weights <- ifelse(train_y == 1, 0.8, ifelse(train_y == 2, 1.2, train_y))
+head(y_weights)
+#> [1] 1.2 1.2 0.0 0.8 0.8 0.0
+```
+
+```{r}
+tuner_w_weights <- mlexperiments::MLTuneParameters$new(
+  learner = mllrnrs::LearnerXgboost$new(
+    metric_optimization_higher_better = FALSE
+  ),
+  strategy = "grid",
+  ncores = ncores,
+  seed = seed
+)
+
+tuner_w_weights$parameter_grid <- parameter_grid
+tuner_w_weights$learner_args <- c(
+  learner_args,
+  list(target_weights = y_weights)
+)
+tuner_w_weights$split_type <- "stratified"
+
+tuner_w_weights$set_data(
+  x = train_x,
+  y = train_y
+)
+
+tuner_results_grid <- tuner_w_weights$execute(k = 3)
+#> 
+#> Parameter settings [============================>-------------------------------------------------------------------] 3/10 ( 30%)
+#> Parameter settings [=====================================>----------------------------------------------------------] 4/10 ( 40%)
+#> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
+#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
+#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
+#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
+#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
+#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+
+head(tuner_results_grid)
+#>    setting_id metric_optim_mean nrounds subsample colsample_bytree min_child_weight learning_rate max_depth
+#>         <int>             <num>   <int>     <num>            <num>            <num>         <num>     <num>
+#> 1:          1         0.5411292      42       0.6              0.8                5           0.2         1
+#> 2:          2         0.5364912      82       1.0              0.8                5           0.1         5
+#> 3:          3         0.5396050     100       0.8              0.8                5           0.1         1
+#> 4:          4         0.5328722      31       0.6              0.8                5           0.2         5
+#> 5:          5         0.5399017      63       1.0              0.8                1           0.1         5
+#> 6:          6         0.5308301      76       0.8              0.8                5           0.1         5
+#>         objective eval_metric num_class
+#>            <char>      <char>     <num>
+#> 1: multi:softprob    mlogloss         3
+#> 2: multi:softprob    mlogloss         3
+#> 3: multi:softprob    mlogloss         3
+#> 4: multi:softprob    mlogloss         3
+#> 5: multi:softprob    mlogloss         3
+#> 6: multi:softprob    mlogloss         3
+```
+
+
+## Appendix II: k-Fold Cross Validation with Target Weigths
+
+```{r}
+validator <- mlexperiments::MLCrossValidation$new(
+  learner = mllrnrs::LearnerXgboost$new(
+    metric_optimization_higher_better = FALSE
+  ),
+  fold_list = fold_list,
+  ncores = ncores,
+  seed = seed
+)
+
+# append the optimized setting from above with the newly created weights
+validator$learner_args <- c(
+  tuner$results$best.setting[-1],
+  list("target_weights" = y_weights)
+)
+
+validator$predict_args <- predict_args
+validator$performance_metric <- performance_metric
+validator$performance_metric_args <- performance_metric_args
+validator$return_models <- return_models
+
+validator$set_data(
+  x = train_x,
+  y = train_y
+)
+
+validator_results <- validator$execute()
+#> 
+#> CV fold: Fold1
+#> 
+#> CV fold: Fold2
+#> 
+#> CV fold: Fold3
+#> CV progress [========================================================================================================] 3/3 (100%)
+#>                                                                                                                                   
+
+head(validator_results)
+#>      fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds
+#>    <char>       <num>     <num>            <num>            <num>         <num>     <num>   <int>
+#> 1:  Fold1   0.3994027 0.5356077        0.8312972                1     0.1099728        10      23
+#> 2:  Fold2   0.3726661 0.5356077        0.8312972                1     0.1099728        10      23
+#> 3:  Fold3   0.3862323 0.5356077        0.8312972                1     0.1099728        10      23
+#>         objective eval_metric num_class
+#>            <char>      <char>     <num>
+#> 1: multi:softprob    mlogloss         3
+#> 2: multi:softprob    mlogloss         3
+#> 3: multi:softprob    mlogloss         3
 ```
 
 ```{r include=FALSE}

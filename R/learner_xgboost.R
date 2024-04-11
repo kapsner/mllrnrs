@@ -127,7 +127,7 @@ LearnerXgboost <- R6::R6Class( # nolint
 
 xgboost_ce <- function() {
   c("xgboost_optimization", "xgboost_fit",
-    "setup_xgb_dataset")
+    "setup_xgb_dataset", "xgboost_dataset_wrapper")
 }
 
 xgboost_bsF <- function(...) { # nolint
@@ -166,11 +166,13 @@ xgboost_optimization <- function(
     "objective" %in% names(params)
   )
 
-  dtrain <- setup_xgb_dataset(
+  temp_list <- xgboost_dataset_wrapper(
     x = x,
     y = y,
-    objective = params$objective
+    params = params
   )
+  params <- temp_list$params
+  dtrain <- temp_list$dtrain
 
   # use the same folds for all algorithms
   # folds: list provides a possibility to use a list of pre-defined CV
@@ -219,16 +221,44 @@ xgboost_optimization <- function(
   return(res)
 }
 
-xgboost_fit <- function(x, y, nrounds, ncores, seed, ...) {
-  params <- list(...)
-  stopifnot("objective" %in% names(params))
-  # train final model with best nrounds
-  dtrain_full <- setup_xgb_dataset(
+xgboost_dataset_wrapper <- function(x, y, params) {
+  # create dataset
+  dataset_args <- list(
     x = x,
     y = y,
     objective = params$objective
   )
+  if ("target_weights" %in% names(params)) {
+    dataset_args <- c(
+      dataset_args,
+      list(target_weights = params$target_weights)
+    )
+    # remove target_weights-param from learner-args
+    params$target_weights <- NULL
+  }
+  dtrain <- do.call(setup_xgb_dataset, dataset_args)
 
+  # return dataset and modified params
+  return(list(
+    dtrain = dtrain,
+    params = params
+  ))
+}
+
+xgboost_fit <- function(x, y, nrounds, ncores, seed, ...) {
+  params <- list(...)
+  stopifnot("objective" %in% names(params))
+
+  # create dataset
+  temp_list <- xgboost_dataset_wrapper(
+    x = x,
+    y = y,
+    params = params
+  )
+  params <- temp_list$params
+  dtrain_full <- temp_list$dtrain
+
+  # train final model with best nrounds
   fit_args <- list(
     data = dtrain_full,
     params = params,
@@ -248,7 +278,8 @@ xgboost_fit <- function(x, y, nrounds, ncores, seed, ...) {
 }
 
 # wrapper function for creating the input data for xgboost
-setup_xgb_dataset <- function(x, y, objective) {
+setup_xgb_dataset <- function(x, y, objective, ...) {
+  kwargs <- list(...)
   if (objective %in% c("survival:aft", "survival:cox")) {
     return(setup_surv_xgb_dataset(x, y, objective))
   } else {
@@ -257,6 +288,9 @@ setup_xgb_dataset <- function(x, y, objective) {
     dtrain <- xgboost::xgb.DMatrix(x)
     label <- y
     xgboost::setinfo(dtrain, "label", label)
+    if ("target_weights" %in% names(kwargs)) {
+      xgboost::setinfo(dtrain, "weight", kwargs$target_weights)
+    }
     return(dtrain)
   }
 }
