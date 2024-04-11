@@ -69,7 +69,7 @@ optim_args <- list(
 # ###########################################################################
 
 test_that(
-  desc = "test nested cv, bayesian, multi:softprob - xgboost",
+  desc = "test nested cv, bayesian, multi:softprob - xgboost, with weights",
   code = {
 
     xgboost_optimizer <- mlexperiments::MLNestedCV$new(
@@ -88,10 +88,12 @@ test_that(
     xgboost_optimizer$split_type <- "stratified"
     xgboost_optimizer$optim_args <- optim_args
 
+    y_weights <- ifelse(train_y == 1, 0.8, ifelse(train_y == 2, 1.2, train_y))
     xgboost_optimizer$learner_args <- list(
       objective = "multi:softprob",
       eval_metric = "mlogloss",
-      num_class = 3
+      num_class = 3,
+      list("target_weights" = y_weights)
     )
     xgboost_optimizer$predict_args <- list(reshape = TRUE)
     xgboost_optimizer$performance_metric <- mlexperiments::metric("bacc")
