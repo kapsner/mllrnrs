@@ -128,7 +128,7 @@ LearnerLightgbm <- R6::R6Class( # nolint
 
 lightgbm_ce <- function() {
   c("lightgbm_optimization", "lightgbm_fit",
-    "setup_lgb_dataset")
+    "setup_lgb_dataset", "lgb_dataset_wrapper")
 }
 
 lightgbm_bsF <- function(...) { # nolint
@@ -162,25 +162,14 @@ lightgbm_optimization <- function(
     ncores,
     seed
   ) {
-  stopifnot(
-    is.list(params),
-    "objective" %in% names(params)
-  )
-
-  if ("cat_vars" %in% names(params)) {
-    cat_vars <- params[["cat_vars"]]
-    params[["cat_vars"]] <- NULL
-  } else {
-    cat_vars <- NULL
-  }
-
-  # train final model with best nrounds
-  dtrain <- setup_lgb_dataset(
+  # create dataset
+  temp_list <- lgb_dataset_wrapper(
     x = x,
     y = y,
-    objective = params$objective,
-    cat_vars = cat_vars
+    params = params
   )
+  params <- temp_list$params
+  dtrain <- temp_list$dtrain
 
   # use the same folds for all algorithms
   # folds: list provides a possibility to use a list of pre-defined CV
@@ -222,22 +211,15 @@ lightgbm_optimization <- function(
 
 lightgbm_fit <- function(x, y, nrounds, ncores, seed, ...) {
   params <- list(...)
-  stopifnot("objective" %in% names(params))
 
-  if ("cat_vars" %in% names(params)) {
-    cat_vars <- params[["cat_vars"]]
-    params[["cat_vars"]] <- NULL
-  } else {
-    cat_vars <- NULL
-  }
-
-  # train final model with best nrounds
-  dtrain_full <- setup_lgb_dataset(
+  # create dataset
+  temp_list <- lgb_dataset_wrapper(
     x = x,
     y = y,
-    objective = params$objective,
-    cat_vars = cat_vars
+    params = params
   )
+  params <- temp_list$params
+  dtrain_full <- temp_list$dtrain
 
   params$num_threads <- ncores
 
@@ -258,22 +240,70 @@ lightgbm_fit <- function(x, y, nrounds, ncores, seed, ...) {
   return(bst)
 }
 
+
+lgb_dataset_wrapper <- function(x, y, params) {
+  stopifnot(
+    is.list(params),
+    "objective" %in% names(params)
+  )
+
+  # create dataset
+  dataset_args <- list(
+    x = x,
+    y = y,
+    objective = params$objective
+  )
+  if ("target_weights" %in% names(params)) {
+    dataset_args <- c(
+      dataset_args,
+      list(target_weights = params$target_weights)
+    )
+    # remove target_weights-param from learner-args
+    params$target_weights <- NULL
+  }
+  if ("cat_vars" %in% names(params)) {
+    cat_vars <- params$cat_vars
+    # remove cat_vars-param from learner-args
+    params$cat_vars <- NULL
+  } else {
+    cat_vars <- NULL
+  }
+  dataset_args <- c(
+    dataset_args,
+    list(cat_vars = cat_vars)
+  )
+  dtrain <- do.call(setup_lgb_dataset, dataset_args)
+
+  # return dataset and modified params
+  return(list(
+    dtrain = dtrain,
+    params = params
+  ))
+}
+
 # wrapper function for creating the input data for lightgbm
-setup_lgb_dataset <- function(x, y, objective, cat_vars) {
+setup_lgb_dataset <- function(x, y, objective, ...) {
   stopifnot(is.atomic(y))
-  # create a lgb.DMatrix
-  dtrain <- lightgbm::lgb.Dataset(
+  kwargs <- list(...)
+
+  dataset_args <- list(
     data = x,
     label = y
   )
+  if ("target_weights" %in% names(kwargs)) {
+    dataset_args <- c(dataset_args, list(weight = kwargs$target_weights))
+  }
 
-  if (!is.null(cat_vars)) {
-    stopifnot(length(intersect(cat_vars, names(x))) == length(cat_vars))
-    lightgbm::lgb.Dataset.set.categorical(
-      dataset = dtrain,
-      categorical_feature = which(cat_vars %in% colnames(x))
+  if (!is.null(kwargs$cat_vars)) {
+    stopifnot(length(intersect(kwargs$cat_vars, names(x))) ==
+                length(kwargs$cat_vars))
+    dataset_args <- c(
+      dataset_args,
+      list(categorical_feature = which(kwargs$cat_vars %in% colnames(x)))
     )
   }
+  # create a lgb.DMatrix
+  dtrain <- do.call(lightgbm::lgb.Dataset, dataset_args)
   return(dtrain)
 }
 

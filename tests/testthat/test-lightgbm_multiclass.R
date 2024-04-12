@@ -90,10 +90,12 @@ test_that(
     lightgbm_optimizer$split_type <- "stratified"
     lightgbm_optimizer$optim_args <- optim_args
 
+    y_weights <- ifelse(train_y == 1, 0.8, ifelse(train_y == 2, 1.2, train_y))
     lightgbm_optimizer$learner_args <- list(
       objective = "multiclass",
       metric = "multi_logloss",
-      num_class = 3
+      num_class = 3,
+      list("target_weights" = y_weights)
     )
     lightgbm_optimizer$predict_args <- list(reshape = TRUE)
     lightgbm_optimizer$performance_metric <- mlexperiments::metric("bacc")

@@ -1,6 +1,16 @@
 # mllrnrs NEWS
 
-## Unreleased (2024-03-08)
+## Unreleased (2024-04-11)
+
+#### New features
+
+-   added option to add weights for xgboost multiclass
+    ([694ca7e](https://github.com/kapsner/mllrnrs/tree/694ca7e56df25ee94d3937bc6b8ab1015de619db))
+
+#### Tests
+
+-   added weighted classification to unit tests
+    ([ca30135](https://github.com/kapsner/mllrnrs/tree/ca30135fabf519ad82f08e9e38a289efb5b06e13))
 
 #### Other changes
 
@@ -10,7 +20,7 @@
     ([323f9cb](https://github.com/kapsner/mllrnrs/tree/323f9cb0dc0e38213154669dccff7a700f5071c2))
 
 Full set of changes:
-[`v0.0.3...4b1625c`](https://github.com/kapsner/mllrnrs/compare/v0.0.3...4b1625c)
+[`v0.0.3...ca30135`](https://github.com/kapsner/mllrnrs/compare/v0.0.3...ca30135)
 
 ## v0.0.3 (2024-03-07)
 
