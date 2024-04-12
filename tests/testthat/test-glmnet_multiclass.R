@@ -78,10 +78,12 @@ test_that(
     glmnet_optimizer$split_type <- "stratified"
     glmnet_optimizer$optim_args <- optim_args
 
+    y_weights <- ifelse(train_y == 1, 0.8, ifelse(train_y == 2, 1.2, 1))
     glmnet_optimizer$learner_args <- list(
       family = "multinomial",
       type.measure = "class",
-      standardize = TRUE
+      standardize = TRUE,
+      target_weights = y_weights
     )
     glmnet_optimizer$predict_args <- list(type = "response", reshape = TRUE)
     glmnet_optimizer$performance_metric <- mlexperiments::metric("bacc")

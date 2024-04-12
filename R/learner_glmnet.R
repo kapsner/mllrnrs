@@ -246,6 +246,17 @@ glmnet_optimization <- function(
     )
   )
 
+  # rename mlexperiments "target_weights" to implementation specific (cv.glment)
+  # "weights"
+  if ("target_weights" %in% names(cv_args)) {
+    stopifnot(
+      "late fail: `target_weights` must be of same length as `y`" =
+        length(cv_args$target_weights) == length(y)
+    )
+    names(cv_args)[which(names(cv_args) == "target_weights")] <-
+      "weights"
+  }
+
   set.seed(seed)
   # fit the glmnet-cv-model
   cvfit <- do.call(glmnet::cv.glmnet, cv_args)
@@ -280,6 +291,18 @@ glmnet_fit <- function(x, y, ncores, seed, ...) {
     ),
     kwargs
   )
+
+  # rename mlexperiments "target_weights" to implementation specific (cv.glment)
+  # "weights"
+  if ("target_weights" %in% names(fit_args)) {
+    stopifnot(
+      "late fail: `target_weights` must be of same length as `y`" =
+        length(fit_args$target_weights) == length(y)
+    )
+    names(fit_args)[which(names(fit_args) == "target_weights")] <-
+      "weights"
+  }
+
   set.seed(seed)
   # train final model with a given lambda / alpha
   fit <- do.call(glmnet::glmnet, fit_args)

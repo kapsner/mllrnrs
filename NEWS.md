@@ -4,6 +4,8 @@
 
 #### New features
 
+-   weights support also for ranger
+    ([935e0dc](https://github.com/kapsner/mllrnrs/tree/935e0dcbd24ebddd05ad6caea96af8d57e9bfe35))
 -   added weights support for lightgbm
     ([c72161c](https://github.com/kapsner/mllrnrs/tree/c72161c5e86ad8416c2cb3e6051a060253dd3ebc))
 -   added option to add weights for xgboost multiclass
@@ -22,7 +24,7 @@
     ([323f9cb](https://github.com/kapsner/mllrnrs/tree/323f9cb0dc0e38213154669dccff7a700f5071c2))
 
 Full set of changes:
-[`v0.0.3...c72161c`](https://github.com/kapsner/mllrnrs/compare/v0.0.3...c72161c)
+[`v0.0.3...935e0dc`](https://github.com/kapsner/mllrnrs/compare/v0.0.3...935e0dc)
 
 ## v0.0.3 (2024-03-07)
 

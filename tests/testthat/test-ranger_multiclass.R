@@ -84,7 +84,11 @@ test_that(
     ranger_optimizer$split_type <- "stratified"
     ranger_optimizer$optim_args <- optim_args
 
-    ranger_optimizer$learner_args <- list(classification = TRUE)
+    y_weights <- ifelse(train_y == 1, 0.8, ifelse(train_y == 2, 1.2, 1))
+    ranger_optimizer$learner_args <- list(
+      classification = TRUE,
+      target_weights = y_weights
+    )
 
     ranger_optimizer$performance_metric <- mlexperiments::metric("bacc")
 

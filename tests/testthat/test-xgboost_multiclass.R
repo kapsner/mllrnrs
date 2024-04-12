@@ -93,7 +93,7 @@ test_that(
       objective = "multi:softprob",
       eval_metric = "mlogloss",
       num_class = 3,
-      list("target_weights" = y_weights)
+      target_weights = y_weights
     )
     xgboost_optimizer$predict_args <- list(reshape = TRUE)
     xgboost_optimizer$performance_metric <- mlexperiments::metric("bacc")

@@ -429,6 +429,107 @@ perf_glmnet
 #> 3: Fold3   0.3529292
 ```
 
+## Appendix I: Grid-Search with Target Weigths
+
+Here, `glmnet`'s [`weights`-argument](https://rdrr.io/cran/glmnet/man/glmnet.html) is used to rescale the case-weights during the training.
+
+```{r}
+# define the target weights
+y_weights <- ifelse(train_y == "n", 0.8, ifelse(train_y == "ei", 1.2, 1))
+head(y_weights)
+#> [1] 1.2 1.2 0.0 0.8 0.8 0.0
+```
+
+```{r}
+tuner_w_weights <- mlexperiments::MLTuneParameters$new(
+  learner = mllrnrs::LearnerGlmnet$new(
+    metric_optimization_higher_better = FALSE
+  ),
+  strategy = "grid",
+  ncores = ncores,
+  seed = seed
+)
+
+tuner_w_weights$parameter_grid <- parameter_grid
+tuner_w_weights$learner_args <- c(
+  learner_args,
+  list(target_weights = y_weights)
+)
+tuner_w_weights$split_type <- "stratified"
+
+tuner_w_weights$set_data(
+  x = train_x,
+  y = train_y
+)
+
+tuner_results_grid <- tuner_w_weights$execute(k = 3)
+#> 
+#> Parameter settings [============================>-------------------------------------------------------------------] 3/10 ( 30%)
+#> Parameter settings [=====================================>----------------------------------------------------------] 4/10 ( 40%)
+#> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
+#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
+#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
+#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
+#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
+#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+
+head(tuner_results_grid)
+#>    setting_id metric_optim_mean      lambda alpha      family type.measure standardize
+#>         <int>             <num>       <num> <num>      <char>       <char>      <lgcl>
+#> 1:          1         0.5428029 0.015786209  0.70 multinomial        class        TRUE
+#> 2:          2         0.5410926 0.005314924  0.90 multinomial        class        TRUE
+#> 3:          3         0.5425178 0.017000533  0.65 multinomial        class        TRUE
+#> 4:          4         0.5429929 0.027372552  0.10 multinomial        class        TRUE
+#> 5:          5         0.5422328 0.020387093  0.45 multinomial        class        TRUE
+#> 6:          6         0.5428979 0.034381521  0.05 multinomial        class        TRUE
+```
+
+## Appendix II: k-Fold Cross Validation with Target Weigths
+
+```{r}
+validator <- mlexperiments::MLCrossValidation$new(
+  learner = mllrnrs::LearnerGlmnet$new(
+    metric_optimization_higher_better = FALSE
+  ),
+  fold_list = fold_list,
+  ncores = ncores,
+  seed = seed
+)
+
+# append the optimized setting from above with the newly created weights
+validator$learner_args <- c(
+  tuner$results$best.setting[-1],
+  list("target_weights" = y_weights)
+)
+
+validator$predict_args <- predict_args
+validator$performance_metric <- performance_metric
+validator$performance_metric_args <- performance_metric_args
+validator$return_models <- return_models
+
+validator$set_data(
+  x = train_x,
+  y = train_y
+)
+
+validator_results <- validator$execute()
+#> 
+#> CV fold: Fold1
+#> 
+#> CV fold: Fold2
+#> 
+#> CV fold: Fold3
+#> CV progress [========================================================================================================] 3/3 (100%)
+#>                                                                                                                                   
+
+head(validator_results)
+#>      fold performance alpha      lambda      family type.measure standardize
+#>    <char>       <num> <num>       <num>      <char>       <char>      <lgcl>
+#> 1:  Fold1   0.4139240   0.7 0.003092562 multinomial        class        TRUE
+#> 2:  Fold2   0.3570648   0.7 0.003092562 multinomial        class        TRUE
+#> 3:  Fold3   0.3831881   0.7 0.003092562 multinomial        class        TRUE
+```
+
 ```{r include=FALSE}
 # nolint end
 ```

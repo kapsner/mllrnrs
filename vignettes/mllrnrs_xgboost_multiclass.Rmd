@@ -459,7 +459,7 @@ perf_xgboost
 
 ## Appendix I: Grid-Search with Target Weigths
 
-Here, `xgboost`'s [`weight`-argument](https://rdrr.io/cran/xgboost/man/setinfo.html) is used to rescale the class-weights during the training.
+Here, `xgboost`'s [`weight`-argument](https://rdrr.io/cran/xgboost/man/setinfo.html) is used to rescale the case-weights during the training.
 
 ```{r}
 # define the target weights

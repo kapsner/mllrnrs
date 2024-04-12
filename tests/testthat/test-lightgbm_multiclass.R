@@ -95,7 +95,7 @@ test_that(
       objective = "multiclass",
       metric = "multi_logloss",
       num_class = 3,
-      list("target_weights" = y_weights)
+      target_weights = y_weights
     )
     lightgbm_optimizer$predict_args <- list(reshape = TRUE)
     lightgbm_optimizer$performance_metric <- mlexperiments::metric("bacc")

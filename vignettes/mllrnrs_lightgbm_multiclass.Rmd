@@ -854,7 +854,7 @@ perf_lightgbm
 
 ## Appendix I: Grid-Search with Target Weigths
 
-Here, `lightgbm`'s [`weight`-argument](https://lightgbm.readthedocs.io/en/latest/R/reference/lgb.Dataset.html) is used to rescale the class-weights during the training.
+Here, `lightgbm`'s [`weight`-argument](https://lightgbm.readthedocs.io/en/latest/R/reference/lgb.Dataset.html) is used to rescale the case-weights during the training.
 
 ```{r}
 # define the target weights
