@@ -254,6 +254,10 @@ lgb_dataset_wrapper <- function(x, y, params) {
     objective = params$objective
   )
   if ("target_weights" %in% names(params)) {
+    stopifnot(
+      "late fail: `target_weights` must be of same length as `y`" =
+        length(params$target_weights) == length(y)
+    )
     dataset_args <- c(
       dataset_args,
       list(target_weights = params$target_weights)

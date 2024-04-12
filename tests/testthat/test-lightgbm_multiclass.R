@@ -90,7 +90,7 @@ test_that(
     lightgbm_optimizer$split_type <- "stratified"
     lightgbm_optimizer$optim_args <- optim_args
 
-    y_weights <- ifelse(train_y == 1, 0.8, ifelse(train_y == 2, 1.2, train_y))
+    y_weights <- ifelse(train_y == 1, 0.8, ifelse(train_y == 2, 1.2, 1))
     lightgbm_optimizer$learner_args <- list(
       objective = "multiclass",
       metric = "multi_logloss",

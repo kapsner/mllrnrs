@@ -11,11 +11,11 @@ editor_options:
 
 ```{r, include = FALSE}
 # # nolint start
-# knitr::opts_chunk$set(
-#   collapse = TRUE,
-#   comment = "#>",
-#   eval = FALSE
-# )
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
 ```
 
 ```{r setup}
@@ -858,7 +858,7 @@ Here, `lightgbm`'s [`weight`-argument](https://lightgbm.readthedocs.io/en/latest
 
 ```{r}
 # define the target weights
-y_weights <- ifelse(train_y == 1, 0.8, ifelse(train_y == 2, 1.2, train_y))
+y_weights <- ifelse(train_y == 1, 0.8, ifelse(train_y == 2, 1.2, 1))
 head(y_weights)
 #> [1] 1.2 1.2 0.0 0.8 0.8 0.0
 ```
@@ -899,12 +899,12 @@ tuner_results_grid <- tuner_w_weights$execute(k = 3)
 head(tuner_results_grid)
 #>    setting_id metric_optim_mean nrounds bagging_fraction feature_fraction min_data_in_leaf learning_rate num_leaves max_depth
 #>         <int>             <num>   <int>            <num>            <num>            <num>         <num>      <num>     <int>
-#> 1:          1        0.08445446      24              0.6              0.6                4           0.2         18        -1
-#> 2:          2        0.07807961      29              0.8              1.0               10           0.2          6        -1
-#> 3:          3        0.09966657     100              0.8              0.8                4           0.1          2        -1
-#> 4:          4        0.08054141      48              1.0              0.8                4           0.1         10        -1
-#> 5:          5        0.08262796      19              1.0              0.6                6           0.2         18        -1
-#> 6:          6        0.09273392      41              1.0              1.0                8           0.1         14        -1
+#> 1:          1         0.1294454      29              0.6              0.6                4           0.2         18        -1
+#> 2:          2         0.1221349      51              0.8              1.0               10           0.2          6        -1
+#> 3:          3         0.2240799     100              0.8              0.8                4           0.1          2        -1
+#> 4:          4         0.1194221      75              1.0              0.8                4           0.1         10        -1
+#> 5:          5         0.1281037      32              1.0              0.6                6           0.2         18        -1
+#> 6:          6         0.1245721      60              1.0              1.0                8           0.1         14        -1
 #>    verbose  objective        metric num_class
 #>      <int>     <char>        <char>    <char>
 #> 1:      -1 multiclass multi_logloss         3
@@ -957,9 +957,9 @@ validator_results <- validator$execute()
 head(validator_results)
 #>      fold performance bagging_fraction feature_fraction min_data_in_leaf learning_rate num_leaves nrounds max_depth verbose
 #>    <char>       <num>            <num>            <num>            <num>         <num>      <num>   <int>     <int>   <int>
-#> 1:  Fold1   0.6507174              0.8              0.6                8           0.1         14      66        -1      -1
-#> 2:  Fold2   0.6458434              0.8              0.6                8           0.1         14      66        -1      -1
-#> 3:  Fold3   0.6493135              0.8              0.6                8           0.1         14      66        -1      -1
+#> 1:  Fold1   0.9635665              0.8              0.6                8           0.1         14      66        -1      -1
+#> 2:  Fold2   0.9551452              0.8              0.6                8           0.1         14      66        -1      -1
+#> 3:  Fold3   0.9521232              0.8              0.6                8           0.1         14      66        -1      -1
 #>     objective        metric num_class
 #>        <char>        <char>    <char>
 #> 1: multiclass multi_logloss         3

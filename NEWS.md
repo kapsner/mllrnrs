@@ -1,9 +1,11 @@
 # mllrnrs NEWS
 
-## Unreleased (2024-04-11)
+## Unreleased (2024-04-12)
 
 #### New features
 
+-   added weights support for lightgbm
+    ([c72161c](https://github.com/kapsner/mllrnrs/tree/c72161c5e86ad8416c2cb3e6051a060253dd3ebc))
 -   added option to add weights for xgboost multiclass
     ([694ca7e](https://github.com/kapsner/mllrnrs/tree/694ca7e56df25ee94d3937bc6b8ab1015de619db))
 
@@ -20,7 +22,7 @@
     ([323f9cb](https://github.com/kapsner/mllrnrs/tree/323f9cb0dc0e38213154669dccff7a700f5071c2))
 
 Full set of changes:
-[`v0.0.3...ca30135`](https://github.com/kapsner/mllrnrs/compare/v0.0.3...ca30135)
+[`v0.0.3...c72161c`](https://github.com/kapsner/mllrnrs/compare/v0.0.3...c72161c)
 
 ## v0.0.3 (2024-03-07)
 

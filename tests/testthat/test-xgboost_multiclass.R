@@ -88,7 +88,7 @@ test_that(
     xgboost_optimizer$split_type <- "stratified"
     xgboost_optimizer$optim_args <- optim_args
 
-    y_weights <- ifelse(train_y == 1, 0.8, ifelse(train_y == 2, 1.2, train_y))
+    y_weights <- ifelse(train_y == 1, 0.8, ifelse(train_y == 2, 1.2, 1))
     xgboost_optimizer$learner_args <- list(
       objective = "multi:softprob",
       eval_metric = "mlogloss",
