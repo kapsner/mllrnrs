@@ -83,7 +83,7 @@ test_that(
       family = "multinomial",
       type.measure = "class",
       standardize = TRUE,
-      target_weights = y_weights
+      case_weights = y_weights
     )
     glmnet_optimizer$predict_args <- list(type = "response", reshape = TRUE)
     glmnet_optimizer$performance_metric <- mlexperiments::metric("bacc")

@@ -87,7 +87,7 @@ test_that(
     y_weights <- ifelse(train_y == 1, 0.8, ifelse(train_y == 2, 1.2, 1))
     ranger_optimizer$learner_args <- list(
       classification = TRUE,
-      target_weights = y_weights
+      case_weights = y_weights
     )
 
     ranger_optimizer$performance_metric <- mlexperiments::metric("bacc")

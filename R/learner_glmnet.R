@@ -246,14 +246,14 @@ glmnet_optimization <- function(
     )
   )
 
-  # rename mlexperiments "target_weights" to implementation specific (cv.glment)
+  # rename mlexperiments "case_weights" to implementation specific (cv.glment)
   # "weights"
-  if ("target_weights" %in% names(cv_args)) {
+  if ("case_weights" %in% names(cv_args)) {
     stopifnot(
-      "late fail: `target_weights` must be of same length as `y`" =
-        length(cv_args$target_weights) == length(y)
+      "late fail: `case_weights` must be of same length as `y`" =
+        length(cv_args$case_weights) == length(y)
     )
-    names(cv_args)[which(names(cv_args) == "target_weights")] <-
+    names(cv_args)[which(names(cv_args) == "case_weights")] <-
       "weights"
   }
 
@@ -292,14 +292,14 @@ glmnet_fit <- function(x, y, ncores, seed, ...) {
     kwargs
   )
 
-  # rename mlexperiments "target_weights" to implementation specific (cv.glment)
+  # rename mlexperiments "case_weights" to implementation specific (cv.glment)
   # "weights"
-  if ("target_weights" %in% names(fit_args)) {
+  if ("case_weights" %in% names(fit_args)) {
     stopifnot(
-      "late fail: `target_weights` must be of same length as `y`" =
-        length(fit_args$target_weights) == length(y)
+      "late fail: `case_weights` must be of same length as `y`" =
+        length(fit_args$case_weights) == length(y)
     )
-    names(fit_args)[which(names(fit_args) == "target_weights")] <-
+    names(fit_args)[which(names(fit_args) == "case_weights")] <-
       "weights"
   }
 

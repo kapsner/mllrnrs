@@ -179,9 +179,9 @@ ranger_cv <- function(
       params
     )
 
-    if ("target_weights" %in% names(args)) {
-      args$target_weights <- kdry::mlh_subset(
-        args$target_weights, ranger_train_idx
+    if ("case_weights" %in% names(args)) {
+      args$case_weights <- kdry::mlh_subset(
+        args$case_weights, ranger_train_idx
       )
     }
 
@@ -304,14 +304,14 @@ ranger_fit <- function(x, y, ncores, seed, ...) {
 
   x <- kdry::dtr_matrix2df(matrix = x, cat_vars = cat_vars)
 
-  # rename mlexperiments "target_weights" to implementation specific (ranger)
+  # rename mlexperiments "case_weights" to implementation specific (ranger)
   # "case.weights"
-  if ("target_weights" %in% names(ranger_params)) {
+  if ("case_weights" %in% names(ranger_params)) {
     stopifnot(
-      "late fail: `target_weights` must be of same length as `y`" =
-        length(ranger_params$target_weights) == length(y)
+      "late fail: `case_weights` must be of same length as `y`" =
+        length(ranger_params$case_weights) == length(y)
     )
-    names(ranger_params)[which(names(ranger_params) == "target_weights")] <-
+    names(ranger_params)[which(names(ranger_params) == "case_weights")] <-
       "case.weights"
   }
 

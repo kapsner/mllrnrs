@@ -253,17 +253,17 @@ lgb_dataset_wrapper <- function(x, y, params) {
     y = y,
     objective = params$objective
   )
-  if ("target_weights" %in% names(params)) {
+  if ("case_weights" %in% names(params)) {
     stopifnot(
-      "late fail: `target_weights` must be of same length as `y`" =
-        length(params$target_weights) == length(y)
+      "late fail: `case_weights` must be of same length as `y`" =
+        length(params$case_weights) == length(y)
     )
     dataset_args <- c(
       dataset_args,
-      list(target_weights = params$target_weights)
+      list(case_weights = params$case_weights)
     )
-    # remove target_weights-param from learner-args
-    params$target_weights <- NULL
+    # remove case_weights-param from learner-args
+    params$case_weights <- NULL
   }
   if ("cat_vars" %in% names(params)) {
     cat_vars <- params$cat_vars
@@ -294,8 +294,8 @@ setup_lgb_dataset <- function(x, y, objective, ...) {
     data = x,
     label = y
   )
-  if ("target_weights" %in% names(kwargs)) {
-    dataset_args <- c(dataset_args, list(weight = kwargs$target_weights))
+  if ("case_weights" %in% names(kwargs)) {
+    dataset_args <- c(dataset_args, list(weight = kwargs$case_weights))
   }
 
   if (!is.null(kwargs$cat_vars)) {

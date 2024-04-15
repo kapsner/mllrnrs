@@ -876,7 +876,7 @@ tuner_w_weights <- mlexperiments::MLTuneParameters$new(
 tuner_w_weights$parameter_grid <- parameter_grid
 tuner_w_weights$learner_args <- c(
   learner_args,
-  list(target_weights = y_weights)
+  list(case_weights = y_weights)
 )
 tuner_w_weights$split_type <- "stratified"
 
@@ -931,7 +931,7 @@ validator <- mlexperiments::MLCrossValidation$new(
 # append the optimized setting from above with the newly created weights
 validator$learner_args <- c(
   tuner$results$best.setting[-1],
-  list("target_weights" = y_weights)
+  list("case_weights" = y_weights)
 )
 
 validator$predict_args <- predict_args
