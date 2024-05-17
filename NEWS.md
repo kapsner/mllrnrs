@@ -1,6 +1,7 @@
+
 # mllrnrs NEWS
 
-## Unreleased (2024-04-12)
+## Unreleased (2024-04-15)
 
 #### New features
 
@@ -26,7 +27,7 @@
     ([323f9cb](https://github.com/kapsner/mllrnrs/tree/323f9cb0dc0e38213154669dccff7a700f5071c2))
 
 Full set of changes:
-[`v0.0.3...1674811`](https://github.com/kapsner/mllrnrs/compare/v0.0.3...1674811)
+[`v0.0.3...58d1f66`](https://github.com/kapsner/mllrnrs/compare/v0.0.3...58d1f66)
 
 ## v0.0.3 (2024-03-07)
 
@@ -51,7 +52,7 @@ Full set of changes:
     ([09cde9d](https://github.com/kapsner/mllrnrs/tree/09cde9d8eb6e38310d405ce4f669eb6fb64a1b37))
 -   temporary fix for compatibility with lightgbm
     ([7a9ef30](https://github.com/kapsner/mllrnrs/tree/7a9ef307926c07ca6f2b33c2d93f4431d2a0a8c8))
--   adaptions to cat\_vars
+-   adaptions to cat_vars
     ([e9f0eff](https://github.com/kapsner/mllrnrs/tree/e9f0effbc2b1274f8f32a86c12b4a68ece9163de))
 
 #### Tests
@@ -61,7 +62,7 @@ Full set of changes:
 
 #### CI
 
--   moving to code\_step
+-   moving to code_step
     ([2e4d11a](https://github.com/kapsner/mllrnrs/tree/2e4d11a96f5f91f62e05772f77237ac384f7e130))
 -   update coverage installing packages
     ([a2aec56](https://github.com/kapsner/mllrnrs/tree/a2aec569a52d66c2ba9feb2c6ae825c1afb3be92))
@@ -157,7 +158,7 @@ Full set of changes:
 
 -   changed order of list to be updated
     ([066eb5a](https://github.com/kapsner/mllrnrs/tree/066eb5a05408e92025c570b58def13c29ed25bab))
--   to metric\_types\_helper from mlexperiments
+-   to metric_types_helper from mlexperiments
     ([1099f1a](https://github.com/kapsner/mllrnrs/tree/1099f1aac600c2cac41a789ca5bdfcc91f2f802b))
 -   code adaptions to upstream changes
     ([c5363fc](https://github.com/kapsner/mllrnrs/tree/c5363fc2be191343ef5ebfd3363a535e0ea5e458))

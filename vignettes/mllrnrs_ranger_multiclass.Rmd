@@ -502,7 +502,7 @@ perf_ranger
 
 ## Appendix I: Grid-Search with Target Weigths
 
-Here, `ranger`'s [`case.weights`-argument](hthttps://rdrr.io/cran/ranger/man/ranger.html) is used to rescale the case-weights during the training.
+Here, `ranger`'s [`case.weights`-argument](https://rdrr.io/cran/ranger/man/ranger.html) is used to rescale the case-weights during the training.
 
 ```{r}
 # define the target weights
