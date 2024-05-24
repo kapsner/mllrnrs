@@ -1,0 +1,63 @@
+---
+format: gfm
+default-image-extension: ""
+editor_options: 
+  chunk_output_type: console
+---
+
+# mllrnrs
+
+<!-- badges: start -->
+```{r}
+#| echo: false
+#| message: false
+#| results: asis
+
+pkg <- desc::desc_get_field("Package")
+cat_var <- paste(
+  badger::badge_lifecycle(),
+  badger::badge_cran_release(pkg = pkg),
+  gsub("summary", "worst", badger::badge_cran_checks(pkg = pkg)),
+  badger::badge_cran_download(pkg = pkg, type = "grand-total", color = "blue"),
+  badger::badge_cran_download(pkg = pkg, type = "last-month", color = "blue"),
+  gsub("netlify\\.com", "netlify.app", badger::badge_dependencies(pkg = pkg)),
+  badger::badge_github_actions(action = utils::URLencode("R CMD Check via {tic}")),
+  badger::badge_github_actions(action = "lint"),
+  badger::badge_github_actions(action = "test-coverage"),
+  badger::badge_codecov(ref = desc::desc_get_urls()),
+  sep = "\n"
+)
+cat_var |> cat()
+```
+
+The `mllrnrs` R package ships with additional ML learners for [`mlexperiments`](https://github.com/kapsner/mlexperiments). 
+
+Currently implemented learners are:
+
+| Name | Based on | Description / Tasks |
+| ---- | -------- | ------------------- |
+| LearnerGlmnet | `glmnet::glmnet` | General interface to `glmnet` (examples available for families [`binomial`](tests/testthat/test-glmnet_binary.R) , [`multinomial`](tests/testthat/test-glmnet_multiclass.R), and [`regression`](tests/testthat/test-glmnet_regression.R) |
+| LearnerLightgbm | `lightgbm::lgb.train` | General interface to `lightgbm` (examples available for objectives [`binary`](tests/testthat/test-lightgbm_binary.R) , [`multiclass`](tests/testthat/test-lightgbm_multiclass.R), and [`regression`](tests/testthat/test-lightgbm_regression.R) |
+| LearnerRanger | `ranger::ranger` | General interface to `ranger` (examples available for tasks [`binary`](tests/testthat/test-ranger_binary.R) , [`multiclass`](tests/testthat/test-ranger_multiclass.R), and [`regression`](tests/testthat/test-ranger_regression.R) |
+| LearnerXgboost | `xgboost::xgb.train` | General interface to `xgboost` (examples available for objectives [`binary:logistic`](tests/testthat/test-xgboost_binary.R) , [`multi:softprob`](tests/testthat/test-xgboost_multiclass.R), and [`reg:squarederror`](tests/testthat/test-xgboost_regression.R) |
+
+For a short introduction on how to use the learners together with the `mlexperiments` R package, please visit the [wiki page](https://github.com/kapsner/mllrnrs/wiki).
+
+Some learner for survival tasks are implemented in the [`mlsurvlrnrs`](https://github.com/kapsner/mlsurvlrnrs) R package.
+
+## Installation
+
+`mllrnrs` can be installed directly from CRAN:
+
+```{r}
+#| eval: false
+install.packages("mllrnrs")
+```
+
+To install the development version, run
+
+```{r}
+#| eval: false
+install.packages("remotes")
+remotes::install_github("kapsner/mllrnrs")
+```

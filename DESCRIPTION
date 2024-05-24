@@ -40,7 +40,6 @@ VignetteBuilder:
     knitr
 Config/testthat/edition: 3
 Config/testthat/parallel: false
-Date/Publication: 2024-05-17 12:29:20.149287 UTC
+Date/Publication: 2024-05-24 10:23:04.66292 UTC
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
