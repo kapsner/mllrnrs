@@ -92,7 +92,8 @@ test_that(
 
     lightgbm_optimizer$learner_args <- list(
       objective = "binary",
-      metric = "binary_logloss"
+      metric = "binary_logloss",
+      cat_vars = c("pregnant", "pedigree")
     )
     lightgbm_optimizer$performance_metric_args <- list(positive = "1")
     lightgbm_optimizer$performance_metric <- mlexperiments::metric("auc")

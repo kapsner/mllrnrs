@@ -1,24 +1,20 @@
 ---
-title: "glmnet: Multiclass Classification"
-output: rmarkdown::html_vignette
+title: "glmnet: Binary Classification"
 vignette: >
   %\VignetteEncoding{UTF-8}
-  %\VignetteIndexEntry{glmnet: Multiclass Classification}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{glmnet: Binary Classification}
+  %\VignetteEngine{quarto::html}
 editor_options: 
   chunk_output_type: console
+
+execute:
+  eval: false
+  collapse: true
+  comment: "#>"
 ---
 
-```{r, include = FALSE}
-# nolint start
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  eval = FALSE
-)
-```
-
 ```{r setup}
+# nolint start
 library(mlexperiments)
 library(mllrnrs)
 ```
@@ -31,13 +27,13 @@ See [https://github.com/kapsner/mllrnrs/blob/main/R/learner_glmnet.R](https://gi
 
 ```{r}
 library(mlbench)
-data("DNA")
-dataset <- DNA |>
+data("PimaIndiansDiabetes2")
+dataset <- PimaIndiansDiabetes2 |>
   data.table::as.data.table() |>
   na.omit()
 
-feature_cols <- colnames(dataset)[160:180]
-target_col <- "Class"
+feature_cols <- colnames(dataset)[1:8]
+target_col <- "diabetes"
 ```
 
 ## General Configurations
@@ -75,14 +71,14 @@ train_x <- model.matrix(
   ~ -1 + .,
   dataset[data_split$train, .SD, .SDcols = feature_cols]
 )
-train_y <- dataset[data_split$train, get(target_col)]
+train_y <- as.integer(dataset[data_split$train, get(target_col)]) - 1L
 
 
 test_x <- model.matrix(
   ~ -1 + .,
   dataset[data_split$test, .SD, .SDcols = feature_cols]
 )
-test_y <- dataset[data_split$test, get(target_col)]
+test_y <- as.integer(dataset[data_split$test, get(target_col)]) - 1L
 ```
 
 ## Generate Training Data Folds
@@ -103,7 +99,7 @@ fold_list <- splitTools::create_folds(
 ```{r}
 # required learner arguments, not optimized
 learner_args <- list(
-  family = "multinomial",
+  family = "binomial",
   type.measure = "class",
   standardize = TRUE
 )
@@ -111,9 +107,9 @@ learner_args <- list(
 # set arguments for predict function and performance metric,
 # required for mlexperiments::MLCrossValidation and
 # mlexperiments::MLNestedCV
-predict_args <- list(type = "response", reshape = TRUE)
-performance_metric <- metric("bacc")
-performance_metric_args <- NULL
+predict_args <- list(type = "response")
+performance_metric <- metric("auc")
+performance_metric_args <- list(positive = "1")
 return_models <- FALSE
 
 # required for grid search and initialization of bayesian optimization
@@ -175,13 +171,13 @@ tuner_results_grid <- tuner$execute(k = 3)
 #> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
 
 head(tuner_results_grid)
-#>    setting_id metric_optim_mean      lambda alpha      family type.measure standardize
-#> 1:          1         0.4728578 0.003092562  0.70 multinomial        class        TRUE
-#> 2:          2         0.4737550 0.002639842  0.90 multinomial        class        TRUE
-#> 3:          3         0.4733064 0.003330451  0.65 multinomial        class        TRUE
-#> 4:          4         0.4733064 0.017972493  0.10 multinomial        class        TRUE
-#> 5:          5         0.4733064 0.003993887  0.45 multinomial        class        TRUE
-#> 6:          6         0.4728578 0.022574498  0.05 multinomial        class        TRUE
+#>    setting_id metric_optim_mean      lambda alpha   family type.measure standardize
+#> 1:          1         0.1751825 0.094027663  0.70 binomial        class        TRUE
+#> 2:          2         0.1788321 0.080262968  0.90 binomial        class        TRUE
+#> 3:          3         0.1788321 0.101260561  0.65 binomial        class        TRUE
+#> 4:          4         0.1751825 0.006282777  0.10 binomial        class        TRUE
+#> 5:          5         0.1751825 0.110644301  0.45 binomial        class        TRUE
+#> 6:          6         0.1751825 0.006551691  0.05 binomial        class        TRUE
 ```
 
 
@@ -215,13 +211,13 @@ tuner_results_bayesian <- tuner$execute(k = 3)
 #> Registering parallel backend using 4 cores.
 
 head(tuner_results_bayesian)
-#>    Epoch setting_id alpha gpUtility acqOptimum inBounds Elapsed      Score metric_optim_mean      lambda errorMessage      family
-#> 1:     0          1  0.70        NA      FALSE     TRUE   1.666 -0.4728578         0.4728578 0.003092562           NA multinomial
-#> 2:     0          2  0.90        NA      FALSE     TRUE   1.635 -0.4737550         0.4737550 0.002639842           NA multinomial
-#> 3:     0          3  0.65        NA      FALSE     TRUE   1.657 -0.4733064         0.4733064 0.003330451           NA multinomial
-#> 4:     0          4  0.10        NA      FALSE     TRUE   1.744 -0.4733064         0.4733064 0.017972493           NA multinomial
-#> 5:     0          5  0.45        NA      FALSE     TRUE   0.577 -0.4733064         0.4733064 0.003993887           NA multinomial
-#> 6:     0          6  0.05        NA      FALSE     TRUE   0.687 -0.4728578         0.4728578 0.022574498           NA multinomial
+#>    Epoch setting_id alpha gpUtility acqOptimum inBounds Elapsed      Score metric_optim_mean      lambda errorMessage   family
+#> 1:     0          1  0.70        NA      FALSE     TRUE   0.934 -0.1751825         0.1751825 0.094027663           NA binomial
+#> 2:     0          2  0.90        NA      FALSE     TRUE   0.971 -0.1788321         0.1788321 0.080262968           NA binomial
+#> 3:     0          3  0.65        NA      FALSE     TRUE   0.948 -0.1788321         0.1788321 0.101260561           NA binomial
+#> 4:     0          4  0.10        NA      FALSE     TRUE   0.931 -0.1751825         0.1751825 0.006282777           NA binomial
+#> 5:     0          5  0.45        NA      FALSE     TRUE   0.027 -0.1751825         0.1751825 0.110644301           NA binomial
+#> 6:     0          6  0.05        NA      FALSE     TRUE   0.030 -0.1751825         0.1751825 0.006551691           NA binomial
 #>    type.measure standardize
 #> 1:        class        TRUE
 #> 2:        class        TRUE
@@ -264,10 +260,10 @@ validator_results <- validator$execute()
 #> CV fold: Fold3
 
 head(validator_results)
-#>     fold performance alpha      lambda      family type.measure standardize
-#> 1: Fold1   0.3672581   0.7 0.003092562 multinomial        class        TRUE
-#> 2: Fold2   0.3524351   0.7 0.003092562 multinomial        class        TRUE
-#> 3: Fold3   0.3700659   0.7 0.003092562 multinomial        class        TRUE
+#>     fold performance     alpha    lambda   family type.measure standardize
+#> 1: Fold1   0.8773136 0.7568403 0.1047508 binomial        class        TRUE
+#> 2: Fold2   0.8630354 0.7568403 0.1047508 binomial        class        TRUE
+#> 3: Fold3   0.8304127 0.7568403 0.1047508 binomial        class        TRUE
 ```
 
 
@@ -340,10 +336,10 @@ validator_results <- validator$execute()
 #> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
 
 head(validator_results)
-#>     fold performance      lambda alpha      family type.measure standardize
-#> 1: Fold1   0.3465038 0.006548214  0.90 multinomial        class        TRUE
-#> 2: Fold2   0.3475436 0.001710793  0.65 multinomial        class        TRUE
-#> 3: Fold3   0.3514970 0.038236018  0.10 multinomial        class        TRUE
+#>     fold performance     lambda alpha   family type.measure standardize
+#> 1: Fold1   0.8741407 0.00093823   0.7 binomial        class        TRUE
+#> 2: Fold2   0.8646219 0.09563561   0.7 binomial        class        TRUE
+#> 3: Fold3   0.8648954 0.03175575   0.7 binomial        class        TRUE
 ```
 
 
@@ -396,10 +392,10 @@ validator_results <- validator$execute()
 #> Registering parallel backend using 4 cores.
 
 head(validator_results)
-#>     fold performance     alpha      lambda      family type.measure standardize
-#> 1: Fold1   0.3652609 0.7000000 0.004817737 multinomial        class        TRUE
-#> 2: Fold2   0.3416288 0.4178147 0.017108341 multinomial        class        TRUE
-#> 3: Fold3   0.3467740 0.1000000 0.041963982 multinomial        class        TRUE
+#>     fold performance alpha     lambda   family type.measure standardize
+#> 1: Fold1   0.8773136   0.9 0.08390173 binomial        class        TRUE
+#> 2: Fold2   0.8767848   0.1 0.15109601 binomial        class        TRUE
+#> 3: Fold3   0.8507631   0.5 0.11271736 binomial        class        TRUE
 ```
 
 
@@ -420,114 +416,19 @@ preds_glmnet <- mlexperiments::predictions(
 perf_glmnet <- mlexperiments::performance(
   object = validator,
   prediction_results = preds_glmnet,
-  y_ground_truth = test_y
+  y_ground_truth = test_y,
+  type = "binary"
 )
 perf_glmnet
-#>    model performance
-#> 1: Fold1   0.3606304
-#> 2: Fold2   0.3603913
-#> 3: Fold3   0.3529292
-```
-
-## Appendix I: Grid-Search with Target Weigths
-
-Here, `glmnet`'s [`weights`-argument](https://rdrr.io/cran/glmnet/man/glmnet.html) is used to rescale the case-weights during the training.
-
-```{r}
-# define the target weights
-y_weights <- ifelse(train_y == "n", 0.8, ifelse(train_y == "ei", 1.2, 1))
-head(y_weights)
-#> [1] 1.2 1.2 0.0 0.8 0.8 0.0
-```
-
-```{r}
-tuner_w_weights <- mlexperiments::MLTuneParameters$new(
-  learner = mllrnrs::LearnerGlmnet$new(
-    metric_optimization_higher_better = FALSE
-  ),
-  strategy = "grid",
-  ncores = ncores,
-  seed = seed
-)
-
-tuner_w_weights$parameter_grid <- parameter_grid
-tuner_w_weights$learner_args <- c(
-  learner_args,
-  list(case_weights = y_weights)
-)
-tuner_w_weights$split_type <- "stratified"
-
-tuner_w_weights$set_data(
-  x = train_x,
-  y = train_y
-)
-
-tuner_results_grid <- tuner_w_weights$execute(k = 3)
-#> 
-#> Parameter settings [============================>-------------------------------------------------------------------] 3/10 ( 30%)
-#> Parameter settings [=====================================>----------------------------------------------------------] 4/10 ( 40%)
-#> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
-#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
-#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
-#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
-#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
-
-head(tuner_results_grid)
-#>    setting_id metric_optim_mean      lambda alpha      family type.measure standardize
-#>         <int>             <num>       <num> <num>      <char>       <char>      <lgcl>
-#> 1:          1         0.5428029 0.015786209  0.70 multinomial        class        TRUE
-#> 2:          2         0.5410926 0.005314924  0.90 multinomial        class        TRUE
-#> 3:          3         0.5425178 0.017000533  0.65 multinomial        class        TRUE
-#> 4:          4         0.5429929 0.027372552  0.10 multinomial        class        TRUE
-#> 5:          5         0.5422328 0.020387093  0.45 multinomial        class        TRUE
-#> 6:          6         0.5428979 0.034381521  0.05 multinomial        class        TRUE
-```
-
-## Appendix II: k-Fold Cross Validation with Target Weigths
-
-```{r}
-validator <- mlexperiments::MLCrossValidation$new(
-  learner = mllrnrs::LearnerGlmnet$new(
-    metric_optimization_higher_better = FALSE
-  ),
-  fold_list = fold_list,
-  ncores = ncores,
-  seed = seed
-)
-
-# append the optimized setting from above with the newly created weights
-validator$learner_args <- c(
-  tuner$results$best.setting[-1],
-  list("case_weights" = y_weights)
-)
-
-validator$predict_args <- predict_args
-validator$performance_metric <- performance_metric
-validator$performance_metric_args <- performance_metric_args
-validator$return_models <- return_models
-
-validator$set_data(
-  x = train_x,
-  y = train_y
-)
-
-validator_results <- validator$execute()
-#> 
-#> CV fold: Fold1
-#> 
-#> CV fold: Fold2
-#> 
-#> CV fold: Fold3
-#> CV progress [========================================================================================================] 3/3 (100%)
-#>                                                                                                                                   
-
-head(validator_results)
-#>      fold performance alpha      lambda      family type.measure standardize
-#>    <char>       <num> <num>       <num>      <char>       <char>      <lgcl>
-#> 1:  Fold1   0.4139240   0.7 0.003092562 multinomial        class        TRUE
-#> 2:  Fold2   0.3570648   0.7 0.003092562 multinomial        class        TRUE
-#> 3:  Fold3   0.3831881   0.7 0.003092562 multinomial        class        TRUE
+#>    model performance       auc     prauc sensitivity specificity       ppv       npv tn tp fn fp       tnr       tpr       fnr
+#> 1: Fold1   0.7656605 0.7656605 0.5841923   0.3333333   0.8860759 0.5909091 0.7291667 70 13 26  9 0.8860759 0.3333333 0.6666667
+#> 2: Fold2   0.7831873 0.7831873 0.5822704   0.3846154   0.8860759 0.6250000 0.7446809 70 15 24  9 0.8860759 0.3846154 0.6153846
+#> 3: Fold3   0.7627394 0.7627394 0.5747411   0.3589744   0.8607595 0.5600000 0.7311828 68 14 25 11 0.8607595 0.3589744 0.6410256
+#>          fpr    bbrier       acc        ce     fbeta
+#> 1: 0.1139241 0.1831706 0.7033898 0.2966102 0.4262295
+#> 2: 0.1139241 0.1786208 0.7203390 0.2796610 0.4761905
+#> 3: 0.1392405 0.1861673 0.6949153 0.3050847 0.4375000
+#>
 ```
 
 ```{r include=FALSE}

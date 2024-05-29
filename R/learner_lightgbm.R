@@ -299,11 +299,11 @@ setup_lgb_dataset <- function(x, y, objective, ...) {
   }
 
   if (!is.null(kwargs$cat_vars)) {
-    stopifnot(length(intersect(kwargs$cat_vars, names(x))) ==
+    stopifnot(length(intersect(kwargs$cat_vars, colnames(x))) ==
                 length(kwargs$cat_vars))
     dataset_args <- c(
       dataset_args,
-      list(categorical_feature = which(kwargs$cat_vars %in% colnames(x)))
+      list(categorical_feature = kwargs$cat_vars)
     )
   }
   # create a lgb.DMatrix

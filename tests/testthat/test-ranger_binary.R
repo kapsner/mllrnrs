@@ -84,7 +84,8 @@ test_that(
     ranger_optimizer$split_type <- "stratified"
     ranger_optimizer$optim_args <- optim_args
 
-    ranger_optimizer$learner_args <- list(probability = TRUE)
+    ranger_optimizer$learner_args <- list(probability = TRUE,
+                                          cat_vars = c("pregnant", "pedigree"))
     ranger_optimizer$predict_args <- list(prob = TRUE, positive = "1")
 
     ranger_optimizer$performance_metric_args <- list(positive = "1")
