@@ -188,7 +188,7 @@ glmnet_optimization <- function(
     fold_list,
     ncores,
     seed
-  ) {
+) {
   stopifnot(
     is.list(params),
     (sapply(
@@ -272,17 +272,17 @@ glmnet_optimization <- function(
 glmnet_fit <- function(x, y, ncores, seed, ...) {
   kwargs <- list(...)
   stopifnot((sapply(
-              X = c("lambda", "alpha", "family"),
-              FUN = function(x) {
-                x %in% names(kwargs)
-              }
-            )),
-            (!sapply(
-              X = c("x", "y"),
-              FUN = function(x) {
-                x %in% names(kwargs)
-              }
-            )))
+    X = c("lambda", "alpha", "family"),
+    FUN = function(x) {
+      x %in% names(kwargs)
+    }
+  )),
+  (!sapply(
+    X = c("x", "y"),
+    FUN = function(x) {
+      x %in% names(kwargs)
+    }
+  )))
 
   fit_args <- kdry::list.append(
     list(
