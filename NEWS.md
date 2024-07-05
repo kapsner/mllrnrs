@@ -2,7 +2,7 @@
 
 # mllrnrs NEWS
 
-## Unreleased (2024-05-24)
+## Unreleased (2024-05-29)
 
 #### New features
 
@@ -25,6 +25,8 @@
 
 #### Other changes
 
+-   switch vignetteengine to quarto
+    ([b70f3d6](https://github.com/kapsner/mllrnrs/tree/b70f3d678751b67513d1404062362b651d5e806a))
 -   added automated gen of readme
     ([dbbcde5](https://github.com/kapsner/mllrnrs/tree/dbbcde53cbc4ba0f3430360111b50c02a2dec33b))
 -   add weight support also for glmnet
@@ -35,7 +37,7 @@
     ([323f9cb](https://github.com/kapsner/mllrnrs/tree/323f9cb0dc0e38213154669dccff7a700f5071c2))
 
 Full set of changes:
-[`v0.0.3...dbbcde5`](https://github.com/kapsner/mllrnrs/compare/v0.0.3...dbbcde5)
+[`v0.0.3...b70f3d6`](https://github.com/kapsner/mllrnrs/compare/v0.0.3...b70f3d6)
 
 ## v0.0.3 (2024-03-07)
 
