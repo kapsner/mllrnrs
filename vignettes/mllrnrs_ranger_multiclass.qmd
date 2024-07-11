@@ -6,7 +6,6 @@ vignette: >
   %\VignetteEngine{quarto::html}
 editor_options: 
   chunk_output_type: console
-
 execute:
   eval: false
   collapse: true
@@ -553,7 +552,7 @@ head(tuner_results_grid)
 ## Appendix II: k-Fold Cross Validation with Target Weigths
 
 ```{r}
-validator <- mlexperiments::MLCrossValidation$new(
+validator_w_weights <- mlexperiments::MLCrossValidation$new(
   learner = mllrnrs::LearnerRanger$new(),
   fold_list = fold_list,
   ncores = ncores,
@@ -561,22 +560,21 @@ validator <- mlexperiments::MLCrossValidation$new(
 )
 
 # append the optimized setting from above with the newly created weights
-validator$learner_args <- c(
-  tuner$results$best.setting[-1],
-  list("case_weights" = y_weights)
+validator_w_weights$learner_args <- c(
+  tuner_w_weights$results$best.setting[-1]
 )
 
-validator$predict_args <- predict_args
-validator$performance_metric <- performance_metric
-validator$performance_metric_args <- performance_metric_args
-validator$return_models <- return_models
+validator_w_weights$predict_args <- predict_args
+validator_w_weights$performance_metric <- performance_metric
+validator_w_weights$performance_metric_args <- performance_metric_args
+validator_w_weights$return_models <- return_models
 
-validator$set_data(
+validator_w_weights$set_data(
   x = train_x,
   y = train_y
 )
 
-validator_results <- validator$execute()
+validator_results <- validator_w_weights$execute()
 #> 
 #> CV fold: Fold1
 #> 
@@ -589,9 +587,9 @@ validator_results <- validator$execute()
 head(validator_results)
 #>      fold performance num.trees  mtry min.node.size max.depth sample.fraction probability classification
 #>    <char>       <num>     <num> <num>         <num>     <num>           <num>      <lgcl>         <lgcl>
-#> 1:  Fold1   0.4565664       500     4             9         9             0.8        TRUE           TRUE
-#> 2:  Fold2   0.4266609       500     4             9         9             0.8        TRUE           TRUE
-#> 3:  Fold3   0.4576471       500     4             9         9             0.8        TRUE           TRUE
+#> 1:  Fold1   0.4265252       500     2             5         9             0.5        TRUE           TRUE
+#> 2:  Fold2   0.4060490       500     2             5         9             0.5        TRUE           TRUE
+#> 3:  Fold3   0.4234232       500     2             5         9             0.5        TRUE           TRUE
 ```
 
 ```{r include=FALSE}

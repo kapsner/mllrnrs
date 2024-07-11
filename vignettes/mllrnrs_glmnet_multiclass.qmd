@@ -6,7 +6,6 @@ vignette: >
   %\VignetteEngine{quarto::html}
 editor_options: 
   chunk_output_type: console
-
 execute:
   eval: false
   collapse: true
@@ -483,7 +482,7 @@ head(tuner_results_grid)
 ## Appendix II: k-Fold Cross Validation with Target Weigths
 
 ```{r}
-validator <- mlexperiments::MLCrossValidation$new(
+validator_w_weights <- mlexperiments::MLCrossValidation$new(
   learner = mllrnrs::LearnerGlmnet$new(
     metric_optimization_higher_better = FALSE
   ),
@@ -493,22 +492,21 @@ validator <- mlexperiments::MLCrossValidation$new(
 )
 
 # append the optimized setting from above with the newly created weights
-validator$learner_args <- c(
-  tuner$results$best.setting[-1],
-  list("case_weights" = y_weights)
+validator_w_weights$learner_args <- c(
+  tuner_w_weights$results$best.setting[-1]
 )
 
-validator$predict_args <- predict_args
-validator$performance_metric <- performance_metric
-validator$performance_metric_args <- performance_metric_args
-validator$return_models <- return_models
+validator_w_weights$predict_args <- predict_args
+validator_w_weights$performance_metric <- performance_metric
+validator_w_weights$performance_metric_args <- performance_metric_args
+validator_w_weights$return_models <- return_models
 
-validator$set_data(
+validator_w_weights$set_data(
   x = train_x,
   y = train_y
 )
 
-validator_results <- validator$execute()
+validator_results <- validator_w_weights$execute()
 #> 
 #> CV fold: Fold1
 #> 
@@ -519,11 +517,11 @@ validator_results <- validator$execute()
 #>                                                                                                                                   
 
 head(validator_results)
-#>      fold performance alpha      lambda      family type.measure standardize
-#>    <char>       <num> <num>       <num>      <char>       <char>      <lgcl>
-#> 1:  Fold1   0.4139240   0.7 0.003092562 multinomial        class        TRUE
-#> 2:  Fold2   0.3570648   0.7 0.003092562 multinomial        class        TRUE
-#> 3:  Fold3   0.3831881   0.7 0.003092562 multinomial        class        TRUE
+#>      fold performance      lambda alpha      family type.measure standardize
+#>    <char>       <num>       <num> <num>      <char>       <char>      <lgcl>
+#> 1:  Fold1   0.4075269 0.005314924   0.9 multinomial        class        TRUE
+#> 2:  Fold2   0.3611115 0.005314924   0.9 multinomial        class        TRUE
+#> 3:  Fold3   0.3957362 0.005314924   0.9 multinomial        class        TRUE
 ```
 
 ```{r include=FALSE}

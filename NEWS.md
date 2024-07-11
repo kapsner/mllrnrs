@@ -2,7 +2,7 @@
 
 # mllrnrs NEWS
 
-## Unreleased (2024-05-29)
+## v0.0.4 (2024-07-05)
 
 #### New features
 
@@ -25,6 +25,10 @@
 
 #### Other changes
 
+-   fixed indentation
+    ([d5e4306](https://github.com/kapsner/mllrnrs/tree/d5e430689e1e81ba15f5c6803028d18993247f3b))
+-   updated version for cran-release
+    ([2ff35e2](https://github.com/kapsner/mllrnrs/tree/2ff35e2c237c03a6e566e269744c5b15df973c7e))
 -   switch vignetteengine to quarto
     ([b70f3d6](https://github.com/kapsner/mllrnrs/tree/b70f3d678751b67513d1404062362b651d5e806a))
 -   added automated gen of readme
@@ -37,7 +41,7 @@
     ([323f9cb](https://github.com/kapsner/mllrnrs/tree/323f9cb0dc0e38213154669dccff7a700f5071c2))
 
 Full set of changes:
-[`v0.0.3...b70f3d6`](https://github.com/kapsner/mllrnrs/compare/v0.0.3...b70f3d6)
+[`v0.0.3...v0.0.4`](https://github.com/kapsner/mllrnrs/compare/v0.0.3...v0.0.4)
 
 ## v0.0.3 (2024-03-07)
 

@@ -6,7 +6,6 @@ vignette: >
   %\VignetteEngine{quarto::html}
 editor_options: 
   chunk_output_type: console
-
 execute:
   eval: false
   collapse: true
@@ -519,7 +518,7 @@ head(tuner_results_grid)
 ## Appendix II: k-Fold Cross Validation with Target Weigths
 
 ```{r}
-validator <- mlexperiments::MLCrossValidation$new(
+validator_w_weights <- mlexperiments::MLCrossValidation$new(
   learner = mllrnrs::LearnerXgboost$new(
     metric_optimization_higher_better = FALSE
   ),
@@ -529,22 +528,21 @@ validator <- mlexperiments::MLCrossValidation$new(
 )
 
 # append the optimized setting from above with the newly created weights
-validator$learner_args <- c(
-  tuner$results$best.setting[-1],
-  list("case_weights" = y_weights)
+validator_w_weights$learner_args <- c(
+  tuner_w_weights$results$best.setting[-1]
 )
 
-validator$predict_args <- predict_args
-validator$performance_metric <- performance_metric
-validator$performance_metric_args <- performance_metric_args
-validator$return_models <- return_models
+validator_w_weights$predict_args <- predict_args
+validator_w_weights$performance_metric <- performance_metric
+validator_w_weights$performance_metric_args <- performance_metric_args
+validator_w_weights$return_models <- return_models
 
-validator$set_data(
+validator_w_weights$set_data(
   x = train_x,
   y = train_y
 )
 
-validator_results <- validator$execute()
+validator_results <- validator_w_weights$execute()
 #> 
 #> CV fold: Fold1
 #> 
@@ -555,16 +553,11 @@ validator_results <- validator$execute()
 #>                                                                                                                                   
 
 head(validator_results)
-#>      fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds      objective eval_metric
-#>    <char>       <num>     <num>            <num>            <num>         <num>     <num>   <int>         <char>      <char>
-#> 1:  Fold1   0.4508447 0.5356077        0.8312972                1     0.1099728        10      23 multi:softprob    mlogloss
-#> 2:  Fold2   0.4185381 0.5356077        0.8312972                1     0.1099728        10      23 multi:softprob    mlogloss
-#> 3:  Fold3   0.4436661 0.5356077        0.8312972                1     0.1099728        10      23 multi:softprob    mlogloss
-#>    num_class
-#>        <num>
-#> 1:         3
-#> 2:         3
-#> 3:         3
+#>      fold performance nrounds subsample colsample_bytree min_child_weight learning_rate max_depth      objective eval_metric num_class
+#>    <char>       <num>   <int>     <num>            <num>            <num>         <num>     <num>         <char>      <char>     <num>
+#> 1:  Fold1   0.4107641      46       0.8              0.8                5           0.1         5 multi:softprob    mlogloss         3
+#> 2:  Fold2   0.3762118      46       0.8              0.8                5           0.1         5 multi:softprob    mlogloss         3
+#> 3:  Fold3   0.4119798      46       0.8              0.8                5           0.1         5 multi:softprob    mlogloss         3
 ```
 
 ```{r include=FALSE}
