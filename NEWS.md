@@ -2,6 +2,14 @@
 
 # mllrnrs NEWS
 
+## Unreleased (2024-07-11)
+
+#### Docs
+
+-   first try to fix issues with vignettes that occur only on macosx
+    cran runners
+    ([836b023](https://github.com/kapsner/mllrnrs/tree/836b023f0bfe26cc937faa55df9bcea3b4837527))
+
 ## v0.0.4 (2024-07-05)
 
 #### New features
