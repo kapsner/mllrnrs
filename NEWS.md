@@ -2,7 +2,7 @@
 
 # mllrnrs NEWS
 
-## Unreleased (2025-03-03)
+## Unreleased (2025-03-05)
 
 #### Docs
 
@@ -12,11 +12,13 @@
 
 #### Other changes
 
+-   providing nthread with parameters now
+    ([a85fd0e](https://github.com/kapsner/mllrnrs/tree/a85fd0eb4ba1b2c8db65fc4d1dc1d25dcd2e3974))
 -   adresses notes on cran-checks
     ([375011f](https://github.com/kapsner/mllrnrs/tree/375011f202925234d6b6e57246e7f31b57c82f35))
 
 Full set of changes:
-[`v0.0.4...375011f`](https://github.com/kapsner/mllrnrs/compare/v0.0.4...375011f)
+[`v0.0.4...a85fd0e`](https://github.com/kapsner/mllrnrs/compare/v0.0.4...a85fd0e)
 
 ## v0.0.4 (2024-07-05)
 

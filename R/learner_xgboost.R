@@ -21,6 +21,7 @@
 #'
 #' @examples
 #' # binary classification
+#' Sys.setenv("OMP_THREAD_LIMIT" = 2)
 #'
 #' library(mlbench)
 #' data("PimaIndiansDiabetes2")
@@ -36,7 +37,8 @@
 #'    colsample_bytree = seq(0.6, 1, .2),
 #'    min_child_weight = seq(1, 5, 4),
 #'    learning_rate = seq(0.1, 0.2, 0.1),
-#'    max_depth = seq(1, 5, 4)
+#'    max_depth = seq(1, 5, 4),
+#'    nthread = 2
 #' )
 #'
 #' train_x <- model.matrix(
