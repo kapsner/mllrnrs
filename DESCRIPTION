@@ -1,6 +1,6 @@
 Package: mllrnrs
 Title: R6-Based ML Learners for 'mlexperiments'
-Version: 0.0.5
+Version: 0.0.5.9001
 Authors@R: 
     person("Lorenz A.", "Kapsner", , "lorenz.kapsner@gmail.com", role = c("cre", "aut", "cph"),
            comment = c(ORCID = "0000-0003-1866-860X"))
@@ -40,7 +40,7 @@ VignetteBuilder:
     quarto
 Config/testthat/edition: 3
 Config/testthat/parallel: false
-Date/Publication: 2025-03-05 14:21:46.070343 UTC
+Date/Publication: 2025-03-05 15:00:49.166356 UTC
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 SystemRequirements: Quarto command line tools

@@ -2,7 +2,13 @@
 
 # mllrnrs NEWS
 
-## Unreleased (2025-03-05)
+## v0.0.5 (2025-03-05)
+
+#### Bug fixes
+
+-   fix cran error and setting omp_thread_limit also in example of
+    xgboostlearner
+    ([d034684](https://github.com/kapsner/mllrnrs/tree/d034684e2a70e631d69b61474239ddeabdee76d2))
 
 #### Docs
 
@@ -18,7 +24,7 @@
     ([375011f](https://github.com/kapsner/mllrnrs/tree/375011f202925234d6b6e57246e7f31b57c82f35))
 
 Full set of changes:
-[`v0.0.4...a85fd0e`](https://github.com/kapsner/mllrnrs/compare/v0.0.4...a85fd0e)
+[`v0.0.4...v0.0.5`](https://github.com/kapsner/mllrnrs/compare/v0.0.4...v0.0.5)
 
 ## v0.0.4 (2024-07-05)
 
