@@ -2,13 +2,21 @@
 
 # mllrnrs NEWS
 
-## Unreleased (2024-07-11)
+## Unreleased (2025-03-03)
 
 #### Docs
 
 -   first try to fix issues with vignettes that occur only on macosx
     cran runners
     ([836b023](https://github.com/kapsner/mllrnrs/tree/836b023f0bfe26cc937faa55df9bcea3b4837527))
+
+#### Other changes
+
+-   adresses notes on cran-checks
+    ([375011f](https://github.com/kapsner/mllrnrs/tree/375011f202925234d6b6e57246e7f31b57c82f35))
+
+Full set of changes:
+[`v0.0.4...375011f`](https://github.com/kapsner/mllrnrs/compare/v0.0.4...375011f)
 
 ## v0.0.4 (2024-07-05)
 

@@ -61,7 +61,7 @@ xgboost_cv <- mlexperiments::MLCrossValidation$new(
     metric_optimization_higher_better = FALSE
   ),
   fold_list = fold_list,
-  ncores = 2,
+  ncores = 2L,
   seed = 123
 )
 xgboost_cv$learner_args <- c(
