@@ -108,7 +108,7 @@ learner_args <- list(
 # mlexperiments::MLNestedCV
 predict_args <- list(type = "response")
 performance_metric <- metric("auc")
-performance_metric_args <- list(positive = "1")
+performance_metric_args <- list(positive = "1", negative = "0")
 return_models <- FALSE
 
 # required for grid search and initialization of bayesian optimization
@@ -419,14 +419,16 @@ perf_glmnet <- mlexperiments::performance(
   type = "binary"
 )
 perf_glmnet
-#>    model performance       auc     prauc sensitivity specificity       ppv       npv tn tp fn fp       tnr       tpr       fnr
-#> 1: Fold1   0.7656605 0.7656605 0.5841923   0.3333333   0.8860759 0.5909091 0.7291667 70 13 26  9 0.8860759 0.3333333 0.6666667
-#> 2: Fold2   0.7831873 0.7831873 0.5822704   0.3846154   0.8860759 0.6250000 0.7446809 70 15 24  9 0.8860759 0.3846154 0.6153846
-#> 3: Fold3   0.7627394 0.7627394 0.5747411   0.3589744   0.8607595 0.5600000 0.7311828 68 14 25 11 0.8607595 0.3589744 0.6410256
-#>          fpr    bbrier       acc        ce     fbeta
-#> 1: 0.1139241 0.1831706 0.7033898 0.2966102 0.4262295
-#> 2: 0.1139241 0.1786208 0.7203390 0.2796610 0.4761905
-#> 3: 0.1392405 0.1861673 0.6949153 0.3050847 0.4375000
+#>     model performance       AUC     Brier BrierScaled       BAC    TP    TN    FP    FN       TPR       TNR       FPR       FNR       PPV
+#>    <char>       <num>     <num>     <num>       <num>     <num> <int> <int> <int> <int>     <num>     <num>     <num>     <num>     <num>
+#> 1:  Fold1   0.7656605 0.7656605 0.1831706   0.1721949 0.6097046    13    70     9    26 0.3333333 0.8860759 0.1139241 0.6666667 0.5909091
+#> 2:  Fold2   0.7831873 0.7831873 0.1786208   0.1927570 0.6353457    15    70     9    24 0.3846154 0.8860759 0.1139241 0.6153846 0.6250000
+#> 3:  Fold3   0.7627394 0.7627394 0.1861673   0.1586518 0.6098669    14    68    11    25 0.3589744 0.8607595 0.1392405 0.6410256 0.5600000
+#>          NPV       FDR       MCC        F1     GMEAN       GPR       ACC      MMCE       BER
+#>        <num>     <num>     <num>     <num>     <num>     <num>     <num>     <num>     <num>
+#> 1: 0.7291667 0.4090909 0.2650049 0.4262295 0.5434691 0.4438127 0.7033898 0.2966102 0.3902954
+#> 2: 0.7446809 0.3750000 0.3163375 0.4761905 0.5837794 0.4902903 0.7203390 0.2796610 0.3646543
+#> 3: 0.7311828 0.4400000 0.2529481 0.4375000 0.5558692 0.4483588 0.6949153 0.3050847 0.3901331
 #>
 ```
 

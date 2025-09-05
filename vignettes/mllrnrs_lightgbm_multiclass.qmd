@@ -111,7 +111,7 @@ learner_args <- list(
 # required for mlexperiments::MLCrossValidation and
 # mlexperiments::MLNestedCV
 predict_args <- list(reshape = TRUE)
-performance_metric <- metric("bacc")
+performance_metric <- metric("ACC")
 performance_metric_args <- NULL
 return_models <- FALSE
 
@@ -380,9 +380,9 @@ validator_results <- validator$execute()
 
 head(validator_results)
 #>     fold performance bagging_fraction feature_fraction min_data_in_leaf learning_rate num_leaves nrounds max_depth verbose
-#> 1: Fold1   0.9674260              0.8              0.6                8           0.1         14      66        -1      -1
-#> 2: Fold2   0.9534347              0.8              0.6                8           0.1         14      66        -1      -1
-#> 3: Fold3   0.9549840              0.8              0.6                8           0.1         14      66        -1      -1
+#> 1: Fold1   0.9663978              0.8              0.6                8           0.1         14      66        -1      -1
+#> 2: Fold2   0.9541161              0.8              0.6                8           0.1         14      66        -1      -1
+#> 3: Fold3   0.9610215              0.8              0.6                8           0.1         14      66        -1      -1
 #>     objective        metric num_class
 #> 1: multiclass multi_logloss         3
 #> 2: multiclass multi_logloss         3
@@ -752,9 +752,9 @@ validator_results <- validator$execute()
 
 head(validator_results)
 #>     fold performance nrounds bagging_fraction feature_fraction min_data_in_leaf learning_rate num_leaves max_depth verbose
-#> 1: Fold1   0.9674260      62              0.8              0.6                8           0.1         14        -1      -1
-#> 2: Fold2   0.9506435      64              0.8              1.0               10           0.2          6        -1      -1
-#> 3: Fold3   0.9559827     100              0.6              0.6                8           0.1          6        -1      -1
+#> 1: Fold1   0.9663978      62              0.8              0.6                8           0.1         14        -1      -1
+#> 2: Fold2   0.9514170      64              0.8              1.0               10           0.2          6        -1      -1
+#> 3: Fold3   0.9610215     100              0.6              0.6                8           0.1          6        -1      -1
 #>     objective        metric num_class
 #> 1: multiclass multi_logloss         3
 #> 2: multiclass multi_logloss         3
@@ -811,9 +811,9 @@ validator_results <- validator$execute()
 
 head(validator_results)
 #>     fold performance bagging_fraction feature_fraction min_data_in_leaf learning_rate num_leaves nrounds max_depth verbose
-#> 1: Fold1   0.9727424        0.2000000        0.2559232                2     0.1992638         20      52        -1      -1
-#> 2: Fold2   0.9494955        0.8293692        0.5664407                7     0.1203691         11      76        -1      -1
-#> 3: Fold3   0.9568462        0.4438889        0.3041453               10     0.1462295         11      67        -1      -1
+#> 1: Fold1   0.9731183        0.2000000        0.2559232                2     0.1992638         20      52        -1      -1
+#> 2: Fold2   0.9527665        0.8293692        0.5664407                7     0.1203691         11      76        -1      -1
+#> 3: Fold3   0.9623656        0.4438889        0.3041453               10     0.1462295         11      67        -1      -1
 #>     objective        metric num_class
 #> 1: multiclass multi_logloss         3
 #> 2: multiclass multi_logloss         3
@@ -842,9 +842,9 @@ perf_lightgbm <- mlexperiments::performance(
 )
 perf_lightgbm
 #>    model performance
-#> 1: Fold1   0.9596127
-#> 2: Fold2   0.9612778
-#> 3: Fold3   0.9583793
+#> 1: Fold1   0.9613375
+#> 2: Fold2   0.9602926
+#> 3: Fold3   0.9582027
 ```
 
 ## Appendix I: Grid-Search with Target Weigths
@@ -951,9 +951,9 @@ validator_results <- validator_w_weights$execute()
 head(validator_results)
 #>      fold performance nrounds bagging_fraction feature_fraction min_data_in_leaf learning_rate num_leaves max_depth verbose  objective
 #>    <char>       <num>   <int>            <num>            <num>            <num>         <num>      <num>     <int>   <int>     <char>
-#> 1:  Fold1   0.9700167      75                1              0.8                4           0.1         10        -1      -1 multiclass
-#> 2:  Fold2   0.9554064      75                1              0.8                4           0.1         10        -1      -1 multiclass
-#> 3:  Fold3   0.9539854      75                1              0.8                4           0.1         10        -1      -1 multiclass
+#> 1:  Fold1   0.9704301      75                1              0.8                4           0.1         10        -1      -1 multiclass
+#> 2:  Fold2   0.9541161      75                1              0.8                4           0.1         10        -1      -1 multiclass
+#> 3:  Fold3   0.9610215      75                1              0.8                4           0.1         10        -1      -1 multiclass
 #>           metric num_class
 #>           <char>    <char>
 #> 1: multi_logloss         3

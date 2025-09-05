@@ -107,7 +107,7 @@ learner_args <- list(
 # required for mlexperiments::MLCrossValidation and
 # mlexperiments::MLNestedCV
 predict_args <- list(type = "response", reshape = TRUE)
-performance_metric <- metric("bacc")
+performance_metric <- metric("ACC")
 performance_metric_args <- NULL
 return_models <- FALSE
 
@@ -260,9 +260,9 @@ validator_results <- validator$execute()
 
 head(validator_results)
 #>     fold performance alpha      lambda      family type.measure standardize
-#> 1: Fold1   0.3672581   0.7 0.003092562 multinomial        class        TRUE
-#> 2: Fold2   0.3524351   0.7 0.003092562 multinomial        class        TRUE
-#> 3: Fold3   0.3700659   0.7 0.003092562 multinomial        class        TRUE
+#> 1: Fold1   0.5389785   0.7 0.003092562 multinomial        class        TRUE
+#> 2: Fold2   0.5101215   0.7 0.003092562 multinomial        class        TRUE
+#> 3: Fold3   0.5309140   0.7 0.003092562 multinomial        class        TRUE
 ```
 
 
@@ -336,9 +336,9 @@ validator_results <- validator$execute()
 
 head(validator_results)
 #>     fold performance      lambda alpha      family type.measure standardize
-#> 1: Fold1   0.3465038 0.006548214  0.90 multinomial        class        TRUE
-#> 2: Fold2   0.3475436 0.001710793  0.65 multinomial        class        TRUE
-#> 3: Fold3   0.3514970 0.038236018  0.10 multinomial        class        TRUE
+#> 1: Fold1   0.5268817 0.006548214  0.90 multinomial        class        TRUE
+#> 2: Fold2   0.4993252 0.001710793  0.65 multinomial        class        TRUE
+#> 3: Fold3   0.5268817 0.038236018  0.10 multinomial        class        TRUE
 ```
 
 
@@ -392,9 +392,9 @@ validator_results <- validator$execute()
 
 head(validator_results)
 #>     fold performance     alpha      lambda      family type.measure standardize
-#> 1: Fold1   0.3652609 0.7000000 0.004817737 multinomial        class        TRUE
-#> 2: Fold2   0.3416288 0.4178147 0.017108341 multinomial        class        TRUE
-#> 3: Fold3   0.3467740 0.1000000 0.041963982 multinomial        class        TRUE
+#> 1: Fold1   0.5389785 0.7000000 0.004817737 multinomial        class        TRUE
+#> 2: Fold2   0.5168691 0.4178147 0.017108341 multinomial        class        TRUE
+#> 3: Fold3   0.5241935 0.1000000 0.041963982 multinomial        class        TRUE
 ```
 
 
@@ -419,9 +419,9 @@ perf_glmnet <- mlexperiments::performance(
 )
 perf_glmnet
 #>    model performance
-#> 1: Fold1   0.3606304
-#> 2: Fold2   0.3603913
-#> 3: Fold3   0.3529292
+#> 1: Fold1   0.5339603
+#> 2: Fold2   0.5287356
+#> 3: Fold3   0.5256008
 ```
 
 ## Appendix I: Grid-Search with Target Weigths
@@ -519,9 +519,9 @@ validator_results <- validator_w_weights$execute()
 head(validator_results)
 #>      fold performance      lambda alpha      family type.measure standardize
 #>    <char>       <num>       <num> <num>      <char>       <char>      <lgcl>
-#> 1:  Fold1   0.4075269 0.005314924   0.9 multinomial        class        TRUE
-#> 2:  Fold2   0.3611115 0.005314924   0.9 multinomial        class        TRUE
-#> 3:  Fold3   0.3957362 0.005314924   0.9 multinomial        class        TRUE
+#> 1:  Fold1   0.5456989 0.005314924   0.9 multinomial        class        TRUE
+#> 2:  Fold2   0.4736842 0.005314924   0.9 multinomial        class        TRUE
+#> 3:  Fold3   0.5040323 0.005314924   0.9 multinomial        class        TRUE
 ```
 
 ```{r include=FALSE}

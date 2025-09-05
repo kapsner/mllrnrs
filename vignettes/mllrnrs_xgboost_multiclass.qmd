@@ -109,7 +109,7 @@ learner_args <- list(
 # required for mlexperiments::MLCrossValidation and
 # mlexperiments::MLNestedCV
 predict_args <- list(reshape = TRUE)
-performance_metric <- metric("bacc")
+performance_metric <- metric("ACC")
 performance_metric_args <- NULL
 return_models <- FALSE
 
@@ -278,9 +278,9 @@ validator_results <- validator$execute()
 
 head(validator_results)
 #>     fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds      objective eval_metric
-#> 1: Fold1   0.4685501 0.5356077        0.8312972                1     0.1099728        10      23 multi:softprob    mlogloss
-#> 2: Fold2   0.4179775 0.5356077        0.8312972                1     0.1099728        10      23 multi:softprob    mlogloss
-#> 3: Fold3   0.4718162 0.5356077        0.8312972                1     0.1099728        10      23 multi:softprob    mlogloss
+#> 1: Fold1   0.5645161 0.5356077        0.8312972                1     0.1099728        10      23 multi:softprob    mlogloss
+#> 2: Fold2   0.5195682 0.5356077        0.8312972                1     0.1099728        10      23 multi:softprob    mlogloss
+#> 3: Fold3   0.5618280 0.5356077        0.8312972                1     0.1099728        10      23 multi:softprob    mlogloss
 #>    num_class
 #> 1:         3
 #> 2:         3
@@ -355,9 +355,9 @@ validator_results <- validator$execute()
 
 head(validator_results)
 #>     fold performance nrounds subsample colsample_bytree min_child_weight learning_rate max_depth      objective eval_metric
-#> 1: Fold1   0.4304667      30       0.8              0.8                5           0.1         5 multi:softprob    mlogloss
-#> 2: Fold2   0.3907826      33       0.8              0.8                5           0.1         5 multi:softprob    mlogloss
-#> 3: Fold3   0.4183769      25       0.6              1.0                1           0.1         5 multi:softprob    mlogloss
+#> 1: Fold1   0.5658602      30       0.8              0.8                5           0.1         5 multi:softprob    mlogloss
+#> 2: Fold2   0.5276653      33       0.8              0.8                5           0.1         5 multi:softprob    mlogloss
+#> 3: Fold3   0.5470430      25       0.6              1.0                1           0.1         5 multi:softprob    mlogloss
 #>    num_class
 #> 1:         3
 #> 2:         3
@@ -415,9 +415,9 @@ validator_results <- validator$execute()
 
 head(validator_results)
 #>     fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds      objective eval_metric
-#> 1: Fold1   0.4607781 0.7285277        0.8178568                1     0.1099728        10      18 multi:softprob    mlogloss
-#> 2: Fold2   0.4306211 0.5578915        0.7352097                1     0.1099728        10      24 multi:softprob    mlogloss
-#> 3: Fold3   0.4464739 0.5001911        0.8708509                1     0.1099728        10      19 multi:softprob    mlogloss
+#> 1: Fold1   0.5524194 0.7285277        0.8178568                1     0.1099728        10      18 multi:softprob    mlogloss
+#> 2: Fold2   0.5330634 0.5578915        0.7352097                1     0.1099728        10      24 multi:softprob    mlogloss
+#> 3: Fold3   0.5456989 0.5001911        0.8708509                1     0.1099728        10      19 multi:softprob    mlogloss
 #>    num_class
 #> 1:         3
 #> 2:         3
@@ -446,9 +446,9 @@ perf_xgboost <- mlexperiments::performance(
 )
 perf_xgboost
 #>    model performance
-#> 1: Fold1   0.4628262
-#> 2: Fold2   0.4503222
-#> 3: Fold3   0.4535445
+#> 1: Fold1   0.5621735
+#> 2: Fold2   0.5475444
+#> 3: Fold3   0.5464995
 ```
 
 
@@ -555,9 +555,9 @@ validator_results <- validator_w_weights$execute()
 head(validator_results)
 #>      fold performance nrounds subsample colsample_bytree min_child_weight learning_rate max_depth      objective eval_metric num_class
 #>    <char>       <num>   <int>     <num>            <num>            <num>         <num>     <num>         <char>      <char>     <num>
-#> 1:  Fold1   0.4107641      46       0.8              0.8                5           0.1         5 multi:softprob    mlogloss         3
-#> 2:  Fold2   0.3762118      46       0.8              0.8                5           0.1         5 multi:softprob    mlogloss         3
-#> 3:  Fold3   0.4119798      46       0.8              0.8                5           0.1         5 multi:softprob    mlogloss         3
+#> 1:  Fold1   0.5631720      46       0.8              0.8                5           0.1         5 multi:softprob    mlogloss         3
+#> 2:  Fold2   0.5222672      46       0.8              0.8                5           0.1         5 multi:softprob    mlogloss         3
+#> 3:  Fold3   0.5510753      46       0.8              0.8                5           0.1         5 multi:softprob    mlogloss         3
 ```
 
 ```{r include=FALSE}
