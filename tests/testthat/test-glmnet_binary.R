@@ -84,8 +84,11 @@ test_that(
       standardize = TRUE
     )
     glmnet_optimizer$predict_args <- list(type = "response")
-    glmnet_optimizer$performance_metric_args <- list(positive = "1")
-    glmnet_optimizer$performance_metric <- mlexperiments::metric("prauc")
+    glmnet_optimizer$performance_metric_args <- list(
+      positive = "1",
+      negative = "0"
+    )
+    glmnet_optimizer$performance_metric <- mlexperiments::metric("AUC")
 
     # set data
     glmnet_optimizer$set_data(
@@ -130,8 +133,11 @@ test_that(
       standardize = TRUE
     )
     glmnet_optimizer$predict_args <- list(type = "response")
-    glmnet_optimizer$performance_metric_args <- list(positive = "1")
-    glmnet_optimizer$performance_metric <- mlexperiments::metric("prauc")
+    glmnet_optimizer$performance_metric_args <- list(
+      positive = "1",
+      negative = "0"
+    )
+    glmnet_optimizer$performance_metric <- mlexperiments::metric("AUC")
 
     # set data
     glmnet_optimizer$set_data(

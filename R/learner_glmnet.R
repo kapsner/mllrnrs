@@ -53,8 +53,8 @@
 #'   standardize = TRUE
 #' )
 #' glmnet_cv$predict_args <- list(type = "response")
-#' glmnet_cv$performance_metric_args <- list(positive = "1")
-#' glmnet_cv$performance_metric <- mlexperiments::metric("auc")
+#' glmnet_cv$performance_metric_args <- list(positive = "1", negative = "0")
+#' glmnet_cv$performance_metric <- mlexperiments::metric("AUC")
 #'
 #' # set data
 #' glmnet_cv$set_data(

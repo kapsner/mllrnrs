@@ -103,8 +103,8 @@ learner_args <- list(probability = TRUE)
 # required for mlexperiments::MLCrossValidation and
 # mlexperiments::MLNestedCV
 predict_args <- list(prob = TRUE, positive = "pos")
-performance_metric <- metric("auc")
-performance_metric_args <- list(positive = "pos")
+performance_metric <- mlexperiments::metric("AUC")
+performance_metric_args <- list(positive = "pos", negative = "neg")
 return_models <- FALSE
 
 # required for grid search and initialization of bayesian optimization
@@ -480,14 +480,16 @@ perf_ranger <- mlexperiments::performance(
   type = "binary"
 )
 perf_ranger
-#>    model performance       auc     prauc sensitivity specificity       ppv       npv tn tp fn fp       tnr       tpr       fnr
-#> 1: Fold1   0.7874067 0.7874067 0.6119292   0.4615385   0.8481013 0.6000000 0.7613636 67 18 21 12 0.8481013 0.4615385 0.5384615
-#> 2: Fold2   0.7802661 0.7802661 0.5977887   0.4615385   0.8860759 0.6666667 0.7692308 70 18 21  9 0.8860759 0.4615385 0.5384615
-#> 3: Fold3   0.7831873 0.7831873 0.6174674   0.4615385   0.8354430 0.5806452 0.7586207 66 18 21 13 0.8354430 0.4615385 0.5384615
-#>          fpr    bbrier       acc        ce     fbeta
-#> 1: 0.1518987 0.1735079 0.7203390 0.2796610 0.5217391
-#> 2: 0.1139241 0.1838647 0.7457627 0.2542373 0.5454545
-#> 3: 0.1645570 0.1754549 0.7118644 0.2881356 0.5142857
+#>     model performance       AUC     Brier BrierScaled       BAC    TP    TN    FP    FN       TPR       TNR       FPR       FNR       PPV
+#>    <char>       <num>     <num>     <num>       <num>     <num> <int> <int> <int> <int>     <num>     <num>     <num>     <num>     <num>
+#> 1:  Fold1   0.7874067 0.7874067 0.1735079   0.2158639 0.6548199    18    67    12    21 0.4615385 0.8481013 0.1518987 0.5384615 0.6000000
+#> 2:  Fold2   0.7802661 0.7802661 0.1838647   0.1690580 0.6738072    18    70     9    21 0.4615385 0.8860759 0.1139241 0.5384615 0.6666667
+#> 3:  Fold3   0.7831873 0.7831873 0.1754549   0.2070644 0.6484907    18    66    13    21 0.4615385 0.8354430 0.1645570 0.5384615 0.5806452
+#>          NPV       FDR       MCC        F1     GMEAN       GPR       ACC      MMCE       BER
+#>        <num>     <num>     <num>     <num>     <num>     <num>     <num>     <num>     <num>
+#> 1: 0.7613636 0.4000000 0.3345034 0.5217391 0.6256448 0.5262348 0.7203390 0.2796610 0.3451801
+#> 2: 0.7692308 0.3333333 0.3892611 0.5454545 0.6394983 0.5547002 0.7457627 0.2542373 0.3261928
+#> 3: 0.7586207 0.4193548 0.3174204 0.5142857 0.6209582 0.5176776 0.7118644 0.2881356 0.3515093
 ```
 
 ```{r include=FALSE}

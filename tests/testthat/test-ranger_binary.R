@@ -88,8 +88,11 @@ test_that(
                                           cat_vars = c("pregnant", "pedigree"))
     ranger_optimizer$predict_args <- list(prob = TRUE, positive = "1")
 
-    ranger_optimizer$performance_metric_args <- list(positive = "1")
-    ranger_optimizer$performance_metric <- mlexperiments::metric("auc")
+    ranger_optimizer$performance_metric_args <- list(
+      positive = "1",
+      negative = "0"
+    )
+    ranger_optimizer$performance_metric <- mlexperiments::metric("AUC")
 
     # set data
     ranger_optimizer$set_data(

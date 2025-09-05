@@ -86,7 +86,7 @@ test_that(
       case_weights = y_weights
     )
     glmnet_optimizer$predict_args <- list(type = "response", reshape = TRUE)
-    glmnet_optimizer$performance_metric <- mlexperiments::metric("bacc")
+    glmnet_optimizer$performance_metric <- mlexperiments::metric("ACC")
 
     # set data
     glmnet_optimizer$set_data(

@@ -98,7 +98,7 @@ test_that(
       case_weights = y_weights
     )
     lightgbm_optimizer$predict_args <- list(reshape = TRUE)
-    lightgbm_optimizer$performance_metric <- mlexperiments::metric("bacc")
+    lightgbm_optimizer$performance_metric <- mlexperiments::metric("ACC")
 
     # set data
     lightgbm_optimizer$set_data(

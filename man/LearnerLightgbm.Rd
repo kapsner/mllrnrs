@@ -78,8 +78,8 @@ lightgbm_cv$learner_args <- c(
   ),
   nrounds = 45L
 )
-lightgbm_cv$performance_metric_args <- list(positive = "1")
-lightgbm_cv$performance_metric <- mlexperiments::metric("auc")
+lightgbm_cv$performance_metric_args <- list(positive = "1", negative = "0")
+lightgbm_cv$performance_metric <- mlexperiments::metric("AUC")
 
 # set data
 lightgbm_cv$set_data(

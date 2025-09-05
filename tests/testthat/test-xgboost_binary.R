@@ -79,7 +79,10 @@ test_that(
       objective = "binary:logistic",
       eval_metric = "logloss"
     )
-    xgboost_optimizer$performance_metric_args <- list(positive = "1")
+    xgboost_optimizer$performance_metric_args <- list(
+      positive = "1",
+      negative = "0"
+    )
     xgboost_optimizer$performance_metric <- mlexperiments::metric("auc")
 
     # set data

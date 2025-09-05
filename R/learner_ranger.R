@@ -15,6 +15,8 @@
 #'
 #' @seealso [ranger::ranger()]
 #'
+#' @importFrom mlexperiments metric
+#'
 #' @examples
 #' # binary classification
 #'
@@ -62,8 +64,8 @@
 #'   ),
 #'   list(classification = TRUE)
 #' )
-#' ranger_cv$performance_metric_args <- list(positive = "1")
-#' ranger_cv$performance_metric <- mlexperiments::metric("auc")
+#' ranger_cv$performance_metric_args <- list(positive = "1", negative = "0")
+#' ranger_cv$performance_metric <- mlexperiments::metric("AUC")
 #'
 #' # set data
 #' ranger_cv$set_data(
@@ -111,7 +113,7 @@ LearnerRanger <- R6::R6Class( # nolint
 
 
 ranger_ce <- function() {
-  c("ranger_optimization", "ranger_fit",
+  c("ranger_optimization", "ranger_fit", "metric",
     "ranger_predict", "ranger_predict_base", "ranger_cv")
 }
 
@@ -221,11 +223,11 @@ ranger_optimization <- function(
 
   # check, if this is a classification context and select metric accordingly
   if (is.factor(y) || isTRUE(params$classification)) {
-    msg <- "Classification: using 'classification error rate'"
-    FUN <- mlexperiments::metric("ce") # nolint
+    msg <- "Classification: using 'mean classification error'"
+    FUN <- metric("MMCE") # nolint
   } else {
     msg <- "Regression: using 'mean squared error'"
-    FUN <- mlexperiments::metric("mse") # nolint
+    FUN <- metric("MSE") # nolint
   }
   message(paste("\n", msg, "as optimization metric."))
 

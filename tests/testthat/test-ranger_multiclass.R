@@ -90,7 +90,7 @@ test_that(
       case_weights = y_weights
     )
 
-    ranger_optimizer$performance_metric <- mlexperiments::metric("bacc")
+    ranger_optimizer$performance_metric <- mlexperiments::metric("ACC")
 
     # set data
     ranger_optimizer$set_data(

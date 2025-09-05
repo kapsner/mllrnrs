@@ -65,8 +65,8 @@ ranger_cv$learner_args <- c(
   ),
   list(classification = TRUE)
 )
-ranger_cv$performance_metric_args <- list(positive = "1")
-ranger_cv$performance_metric <- mlexperiments::metric("auc")
+ranger_cv$performance_metric_args <- list(positive = "1", negative = "0")
+ranger_cv$performance_metric <- mlexperiments::metric("AUC")
 
 # set data
 ranger_cv$set_data(

@@ -79,8 +79,8 @@ xgboost_cv$learner_args <- c(
   ),
   nrounds = 45L
 )
-xgboost_cv$performance_metric_args <- list(positive = "1")
-xgboost_cv$performance_metric <- mlexperiments::metric("auc")
+xgboost_cv$performance_metric_args <- list(positive = "1", negative = "0")
+xgboost_cv$performance_metric <- mlexperiments::metric("AUC")
 
 # set data
 xgboost_cv$set_data(

@@ -83,7 +83,7 @@ test_that(
       case_weights = y_weights
     )
     xgboost_optimizer$predict_args <- list(reshape = TRUE)
-    xgboost_optimizer$performance_metric <- mlexperiments::metric("bacc")
+    xgboost_optimizer$performance_metric <- mlexperiments::metric("ACC")
 
     # set data
     xgboost_optimizer$set_data(

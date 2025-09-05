@@ -103,7 +103,7 @@ learner_args <- list(probability = TRUE, classification = TRUE)
 # required for mlexperiments::MLCrossValidation and
 # mlexperiments::MLNestedCV
 predict_args <- list(reshape = TRUE)
-performance_metric <- metric("bacc")
+performance_metric <- metric("ACC")
 performance_metric_args <- NULL
 return_models <- FALSE
 
@@ -279,9 +279,9 @@ validator_results <- validator$execute()
 
 head(validator_results)
 #>     fold performance num.trees mtry min.node.size max.depth sample.fraction probability classification
-#> 1: Fold1   0.4206685       500    4             9         9             0.8        TRUE           TRUE
-#> 2: Fold2   0.4011889       500    4             9         9             0.8        TRUE           TRUE
-#> 3: Fold3   0.4252033       500    4             9         9             0.8        TRUE           TRUE
+#> 1: Fold1   0.5739247       500    4             9         9             0.8        TRUE           TRUE
+#> 2: Fold2   0.5452092       500    4             9         9             0.8        TRUE           TRUE
+#> 3: Fold3   0.5685484       500    4             9         9             0.8        TRUE           TRUE
 ```
 
 
@@ -409,9 +409,9 @@ validator_results <- validator$execute()
 
 head(validator_results)
 #>     fold performance num.trees mtry min.node.size max.depth sample.fraction probability classification
-#> 1: Fold1   0.4505456      1000    6             1         9             0.5        TRUE           TRUE
-#> 2: Fold2   0.4162822      1000    6             1         9             0.5        TRUE           TRUE
-#> 3: Fold3   0.4508978      1000    6             1         9             0.5        TRUE           TRUE
+#> 1: Fold1   0.5846774      1000    6             1         9             0.5        TRUE           TRUE
+#> 2: Fold2   0.5452092      1000    6             1         9             0.5        TRUE           TRUE
+#> 3: Fold3   0.5712366      1000    6             1         9             0.5        TRUE           TRUE
 ```
 
 
@@ -463,9 +463,9 @@ validator_results <- validator$execute()
 
 head(validator_results)
 #>     fold performance num.trees mtry min.node.size max.depth sample.fraction probability classification
-#> 1: Fold1   0.4470914      1000    6             1         9       0.5000000        TRUE           TRUE
-#> 2: Fold2   0.4419416       636    6             2        12       0.9378338        TRUE           TRUE
-#> 3: Fold3   0.4737314       388    6             5        14       0.7457303        TRUE           TRUE
+#> 1: Fold1   0.5793011      1000    6             1         9       0.5000000        TRUE           TRUE
+#> 2: Fold2   0.5411606       636    6             2        12       0.9378338        TRUE           TRUE
+#> 3: Fold3   0.5725806       388    6             5        14       0.7457303        TRUE           TRUE
 ```
 
 
@@ -490,9 +490,9 @@ perf_ranger <- mlexperiments::performance(
 )
 perf_ranger
 #>    model performance
-#> 1: Fold1   0.4466305
-#> 2: Fold2   0.4601201
-#> 3: Fold3   0.4742046
+#> 1: Fold1   0.5757576
+#> 2: Fold2   0.5506792
+#> 3: Fold3   0.5726228
 ```
 
 ## Appendix I: Grid-Search with Target Weigths
@@ -587,9 +587,9 @@ validator_results <- validator_w_weights$execute()
 head(validator_results)
 #>      fold performance num.trees  mtry min.node.size max.depth sample.fraction probability classification
 #>    <char>       <num>     <num> <num>         <num>     <num>           <num>      <lgcl>         <lgcl>
-#> 1:  Fold1   0.4265252       500     2             5         9             0.5        TRUE           TRUE
-#> 2:  Fold2   0.4060490       500     2             5         9             0.5        TRUE           TRUE
-#> 3:  Fold3   0.4234232       500     2             5         9             0.5        TRUE           TRUE
+#> 1:  Fold1   0.5752688       500     2             5         9             0.5        TRUE           TRUE
+#> 2:  Fold2   0.5438596       500     2             5         9             0.5        TRUE           TRUE
+#> 3:  Fold3   0.5564516       500     2             5         9             0.5        TRUE           TRUE
 ```
 
 ```{r include=FALSE}
