@@ -2,10 +2,12 @@
 
 # mllrnrs NEWS
 
-## Unreleased (2025-09-05)
+## Unreleased (2025-09-06)
 
 #### Other changes
 
+-   updated pkg metadata
+    ([e9d8ed8](https://github.com/kapsner/mllrnrs/tree/e9d8ed8a6f28bdba4d46c08cb73f86d377e53811))
 -   updated description and news.md
     ([c607c55](https://github.com/kapsner/mllrnrs/tree/c607c554311647ccc3505f6bc3f8ec80ac6e33c0))
 -   updated wiki-creation
@@ -22,7 +24,7 @@
     ([0b24c76](https://github.com/kapsner/mllrnrs/tree/0b24c762660896447ef8ee85991c54c510601078))
 
 Full set of changes:
-[`v0.0.5...c607c55`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...c607c55)
+[`v0.0.5...e9d8ed8`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...e9d8ed8)
 
 ## v0.0.5 (2025-03-05)
 

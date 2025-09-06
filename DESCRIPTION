@@ -40,7 +40,7 @@ VignetteBuilder:
     quarto
 Config/testthat/edition: 3
 Config/testthat/parallel: false
-Date/Publication: 2025-09-06 13:53:28.380803 UTC
+Date/Publication: 2025-09-06 14:55:28.991938 UTC
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 SystemRequirements: Quarto command line tools

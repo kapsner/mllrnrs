@@ -12,5 +12,5 @@ get_stage("install") %>%
   #  dependencies = c("Depends", "Imports", "Suggests"),
   #  force = TRUE
   #)) %>%
-  add_code_step(remotes::install_cran(c("ParBayesianOptimization", "mlr3measures"))) %>%
+  add_code_step(remotes::install_cran(c("ParBayesianOptimization", "measures"))) %>%
   add_code_step(devtools::install(".", upgrade = "always"))
