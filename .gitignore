@@ -50,3 +50,4 @@ docs
 Meta
 !README.qmd
 !vignettes/*.qmd
+revdep

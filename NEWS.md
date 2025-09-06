@@ -6,6 +6,8 @@
 
 #### Other changes
 
+-   updated description and news.md
+    ([c607c55](https://github.com/kapsner/mllrnrs/tree/c607c554311647ccc3505f6bc3f8ec80ac6e33c0))
 -   updated wiki-creation
     ([0d8bc88](https://github.com/kapsner/mllrnrs/tree/0d8bc8815d0c71023ff8ac4d05596111464f2c9f))
 -   also fixed vignettes to new mlexperiments version
@@ -20,7 +22,7 @@
     ([0b24c76](https://github.com/kapsner/mllrnrs/tree/0b24c762660896447ef8ee85991c54c510601078))
 
 Full set of changes:
-[`v0.0.5...0d8bc88`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...0d8bc88)
+[`v0.0.5...c607c55`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...c607c55)
 
 ## v0.0.5 (2025-03-05)
 

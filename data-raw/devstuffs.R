@@ -69,7 +69,7 @@ usethis::use_package("R6", type = "Imports")
 usethis::use_package("data.table", type = "Imports")
 usethis::use_package("kdry", type = "Imports")
 usethis::use_package("stats", type = "Imports")
-usethis::use_package("mlexperiments", type = "Imports")
+usethis::use_package("mlexperiments", type = "Imports", min_version = "0.0.6")
 
 # Suggests
 usethis::use_package("testthat", type = "Suggests", min_version = "3.0.1")
@@ -150,6 +150,7 @@ usethis::use_build_ignore("README.md")
 usethis::use_build_ignore("README.qmd")
 usethis::use_build_ignore("docs")
 usethis::use_build_ignore("Meta")
+usethis::use_build_ignore("revdep")
 
 usethis::use_git_ignore("!NEWS.md")
 usethis::use_git_ignore("!README.md")
@@ -157,6 +158,7 @@ usethis::use_git_ignore("!README.qmd")
 usethis::use_git_ignore("docs")
 usethis::use_git_ignore("Meta")
 usethis::use_git_ignore("!vignettes/*.qmd")
+usethis::use_git_ignore("revdep")
 
 usethis::use_tidy_description()
 
