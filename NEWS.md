@@ -2,6 +2,13 @@
 
 # mllrnrs NEWS
 
+## Unreleased (2025-09-08)
+
+#### Other changes
+
+-   udpated news.md
+    ([fb25780](https://github.com/kapsner/mllrnrs/tree/fb25780366b519de8259b644037eae20b558160d))
+
 ## v0.0.6 (2025-09-08)
 
 #### Tests

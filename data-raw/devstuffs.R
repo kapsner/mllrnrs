@@ -19,7 +19,7 @@ my_desc$set_authors(c(
 # Remove some author fields
 my_desc$del("Maintainer")
 # Set the version
-my_desc$set_version("0.0.6")
+my_desc$set_version("0.0.6.9001")
 # The title of your package
 my_desc$set(Title = "R6-Based ML Learners for 'mlexperiments'")
 # The description of your package
@@ -69,7 +69,7 @@ usethis::use_package("R6", type = "Imports")
 usethis::use_package("data.table", type = "Imports")
 usethis::use_package("kdry", type = "Imports")
 usethis::use_package("stats", type = "Imports")
-usethis::use_package("mlexperiments", type = "Imports", min_version = "0.0.6")
+usethis::use_package("mlexperiments", type = "Imports", min_version = "0.0.7")
 
 # Suggests
 usethis::use_package("testthat", type = "Suggests", min_version = "3.0.1")
@@ -140,6 +140,7 @@ if (!is.null(remotes_append_vector)) {
     file = usethis::proj_get()
   )
 }
+
 
 usethis::use_build_ignore("cran-comments.md")
 usethis::use_build_ignore(".lintr")
