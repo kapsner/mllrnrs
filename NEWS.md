@@ -2,7 +2,12 @@
 
 # mllrnrs NEWS
 
-## Unreleased (2025-09-06)
+## v0.0.6 (2025-09-08)
+
+#### Tests
+
+-   shrinking test-pipeline to reduce overall test-time on cran
+    ([4ed71f1](https://github.com/kapsner/mllrnrs/tree/4ed71f18f82f5f9ab04d4e177d39761df0e892a1))
 
 #### Other changes
 
@@ -26,7 +31,7 @@
     ([0b24c76](https://github.com/kapsner/mllrnrs/tree/0b24c762660896447ef8ee85991c54c510601078))
 
 Full set of changes:
-[`v0.0.5...b58bb74`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...b58bb74)
+[`v0.0.5...v0.0.6`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...v0.0.6)
 
 ## v0.0.5 (2025-03-05)
 
