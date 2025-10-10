@@ -263,12 +263,12 @@ lgb_dataset_wrapper <- function(x, y, params) {
       list(case_weights = params$case_weights)
     )
     # remove case_weights-param from learner-args
-    params$case_weights <- NULL
+    params[["case_weights"]] <- NULL
   }
   if ("cat_vars" %in% names(params)) {
     cat_vars <- params$cat_vars
     # remove cat_vars-param from learner-args
-    params$cat_vars <- NULL
+    params[["cat_vars"]] <- NULL
   } else {
     cat_vars <- NULL
   }
@@ -298,30 +298,46 @@ setup_lgb_dataset <- function(x, y, objective, ...) {
     dataset_args <- c(dataset_args, list(weight = kwargs$case_weights))
   }
 
-  if (!is.null(kwargs$cat_vars)) {
-    stopifnot(length(intersect(kwargs$cat_vars, colnames(x))) ==
-                length(kwargs$cat_vars))
-    dataset_args <- c(
-      dataset_args,
-      list(categorical_feature = kwargs$cat_vars)
-    )
-  }
+  dataset_args <- lgb_categorical_features(
+    dataset_args = dataset_args,
+    kwargs = kwargs,
+    cnames = colnames(x)
+  )
+
   # create a lgb.DMatrix
   dtrain <- do.call(lightgbm::lgb.Dataset, dataset_args)
   return(dtrain)
 }
 
+lgb_categorical_features <- function(dataset_args, kwargs, cnames) {
+  if (!is.null(kwargs$cat_vars)) {
+    stopifnot(length(intersect(kwargs$cat_vars, cnames)) ==
+                length(kwargs$cat_vars))
+    dataset_args <- c(
+      dataset_args,
+      list(categorical_feature = which(
+        cnames %in% kwargs$cat_vars
+      ))
+    )
+  }
+  return(dataset_args)
+}
+
 lightgbm_predict <- function(model, newdata, ncores, ...) {
   kwargs <- list(...)
+
+  if ("cat_vars" %in% names(kwargs)) {
+    kwargs[["cat_vars"]] <- NULL
+  }
+
   args <- kdry::list.append(
     list(
-      object = model
-      # , data = newdata # data in 3.3.2 and newdata in 3.3.2.99
+      object = model,
+      newdata = newdata
     ),
     kwargs
   )
 
-  args$newdata <- newdata
   # remove also reshape argument (https://github.com/microsoft/LightGBM/pull/4971)
   # by default, multiclass now outputs a matrix
   args$reshape <- NULL

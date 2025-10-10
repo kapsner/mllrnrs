@@ -113,6 +113,16 @@ LearnerXgboost <- R6::R6Class( # nolint
           ),
           call. = FALSE
         )
+
+        if (as.integer(options("mlexperiments.optim.xgb.nrounds")) < 
+            as.integer(
+            options("mlexperiments.optim.xgb.early_stopping_rounds")
+          )) {
+          stop(paste0(
+            "Value of option 'mlexperiments.optim.xgb.nrounds' must be ",
+            "greater than 'mlexperiments.optim.xgb.early_stopping_rounds'"
+          ))
+        }
       }
       super$initialize(metric_optimization_higher_better =
                          metric_optimization_higher_better)
@@ -215,12 +225,11 @@ xgboost_optimization <- function(
 
   res <- list(
     "metric_optim_mean" = cvfit$evaluation_log[
-      get("iter") == cvfit$best_iteration,
+      get("iter") == cvfit$early_stop$best_iteration,
       get(metric_col)
     ],
-    "nrounds" = cvfit$best_iteration
+    "nrounds" = cvfit$early_stop$best_iteration
   )
-
   return(res)
 }
 
@@ -273,7 +282,7 @@ xgboost_fit <- function(x, y, nrounds, ncores, seed, ...) {
     params = params,
     print_every_n = as.integer(options("mlexperiments.xgb.print_every_n")),
     nrounds = nrounds,
-    watchlist = list(
+    evals = list(
       train = dtrain_full  # setup a watchlist (the training data here)
     ),
     verbose = as.logical(options("mlexperiments.xgb.verbose"))
@@ -292,23 +301,26 @@ setup_xgb_dataset <- function(x, y, objective, ...) {
     return(setup_surv_xgb_dataset(x, y, objective))
   } else {
     stopifnot(is.atomic(y))
-    # create a xgb.DMatrix
-    dtrain <- xgboost::xgb.DMatrix(x)
-    label <- y
-    xgboost::setinfo(dtrain, "label", label)
     if ("case_weights" %in% names(kwargs)) {
-      xgboost::setinfo(dtrain, "weight", kwargs$case_weights)
+      kwargs$weight <- kwargs$case_weights
+      kwargs[["case_weights"]] <- NULL
     }
-    return(dtrain)
+    
+    args <- kdry::list.append(
+      list(
+        data = x,
+        label = y
+      ),
+      kwargs
+    )
+    # create a xgb.DMatrix
+    return(do.call(xgboost::xgb.DMatrix, args))
   }
 }
 
 
 # wrapper function for creating the input data for xgboost
 setup_surv_xgb_dataset <- function(x, y, objective) {
-
-  # create a xgb.DMatrix
-  dtrain <- xgboost::xgb.DMatrix(x)
 
   # for aft-models, the label must be formatted as follows:
   if (objective == "survival:aft") {
@@ -318,23 +330,34 @@ setup_surv_xgb_dataset <- function(x, y, objective) {
       y[, 1],
       Inf
     )
-    xgboost::setinfo(dtrain, "label_lower_bound", y_lower_bound)
-    xgboost::setinfo(dtrain, "label_upper_bound", y_upper_bound)
+    args <- list(
+      data = x,
+      label_lower_bound = y_lower_bound,
+      label_upper_bound = y_upper_bound
+    )
   } else if (objective == "survival:cox") {
     # Cox regression for right censored survival time data (negative values
     # are considered right censored). Note that predictions are returned on
     # the hazard ratio scale (i.e., as HR = exp(marginal_prediction) in
     # the proportional hazard function h(t) = h0(t) * HR).
-    label <- ifelse(y[, 2] == 1, y[, 1], -y[, 1])
-    xgboost::setinfo(dtrain, "label", label)
+    label <- ifelse(y[, 2] == 1, y[, 1], -y[, 1])    
+    args <- list(
+      data = x,
+      label = label
+    )
   }
-
-  return(dtrain)
+  return(do.call(xgboost::xgb.DMatrix, args))
 }
 
 
 xgboost_predict <- function(model, newdata, ncores, ...) {
   kwargs <- list(...)
+  if ("reshape" %in% names(kwargs)) {
+    reshape <- kwargs$reshape
+    kwargs[["reshape"]] <- NULL
+  } else {
+    reshape <- NA
+  }
   args <- kdry::list.append(
     list(
       object = model,
@@ -343,8 +366,8 @@ xgboost_predict <- function(model, newdata, ncores, ...) {
     kwargs
   )
   preds <- do.call(stats::predict, args)
-  if (!is.null(kwargs$reshape)) {
-    if (isTRUE(kwargs$reshape)) {
+  if (!is.na(reshape)) {
+    if (isTRUE(reshape)) {
       preds <- kdry::mlh_reshape(preds)
     }
   }
