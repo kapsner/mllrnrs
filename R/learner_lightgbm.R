@@ -86,11 +86,11 @@
 #'
 #' @export
 #'
-LearnerLightgbm <- R6::R6Class( # nolint
+LearnerLightgbm <- R6::R6Class(
+  # nolint
   classname = "LearnerLightgbm",
   inherit = mlexperiments::MLLearnerBase,
   public = list(
-
     #' @description
     #' Create a new `LearnerLightgbm` object.
     #'
@@ -103,7 +103,8 @@ LearnerLightgbm <- R6::R6Class( # nolint
     #' @examples
     #' LearnerLightgbm$new(metric_optimization_higher_better = FALSE)
     #'
-    initialize = function(metric_optimization_higher_better) { # nolint
+    initialize = function(metric_optimization_higher_better) {
+      # nolint
       if (!requireNamespace("lightgbm", quietly = TRUE)) {
         stop(
           paste0(
@@ -113,8 +114,9 @@ LearnerLightgbm <- R6::R6Class( # nolint
           call. = FALSE
         )
       }
-      super$initialize(metric_optimization_higher_better =
-                         metric_optimization_higher_better)
+      super$initialize(
+        metric_optimization_higher_better = metric_optimization_higher_better
+      )
       self$environment <- "mllrnrs"
       self$cluster_export <- lightgbm_ce()
       private$fun_optim_cv <- lightgbm_optimization
@@ -127,15 +129,21 @@ LearnerLightgbm <- R6::R6Class( # nolint
 
 
 lightgbm_ce <- function() {
-  c("lightgbm_optimization", "lightgbm_fit",
-    "setup_lgb_dataset", "lgb_dataset_wrapper")
+  c(
+    "lightgbm_optimization",
+    "lightgbm_fit",
+    "lgb_categorical_features",
+    "setup_lgb_dataset",
+    "lgb_dataset_wrapper"
+  )
 }
 
-lightgbm_bsF <- function(...) { # nolint
+lightgbm_bsF <- function(...) {
+  # nolint
 
   params <- list(...)
 
-  set.seed(seed)#, kind = "L'Ecuyer-CMRG")
+  set.seed(seed) #, kind = "L'Ecuyer-CMRG")
   bayes_opt_lightgbm <- lightgbm_optimization(
     x = x,
     y = y,
@@ -155,13 +163,13 @@ lightgbm_bsF <- function(...) { # nolint
 
 # tune lambda
 lightgbm_optimization <- function(
-    x,
-    y,
-    params,
-    fold_list,
-    ncores,
-    seed
-  ) {
+  x,
+  y,
+  params,
+  fold_list,
+  ncores,
+  seed
+) {
   # create dataset
   temp_list <- lgb_dataset_wrapper(
     x = x,
@@ -229,7 +237,7 @@ lightgbm_fit <- function(x, y, nrounds, ncores, seed, ...) {
     eval_freq = as.integer(options("mlexperiments.lgb.print_every_n")),
     nrounds = nrounds,
     valids = list(
-      train = dtrain_full  # setup a watchlist (the training data here)
+      train = dtrain_full # setup a watchlist (the training data here)
     ),
     verbose = as.integer(options("mlexperiments.lgb.verbose"))
   )
@@ -255,8 +263,10 @@ lgb_dataset_wrapper <- function(x, y, params) {
   )
   if ("case_weights" %in% names(params)) {
     stopifnot(
-      "late fail: `case_weights` must be of same length as `y`" =
-        length(params$case_weights) == length(y)
+      "late fail: `case_weights` must be of same length as `y`" = length(
+        params$case_weights
+      ) ==
+        length(y)
     )
     dataset_args <- c(
       dataset_args,
@@ -311,13 +321,16 @@ setup_lgb_dataset <- function(x, y, objective, ...) {
 
 lgb_categorical_features <- function(dataset_args, kwargs, cnames) {
   if (!is.null(kwargs$cat_vars)) {
-    stopifnot(length(intersect(kwargs$cat_vars, cnames)) ==
-                length(kwargs$cat_vars))
+    stopifnot(
+      length(intersect(kwargs$cat_vars, cnames)) == length(kwargs$cat_vars)
+    )
     dataset_args <- c(
       dataset_args,
-      list(categorical_feature = which(
-        cnames %in% kwargs$cat_vars
-      ))
+      list(
+        categorical_feature = which(
+          cnames %in% kwargs$cat_vars
+        )
+      )
     )
   }
   return(dataset_args)

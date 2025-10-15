@@ -87,11 +87,11 @@
 #'
 #' @export
 #'
-LearnerXgboost <- R6::R6Class( # nolint
+LearnerXgboost <- R6::R6Class(
+  # nolint
   classname = "LearnerXgboost",
   inherit = mlexperiments::MLLearnerBase,
   public = list(
-
     #' @description
     #' Create a new `LearnerXgboost` object.
     #'
@@ -104,7 +104,8 @@ LearnerXgboost <- R6::R6Class( # nolint
     #' @examples
     #' LearnerXgboost$new(metric_optimization_higher_better = FALSE)
     #'
-    initialize = function(metric_optimization_higher_better) { # nolint
+    initialize = function(metric_optimization_higher_better) {
+      # nolint
       if (!requireNamespace("xgboost", quietly = TRUE)) {
         stop(
           paste0(
@@ -114,18 +115,21 @@ LearnerXgboost <- R6::R6Class( # nolint
           call. = FALSE
         )
 
-        if (as.integer(options("mlexperiments.optim.xgb.nrounds")) < 
+        if (
+          as.integer(options("mlexperiments.optim.xgb.nrounds")) <
             as.integer(
-            options("mlexperiments.optim.xgb.early_stopping_rounds")
-          )) {
+              options("mlexperiments.optim.xgb.early_stopping_rounds")
+            )
+        ) {
           stop(paste0(
             "Value of option 'mlexperiments.optim.xgb.nrounds' must be ",
             "greater than 'mlexperiments.optim.xgb.early_stopping_rounds'"
           ))
         }
       }
-      super$initialize(metric_optimization_higher_better =
-                         metric_optimization_higher_better)
+      super$initialize(
+        metric_optimization_higher_better = metric_optimization_higher_better
+      )
       self$environment <- "mllrnrs"
       self$cluster_export <- xgboost_ce()
       private$fun_optim_cv <- xgboost_optimization
@@ -138,15 +142,20 @@ LearnerXgboost <- R6::R6Class( # nolint
 
 
 xgboost_ce <- function() {
-  c("xgboost_optimization", "xgboost_fit",
-    "setup_xgb_dataset", "xgboost_dataset_wrapper")
+  c(
+    "xgboost_optimization",
+    "xgboost_fit",
+    "setup_xgb_dataset",
+    "xgboost_dataset_wrapper"
+  )
 }
 
-xgboost_bsF <- function(...) { # nolint
+xgboost_bsF <- function(...) {
+  # nolint
 
   params <- list(...)
 
-  set.seed(seed)#, kind = "L'Ecuyer-CMRG")
+  set.seed(seed) #, kind = "L'Ecuyer-CMRG")
   bayes_opt_xgboost <- xgboost_optimization(
     x = x,
     y = y,
@@ -166,13 +175,13 @@ xgboost_bsF <- function(...) { # nolint
 
 # tune lambda
 xgboost_optimization <- function(
-    x,
-    y,
-    params,
-    fold_list,
-    ncores,
-    seed
-  ) {
+  x,
+  y,
+  params,
+  fold_list,
+  ncores,
+  seed
+) {
   stopifnot(
     is.list(params),
     "objective" %in% names(params)
@@ -242,8 +251,10 @@ xgboost_dataset_wrapper <- function(x, y, params) {
   )
   if ("case_weights" %in% names(params)) {
     stopifnot(
-      "late fail: `case_weights` must be of same length as `y`" =
-        length(params$case_weights) == length(y)
+      "late fail: `case_weights` must be of same length as `y`" = length(
+        params$case_weights
+      ) ==
+        length(y)
     )
     dataset_args <- c(
       dataset_args,
@@ -283,7 +294,7 @@ xgboost_fit <- function(x, y, nrounds, ncores, seed, ...) {
     print_every_n = as.integer(options("mlexperiments.xgb.print_every_n")),
     nrounds = nrounds,
     evals = list(
-      train = dtrain_full  # setup a watchlist (the training data here)
+      train = dtrain_full # setup a watchlist (the training data here)
     ),
     verbose = as.logical(options("mlexperiments.xgb.verbose"))
   )
@@ -305,7 +316,7 @@ setup_xgb_dataset <- function(x, y, objective, ...) {
       kwargs$weight <- kwargs$case_weights
       kwargs[["case_weights"]] <- NULL
     }
-    
+
     args <- kdry::list.append(
       list(
         data = x,
@@ -321,7 +332,6 @@ setup_xgb_dataset <- function(x, y, objective, ...) {
 
 # wrapper function for creating the input data for xgboost
 setup_surv_xgb_dataset <- function(x, y, objective) {
-
   # for aft-models, the label must be formatted as follows:
   if (objective == "survival:aft") {
     y_lower_bound <- y[, 1]
@@ -340,7 +350,7 @@ setup_surv_xgb_dataset <- function(x, y, objective) {
     # are considered right censored). Note that predictions are returned on
     # the hazard ratio scale (i.e., as HR = exp(marginal_prediction) in
     # the proportional hazard function h(t) = h0(t) * HR).
-    label <- ifelse(y[, 2] == 1, y[, 1], -y[, 1])    
+    label <- ifelse(y[, 2] == 1, y[, 1], -y[, 1])
     args <- list(
       data = x,
       label = label

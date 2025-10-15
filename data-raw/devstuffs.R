@@ -15,37 +15,41 @@ my_desc$set_authors(c(
     email = "lorenz.kapsner@gmail.com",
     role = c('cre', 'aut', 'cph'),
     comment = c(ORCID = "0000-0003-1866-860X")
-  )))
+  )
+))
 # Remove some author fields
 my_desc$del("Maintainer")
 # Set the version
-my_desc$set_version("0.0.6.9001")
+my_desc$set_version("0.0.6.9002")
 # The title of your package
 my_desc$set(Title = "R6-Based ML Learners for 'mlexperiments'")
 # The description of your package
-my_desc$set(Description = paste0(
-  "Enhances 'mlexperiments' <https://CRAN.R-project.org/package=mlexperiments> ",
-  "with additional machine learning ('ML') learners. ",
-  "The package provides R6-based learners for the following algorithms: ",
-  "'glmnet' <https://CRAN.R-project.org/package=glmnet>, ",
-  "'ranger' <https://CRAN.R-project.org/package=ranger>, ",
-  "'xgboost' <https://CRAN.R-project.org/package=xgboost>, and ",
-  "'lightgbm' <https://CRAN.R-project.org/package=lightgbm>. These can be ",
-  "used directly with the 'mlexperiments' R package."
-))
+my_desc$set(
+  Description = paste0(
+    "Enhances 'mlexperiments' <https://CRAN.R-project.org/package=mlexperiments> ",
+    "with additional machine learning ('ML') learners. ",
+    "The package provides R6-based learners for the following algorithms: ",
+    "'glmnet' <https://CRAN.R-project.org/package=glmnet>, ",
+    "'ranger' <https://CRAN.R-project.org/package=ranger>, ",
+    "'xgboost' <https://CRAN.R-project.org/package=xgboost>, and ",
+    "'lightgbm' <https://CRAN.R-project.org/package=lightgbm>. These can be ",
+    "used directly with the 'mlexperiments' R package."
+  )
+)
 # The description of your package
 my_desc$set("Date/Publication" = paste(as.character(Sys.time()), "UTC"))
 # The urls
 my_desc$set("URL", "https://github.com/kapsner/mllrnrs")
-my_desc$set("BugReports",
-            "https://github.com/kapsner/mllrnrs/issues")
+my_desc$set("BugReports", "https://github.com/kapsner/mllrnrs/issues")
 
 # Vignette Builder
 my_desc$set("VignetteBuilder" = "quarto")
 # Quarto
-my_desc$set("SystemRequirements" = paste0(
-  "Quarto command line tools ",
-  "(https://github.com/quarto-dev/quarto-cli).")
+my_desc$set(
+  "SystemRequirements" = paste0(
+    "Quarto command line tools ",
+    "(https://github.com/quarto-dev/quarto-cli)."
+  )
 )
 
 # Testthat stuff
@@ -92,7 +96,7 @@ remotes_append_vector <- NULL
 tag1 <- "cran" # e.g. "v0.1.7", "development" or "cran"
 if (tag1 == "cran") {
   install.packages("mlexperiments")
-} else{
+} else {
   remotes::install_github(
     repo = "kapsner/mlexperiments",
     ref = tag1
@@ -101,7 +105,8 @@ if (tag1 == "cran") {
   #   "url::https://gitlab.miracum.org/miracum/misc/diztools/-/archive/", tools_tag, "/diztools-", tools_tag, ".zip"
   # )
   add_remotes <- paste0(
-    "github::kapsner/mlexperiments@", tag1
+    "github::kapsner/mlexperiments@",
+    tag1
   )
 
   if (is.null(remotes_append_vector)) {
@@ -114,7 +119,7 @@ if (tag1 == "cran") {
 tag2 <- "cran" # e.g. "v0.1.7", "development" or "cran"
 if (tag2 == "cran") {
   install.packages("kdry")
-} else{
+} else {
   remotes::install_github(
     repo = "kapsner/kdry",
     ref = tag2
@@ -123,7 +128,8 @@ if (tag2 == "cran") {
   #   "url::https://gitlab.miracum.org/miracum/misc/dizutils/-/archive/", utils_tag, "/dizutils-", utils_tag, ".zip"
   # )
   add_remotes <- paste0(
-    "github::kapsner/kdry@", tag2
+    "github::kapsner/kdry@",
+    tag2
   )
 
   if (is.null(remotes_append_vector)) {
@@ -164,7 +170,6 @@ usethis::use_git_ignore("revdep")
 usethis::use_tidy_description()
 
 quarto::quarto_render(input = "README.qmd")
-
 
 
 # https://github.com/gitpython-developers/GitPython/issues/1016#issuecomment-1104114129

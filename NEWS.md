@@ -2,12 +2,22 @@
 
 # mllrnrs NEWS
 
-## Unreleased (2025-09-08)
+## Unreleased (2025-10-10)
+
+#### Bug fixes
+
+-   adaptions to new xgboost interface
+    ([a360851](https://github.com/kapsner/mllrnrs/tree/a3608515f84a3fabc8bf839457c853fc3cabb0d2))
 
 #### Other changes
 
+-   updated dev-version
+    ([e17e5ab](https://github.com/kapsner/mllrnrs/tree/e17e5abcd326f1d24cb44ace7fea6873486b4b10))
 -   udpated news.md
     ([fb25780](https://github.com/kapsner/mllrnrs/tree/fb25780366b519de8259b644037eae20b558160d))
+
+Full set of changes:
+[`v0.0.6...a360851`](https://github.com/kapsner/mllrnrs/compare/v0.0.6...a360851)
 
 ## v0.0.6 (2025-09-08)
 
