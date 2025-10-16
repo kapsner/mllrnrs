@@ -2,7 +2,7 @@
 
 # mllrnrs NEWS
 
-## Unreleased (2025-10-15)
+## Unreleased (2025-10-16)
 
 #### Bug fixes
 
@@ -11,6 +11,8 @@
 
 #### Other changes
 
+-   updated required min-version of mlexperiments
+    ([1114760](https://github.com/kapsner/mllrnrs/tree/1114760d15f2300f6b7edd8332412b376038b2cd))
 -   updated description and news.md
     ([7ce8fcd](https://github.com/kapsner/mllrnrs/tree/7ce8fcdd3103f1e1a36a62050dc39cb305693504))
 -   updated dev-version
@@ -19,7 +21,7 @@
     ([fb25780](https://github.com/kapsner/mllrnrs/tree/fb25780366b519de8259b644037eae20b558160d))
 
 Full set of changes:
-[`v0.0.6...7ce8fcd`](https://github.com/kapsner/mllrnrs/compare/v0.0.6...7ce8fcd)
+[`v0.0.6...1114760`](https://github.com/kapsner/mllrnrs/compare/v0.0.6...1114760)
 
 ## v0.0.6 (2025-09-08)
 

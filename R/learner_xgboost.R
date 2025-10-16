@@ -146,7 +146,8 @@ xgboost_ce <- function() {
     "xgboost_optimization",
     "xgboost_fit",
     "setup_xgb_dataset",
-    "xgboost_dataset_wrapper"
+    "xgboost_dataset_wrapper",
+    "xgboost_fix_params"
   )
 }
 
@@ -171,6 +172,18 @@ xgboost_bsF <- function(...) {
   )
 
   return(ret)
+}
+
+xgboost_fix_params <- function(params) {
+  sapply(
+    X = names(params),
+    FUN = function(x) {
+      val <- params[[x]]
+      ifelse(is.factor(val), as.character(val), val)
+    },
+    simplify = FALSE,
+    USE.NAMES = TRUE
+  )
 }
 
 # tune lambda
@@ -207,10 +220,17 @@ xgboost_optimization <- function(
     dataset_nrows = nrow(x)
   )
 
+  if ("nrounds" %in% names(params)) {
+    use_nrounds <- params$nrounds
+    params[["nrounds"]] <- NULL
+  } else {
+    use_nrounds <- as.integer(options("mlexperiments.optim.xgb.nrounds"))
+  }
+
   fit_args <- list(
-    params = params,
+    params = xgboost_fix_params(params),
     data = dtrain,
-    nrounds = as.integer(options("mlexperiments.optim.xgb.nrounds")),
+    nrounds = use_nrounds,
     folds = xgb_fids,
     print_every_n = as.integer(options("mlexperiments.xgb.print_every_n")),
     early_stopping_rounds = as.integer(
@@ -290,7 +310,7 @@ xgboost_fit <- function(x, y, nrounds, ncores, seed, ...) {
   # train final model with best nrounds
   fit_args <- list(
     data = dtrain_full,
-    params = params,
+    params = xgboost_fix_params(params),
     print_every_n = as.integer(options("mlexperiments.xgb.print_every_n")),
     nrounds = nrounds,
     evals = list(
