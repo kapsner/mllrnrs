@@ -20,7 +20,7 @@ my_desc$set_authors(c(
 # Remove some author fields
 my_desc$del("Maintainer")
 # Set the version
-my_desc$set_version("0.0.6.9004")
+my_desc$set_version("0.0.6.9005")
 # The title of your package
 my_desc$set(Title = "R6-Based ML Learners for 'mlexperiments'")
 # The description of your package
@@ -80,7 +80,7 @@ usethis::use_package("testthat", type = "Suggests", min_version = "3.0.1")
 usethis::use_package("lintr", type = "Suggests")
 usethis::use_package("quarto", type = "Suggests")
 usethis::use_package("glmnet", type = "Suggests")
-usethis::use_package("xgboost", type = "Suggests", min_version = "3.1.0.1")
+usethis::use_package("xgboost", type = "Suggests") #, min_version = "3.1.0.1")
 usethis::use_package("lightgbm", type = "Suggests", min_version = "4.0.0")
 usethis::use_package("ranger", type = "Suggests")
 usethis::use_package("splitTools", type = "Suggests")
@@ -158,6 +158,7 @@ usethis::use_build_ignore("README.qmd")
 usethis::use_build_ignore("docs")
 usethis::use_build_ignore("Meta")
 usethis::use_build_ignore("revdep")
+usethis::use_build_ignore(".pre-commit-config.yaml")
 
 usethis::use_git_ignore("!NEWS.md")
 usethis::use_git_ignore("!README.md")
@@ -183,7 +184,10 @@ quarto::quarto_render(input = "README.qmd")
 # system(
 #   command = 'auto-changelog -u -t "sjtable2df NEWS" --tag-prefix "v" -o "NEWS.md"'
 # )
-an <- autonewsmd::autonewsmd$new(repo_name = packagename)
+an <- autonewsmd::autonewsmd$new(
+  repo_name = packagename,
+  repo_remotes = "origin"
+)
 an$generate()
 an$write(force = TRUE)
 

@@ -51,3 +51,5 @@ Meta
 !README.qmd
 !vignettes/*.qmd
 revdep
+
+!.pre-commit-config.yaml

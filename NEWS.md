@@ -2,12 +2,24 @@
 
 # mllrnrs NEWS
 
-## Unreleased (2025-10-16)
+## Unreleased (2025-11-16)
 
 #### Bug fixes
 
+-   added type-conversion factor-\>character for xgboost-params
+    ([c66876c](https://github.com/kapsner/mllrnrs/tree/c66876c36dddace69247ef64114998647d27a03b))
 -   adaptions to new xgboost interface
     ([a360851](https://github.com/kapsner/mllrnrs/tree/a3608515f84a3fabc8bf839457c853fc3cabb0d2))
+
+#### Tests
+
+-   shrinking test-pipeline to reduce overall test-time on cran
+    ([4ed71f1](https://github.com/kapsner/mllrnrs/tree/4ed71f18f82f5f9ab04d4e177d39761df0e892a1))
+
+#### CI
+
+-   added pre-commit-hooks
+    ([e2fa022](https://github.com/kapsner/mllrnrs/tree/e2fa022f16406934adf363db520434bba2b2016d))
 
 #### Other changes
 
@@ -19,19 +31,6 @@
     ([e17e5ab](https://github.com/kapsner/mllrnrs/tree/e17e5abcd326f1d24cb44ace7fea6873486b4b10))
 -   udpated news.md
     ([fb25780](https://github.com/kapsner/mllrnrs/tree/fb25780366b519de8259b644037eae20b558160d))
-
-Full set of changes:
-[`v0.0.6...1114760`](https://github.com/kapsner/mllrnrs/compare/v0.0.6...1114760)
-
-## v0.0.6 (2025-09-08)
-
-#### Tests
-
--   shrinking test-pipeline to reduce overall test-time on cran
-    ([4ed71f1](https://github.com/kapsner/mllrnrs/tree/4ed71f18f82f5f9ab04d4e177d39761df0e892a1))
-
-#### Other changes
-
 -   updated description and news.md
     ([b58bb74](https://github.com/kapsner/mllrnrs/tree/b58bb74dca7b3d84f7e1d38cf7f252103a172459))
 -   updated pkg metadata
@@ -52,7 +51,7 @@ Full set of changes:
     ([0b24c76](https://github.com/kapsner/mllrnrs/tree/0b24c762660896447ef8ee85991c54c510601078))
 
 Full set of changes:
-[`v0.0.5...v0.0.6`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...v0.0.6)
+[`v0.0.5...e2fa022`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...e2fa022)
 
 ## v0.0.5 (2025-03-05)
 
