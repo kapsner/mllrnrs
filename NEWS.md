@@ -19,10 +19,12 @@
 #### CI
 
 -   added pre-commit-hooks
-    ([e2fa022](https://github.com/kapsner/mllrnrs/tree/e2fa022f16406934adf363db520434bba2b2016d))
+    ([8b0777a](https://github.com/kapsner/mllrnrs/tree/8b0777af9ff0696984b4be47e13ef252a5fd46c4))
 
 #### Other changes
 
+-   again pinned xgboost min-version in description
+    ([a4f6950](https://github.com/kapsner/mllrnrs/tree/a4f6950da0eb9a828e5d7f1c14ed6cc9a8917b6b))
 -   updated required min-version of mlexperiments
     ([1114760](https://github.com/kapsner/mllrnrs/tree/1114760d15f2300f6b7edd8332412b376038b2cd))
 -   updated description and news.md
@@ -51,7 +53,7 @@
     ([0b24c76](https://github.com/kapsner/mllrnrs/tree/0b24c762660896447ef8ee85991c54c510601078))
 
 Full set of changes:
-[`v0.0.5...e2fa022`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...e2fa022)
+[`v0.0.5...a4f6950`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...a4f6950)
 
 ## v0.0.5 (2025-03-05)
 
