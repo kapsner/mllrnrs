@@ -23,8 +23,10 @@
 
 #### Other changes
 
+-   updated vignette outputs for xgb
+    ([bac711e](https://github.com/kapsner/mllrnrs/tree/bac711e99c50c72c08656f0fd1e47878324eca30))
 -   update to v0.0.7
-    ([70cf6db](https://github.com/kapsner/mllrnrs/tree/70cf6db4910f6ddbb2c334f4880c114f57eef87c))
+    ([6cc9c46](https://github.com/kapsner/mllrnrs/tree/6cc9c469cf8df4a6f98c7a69fc65d589462fc9c5))
 -   again pinned xgboost min-version in description
     ([4d9b393](https://github.com/kapsner/mllrnrs/tree/4d9b3933779d6a812eecb75f08c3cd25c69167f1))
 -   updated required min-version of mlexperiments
@@ -55,7 +57,7 @@
     ([0b24c76](https://github.com/kapsner/mllrnrs/tree/0b24c762660896447ef8ee85991c54c510601078))
 
 Full set of changes:
-[`v0.0.5...70cf6db`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...70cf6db)
+[`v0.0.5...bac711e`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...bac711e)
 
 ## v0.0.5 (2025-03-05)
 

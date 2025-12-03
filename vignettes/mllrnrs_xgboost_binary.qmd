@@ -4,7 +4,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
   %\VignetteIndexEntry{xgboost: Binary Classification}
   %\VignetteEngine{quarto::html}
-editor_options: 
+editor_options:
   chunk_output_type: console
 execute:
   eval: false
@@ -167,7 +167,7 @@ tuner$set_data(
 )
 
 tuner_results_grid <- tuner$execute(k = 3)
-#> 
+#>
 #> Parameter settings [==================>-----------------------------------------------------------------------------] 2/10 ( 20%)
 #> Parameter settings [============================>-------------------------------------------------------------------] 3/10 ( 30%)
 #> Parameter settings [=====================================>----------------------------------------------------------] 4/10 ( 40%)
@@ -176,23 +176,17 @@ tuner_results_grid <- tuner$execute(k = 3)
 #> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
 #> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
 #> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+#> Parameter settings [===============================================================================================] 10/10 (100%)
 
 head(tuner_results_grid)
-#>    setting_id metric_optim_mean nrounds subsample colsample_bytree min_child_weight learning_rate max_depth       objective
-#> 1:          1         0.4121967      34       0.6              0.8                5           0.2         1 binary:logistic
-#> 2:          2         0.3890956      57       1.0              0.8                5           0.1         5 binary:logistic
-#> 3:          3         0.3925308     100       0.8              0.8                5           0.1         1 binary:logistic
-#> 4:          4         0.4082505      34       0.6              0.8                5           0.2         5 binary:logistic
-#> 5:          5         0.3975907      36       1.0              0.8                1           0.1         5 binary:logistic
-#> 6:          6         0.3932451      66       0.8              0.8                5           0.1         5 binary:logistic
-#>    eval_metric
-#> 1:     logloss
-#> 2:     logloss
-#> 3:     logloss
-#> 4:     logloss
-#> 5:     logloss
-#> 6:     logloss
+#>    setting_id metric_optim_mean nrounds subsample colsample_bytree min_child_weight learning_rate max_depth       objective eval_metric
+#>         <int>             <num>   <int>     <num>            <num>            <num>         <num>     <num>          <char>      <char>
+#> 1:          1         0.3977489      62       0.6              0.8                5           0.2         1 binary:logistic     logloss
+#> 2:          2         0.3915203      67       1.0              0.8                5           0.1         5 binary:logistic     logloss
+#> 3:          3         0.3972711      96       0.8              0.8                5           0.1         1 binary:logistic     logloss
+#> 4:          4         0.3951791      62       0.6              0.8                5           0.2         5 binary:logistic     logloss
+#> 5:          5         0.3786375      44       1.0              0.8                1           0.1         5 binary:logistic     logloss
+#> 6:          6         0.3956902      75       0.8              0.8                5           0.1         5 binary:logistic     logloss
 ```
 
 
@@ -222,24 +216,26 @@ tuner$set_data(
 )
 
 tuner_results_bayesian <- tuner$execute(k = 3)
-#> 
+#>
 #> Registering parallel backend using 4 cores.
 
 head(tuner_results_bayesian)
 #>    Epoch setting_id subsample colsample_bytree min_child_weight learning_rate max_depth gpUtility acqOptimum inBounds Elapsed
-#> 1:     0          1       0.6              0.8                5           0.2         1        NA      FALSE     TRUE   1.695
-#> 2:     0          2       1.0              0.8                5           0.1         5        NA      FALSE     TRUE   1.702
-#> 3:     0          3       0.8              0.8                5           0.1         1        NA      FALSE     TRUE   1.734
-#> 4:     0          4       0.6              0.8                5           0.2         5        NA      FALSE     TRUE   1.724
-#> 5:     0          5       1.0              0.8                1           0.1         5        NA      FALSE     TRUE   0.849
-#> 6:     0          6       0.8              0.8                5           0.1         5        NA      FALSE     TRUE   0.850
+#>    <num>      <int>     <num>            <num>            <num>         <num>     <num>     <num>     <lgcl>   <lgcl>   <num>
+#> 1:     0          1       0.6              0.8                5           0.2         1        NA      FALSE     TRUE   0.890
+#> 2:     0          2       1.0              0.8                5           0.1         5        NA      FALSE     TRUE   0.892
+#> 3:     0          3       0.8              0.8                5           0.1         1        NA      FALSE     TRUE   0.991
+#> 4:     0          4       0.6              0.8                5           0.2         5        NA      FALSE     TRUE   0.911
+#> 5:     0          5       1.0              0.8                1           0.1         5        NA      FALSE     TRUE   0.173
+#> 6:     0          6       0.8              0.8                5           0.1         5        NA      FALSE     TRUE   0.183
 #>         Score metric_optim_mean nrounds errorMessage       objective eval_metric
-#> 1: -0.4089735         0.4089735      56           NA binary:logistic     logloss
-#> 2: -0.3970937         0.3970937      49           NA binary:logistic     logloss
-#> 3: -0.4013240         0.4013240     100           NA binary:logistic     logloss
-#> 4: -0.4070968         0.4070968      69           NA binary:logistic     logloss
-#> 5: -0.3819756         0.3819756      39           NA binary:logistic     logloss
-#> 6: -0.3987643         0.3987643      99           NA binary:logistic     logloss
+#>         <num>             <num>   <int>       <lgcl>          <char>      <char>
+#> 1: -0.3977489         0.3977489      62           NA binary:logistic     logloss
+#> 2: -0.3915203         0.3915203      67           NA binary:logistic     logloss
+#> 3: -0.3972711         0.3972711      96           NA binary:logistic     logloss
+#> 4: -0.3951791         0.3951791      62           NA binary:logistic     logloss
+#> 5: -0.3786375         0.3786375      44           NA binary:logistic     logloss
+#> 6: -0.3956902         0.3956902      75           NA binary:logistic     logloss
 ```
 
 ## k-Fold Cross Validation
@@ -267,18 +263,19 @@ validator$set_data(
 )
 
 validator_results <- validator$execute()
-#> 
+#>
 #> CV fold: Fold1
-#> 
+#>
 #> CV fold: Fold2
-#> 
+#>
 #> CV fold: Fold3
 
 head(validator_results)
-#>     fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds       objective eval_metric
-#> 1: Fold1   0.8799577         1              0.8                1           0.1         5      39 binary:logistic     logloss
-#> 2: Fold2   0.8635643         1              0.8                1           0.1         5      39 binary:logistic     logloss
-#> 3: Fold3   0.9027699         1              0.8                1           0.1         5      39 binary:logistic     logloss
+#>      fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds       objective eval_metric
+#>    <char>       <num>     <num>            <num>            <num>         <num>     <num>   <int>          <char>      <char>
+#> 1:  Fold1   0.8947647         1              0.8                1           0.1         5      44 binary:logistic     logloss
+#> 2:  Fold2   0.8720254         1              0.8                1           0.1         5      44 binary:logistic     logloss
+#> 3:  Fold3   0.9010741         1              0.8                1           0.1         5      44 binary:logistic     logloss
 ```
 
 
@@ -313,35 +310,36 @@ validator$set_data(
 )
 
 validator_results <- validator$execute()
-#> 
+#>
 #> CV fold: Fold1
-#> 
+#>
 #> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
 #> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
 #> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+#> Parameter settings [===============================================================================================] 10/10 (100%)
 #> CV fold: Fold2
 #> CV progress [====================================================================>-----------------------------------] 2/3 ( 67%)
-#> 
+#>
 #> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
 #> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
 #> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+#> Parameter settings [===============================================================================================] 10/10 (100%)
 #> CV fold: Fold3
 #> CV progress [========================================================================================================] 3/3 (100%)
-#>                                                                                                                                   
+#>
 #> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
 #> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
 #> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
 #> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
 #> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+#> Parameter settings [===============================================================================================] 10/10 (100%)
 
 head(validator_results)
-#>     fold performance nrounds subsample colsample_bytree min_child_weight learning_rate max_depth       objective eval_metric
-#> 1: Fold1   0.8675304      40       0.6                1                1           0.2         1 binary:logistic     logloss
-#> 2: Fold2   0.8635643      44       1.0                1                5           0.1         5 binary:logistic     logloss
-#> 3: Fold3   0.8793103      24       0.6                1                1           0.2         1 binary:logistic     logloss
+#>      fold performance nrounds subsample colsample_bytree min_child_weight learning_rate max_depth       objective eval_metric
+#>    <char>       <num>   <int>     <num>            <num>            <num>         <num>     <num>          <char>      <char>
+#> 1:  Fold1   0.8714966      40       0.6              1.0                1           0.2         1 binary:logistic     logloss
+#> 2:  Fold2   0.8754627      35       1.0              1.0                5           0.1         5 binary:logistic     logloss
+#> 3:  Fold3   0.8883550      41       0.8              0.8                5           0.1         1 binary:logistic     logloss
 ```
 
 
@@ -378,26 +376,27 @@ validator$set_data(
 )
 
 validator_results <- validator$execute()
-#> 
+#>
 #> CV fold: Fold1
-#> 
+#>
 #> Registering parallel backend using 4 cores.
-#> 
+#>
 #> CV fold: Fold2
 #> CV progress [====================================================================>-----------------------------------] 2/3 ( 67%)
-#> 
+#>
 #> Registering parallel backend using 4 cores.
-#> 
+#>
 #> CV fold: Fold3
 #> CV progress [========================================================================================================] 3/3 (100%)
-#>                                                                                                                                   
+#>
 #> Registering parallel backend using 4 cores.
 
 head(validator_results)
-#>     fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds       objective eval_metric
-#> 1: Fold1   0.8662084       0.6              1.0                1           0.2         1      28 binary:logistic     logloss
-#> 2: Fold2   0.8746695       1.0              0.8                5           0.1         5      44 binary:logistic     logloss
-#> 3: Fold3   0.8903335       0.6              1.0                1           0.1         5      30 binary:logistic     logloss
+#>      fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds       objective eval_metric
+#>    <char>       <num>     <num>            <num>            <num>         <num>     <num>   <int>          <char>      <char>
+#> 1:  Fold1   0.8714966       0.6        1.0000000                1     0.2000000         1      40 binary:logistic     logloss
+#> 2:  Fold2   0.8754627       1.0        1.0000000                5     0.1000000         5      35 binary:logistic     logloss
+#> 3:  Fold3   0.8810062       1.0        0.6293304                1     0.1034034         1      56 binary:logistic     logloss
 ```
 
 
@@ -422,16 +421,16 @@ perf_xgboost <- mlexperiments::performance(
   type = "binary"
 )
 perf_xgboost
-#>     model performance       AUC     Brier BrierScaled       BAC    TP    TN    FP    FN       TPR       TNR       FPR       FNR       PPV
-#>    <char>       <num>     <num>     <num>       <num>     <num> <int> <int> <int> <int>     <num>     <num>     <num>     <num>     <num>
-#> 1:  Fold1   0.7922752 0.7922752 0.1726355   0.2198065 0.6931191    20    69    10    19 0.5128205 0.8734177 0.1265823 0.4871795 0.6666667
-#> 2:  Fold2   0.7687439 0.7687439 0.1885316   0.1479670 0.6353457    15    70     9    24 0.3846154 0.8860759 0.1139241 0.6153846 0.6250000
-#> 3:  Fold3   0.7594937 0.7594937 0.1854326   0.1619724 0.6676404    19    67    12    20 0.4871795 0.8481013 0.1518987 0.5128205 0.6129032
-#>          NPV       FDR       MCC        F1     GMEAN       GPR       ACC      MMCE       BER
-#>        <num>     <num>     <num>     <num>     <num>     <num>     <num>     <num>     <num>
-#> 1: 0.7840909 0.3333333 0.4172527 0.5797101 0.6692582 0.5847053 0.7542373 0.2457627 0.3068809
-#> 2: 0.7446809 0.3750000 0.3163375 0.4761905 0.5837794 0.4902903 0.7203390 0.2796610 0.3646543
-#> 3: 0.7701149 0.3870968 0.3583554 0.5428571 0.6427889 0.5464374 0.7288136 0.2711864 0.3323596
+#>     model performance       AUC     Brier BrierScaled       BAC    TP    TN    FP    FN       TPR       TNR       FPR       FNR
+#>    <char>       <num>     <num>     <num>       <num>     <num> <int> <int> <int> <int>     <num>     <num>     <num>     <num>
+#> 1:  Fold1   0.7913015 0.7913015 0.1743251   0.2121706 0.6994482    20    70     9    19 0.5128205 0.8860759 0.1139241 0.4871795
+#> 2:  Fold2   0.7745862 0.7745862 0.1856610   0.1609401 0.6481662    16    70     9    23 0.4102564 0.8860759 0.1139241 0.5897436
+#> 3:  Fold3   0.7917884 0.7917884 0.1739823   0.2137198 0.6609867    17    70     9    22 0.4358974 0.8860759 0.1139241 0.5641026
+#>          PPV       NPV       FDR       MCC        F1     GMEAN       GPR       ACC      MMCE       BER
+#>        <num>     <num>     <num>     <num>     <num>     <num>     <num>     <num>     <num>     <num>
+#> 1: 0.6896552 0.7865169 0.3103448 0.4358249 0.5882353 0.6740904 0.5947010 0.7627119 0.2372881 0.3005518
+#> 2: 0.6400000 0.7526882 0.3600000 0.3411249 0.5000000 0.6029248 0.5124101 0.7288136 0.2711864 0.3518338
+#> 3: 0.6538462 0.7608696 0.3461538 0.3654140 0.5230769 0.6214807 0.5338631 0.7372881 0.2627119 0.3390133
 ```
 
 ```{r include=FALSE}
