@@ -4,7 +4,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
   %\VignetteIndexEntry{xgboost: Multiclass Classification}
   %\VignetteEngine{quarto::html}
-editor_options: 
+editor_options:
   chunk_output_type: console
 execute:
   eval: false
@@ -168,7 +168,7 @@ tuner$set_data(
 )
 
 tuner_results_grid <- tuner$execute(k = 3)
-#> 
+#>
 #> Parameter settings [============================>-------------------------------------------------------------------] 3/10 ( 30%)
 #> Parameter settings [=====================================>----------------------------------------------------------] 4/10 ( 40%)
 #> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
@@ -176,7 +176,7 @@ tuner_results_grid <- tuner$execute(k = 3)
 #> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
 #> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
 #> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+#> Parameter settings [===============================================================================================] 10/10 (100%)
 
 head(tuner_results_grid)
 #>    setting_id metric_optim_mean nrounds subsample colsample_bytree min_child_weight learning_rate max_depth      objective
@@ -222,7 +222,7 @@ tuner$set_data(
 )
 
 tuner_results_bayesian <- tuner$execute(k = 3)
-#> 
+#>
 #> Registering parallel backend using 4 cores.
 
 head(tuner_results_bayesian)
@@ -267,14 +267,14 @@ validator$set_data(
 )
 
 validator_results <- validator$execute()
-#> 
+#>
 #> CV fold: Fold1
-#> 
+#>
 #> CV fold: Fold2
-#> 
+#>
 #> CV fold: Fold3
 #> CV progress [========================================================================================================] 3/3 (100%)
-#>                                                                                                                                   
+#>
 
 head(validator_results)
 #>     fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds      objective eval_metric
@@ -319,9 +319,9 @@ validator$set_data(
 )
 
 validator_results <- validator$execute()
-#> 
+#>
 #> CV fold: Fold1
-#> 
+#>
 #> Parameter settings [============================>-------------------------------------------------------------------] 3/10 ( 30%)
 #> Parameter settings [=====================================>----------------------------------------------------------] 4/10 ( 40%)
 #> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
@@ -329,10 +329,10 @@ validator_results <- validator$execute()
 #> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
 #> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
 #> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+#> Parameter settings [===============================================================================================] 10/10 (100%)
 #> CV fold: Fold2
 #> CV progress [====================================================================>-----------------------------------] 2/3 ( 67%)
-#> 
+#>
 #> Parameter settings [============================>-------------------------------------------------------------------] 3/10 ( 30%)
 #> Parameter settings [=====================================>----------------------------------------------------------] 4/10 ( 40%)
 #> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
@@ -340,10 +340,10 @@ validator_results <- validator$execute()
 #> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
 #> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
 #> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+#> Parameter settings [===============================================================================================] 10/10 (100%)
 #> CV fold: Fold3
 #> CV progress [========================================================================================================] 3/3 (100%)
-#>                                                                                                                                   
+#>
 #> Parameter settings [============================>-------------------------------------------------------------------] 3/10 ( 30%)
 #> Parameter settings [=====================================>----------------------------------------------------------] 4/10 ( 40%)
 #> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
@@ -351,7 +351,7 @@ validator_results <- validator$execute()
 #> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
 #> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
 #> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+#> Parameter settings [===============================================================================================] 10/10 (100%)
 
 head(validator_results)
 #>     fold performance nrounds subsample colsample_bytree min_child_weight learning_rate max_depth      objective eval_metric
@@ -398,19 +398,19 @@ validator$set_data(
 )
 
 validator_results <- validator$execute()
-#> 
+#>
 #> CV fold: Fold1
-#> 
+#>
 #> Registering parallel backend using 4 cores.
-#> 
+#>
 #> CV fold: Fold2
 #> CV progress [====================================================================>-----------------------------------] 2/3 ( 67%)
-#> 
+#>
 #> Registering parallel backend using 4 cores.
-#> 
+#>
 #> CV fold: Fold3
 #> CV progress [========================================================================================================] 3/3 (100%)
-#>                                                                                                                                   
+#>
 #> Registering parallel backend using 4 cores.
 
 head(validator_results)
@@ -454,7 +454,7 @@ perf_xgboost
 
 ## Appendix I: Grid-Search with Target Weigths
 
-Here, `xgboost`'s [`weight`-argument](https://rdrr.io/cran/xgboost/man/setinfo.html) is used to rescale the case-weights during the training.
+Here, `xgboost`'s [`weight`-argument](https://rdrr.io/cran/xgboost/man/xgb.DMatrix.html) is used to rescale the case-weights during the training.
 
 ```{r}
 # define the target weights
@@ -486,7 +486,7 @@ tuner_w_weights$set_data(
 )
 
 tuner_results_grid <- tuner_w_weights$execute(k = 3)
-#> 
+#>
 #> Parameter settings [============================>-------------------------------------------------------------------] 3/10 ( 30%)
 #> Parameter settings [=====================================>----------------------------------------------------------] 4/10 ( 40%)
 #> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
@@ -494,7 +494,7 @@ tuner_results_grid <- tuner_w_weights$execute(k = 3)
 #> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
 #> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
 #> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
+#> Parameter settings [===============================================================================================] 10/10 (100%)
 
 head(tuner_results_grid)
 #>    setting_id metric_optim_mean nrounds subsample colsample_bytree min_child_weight learning_rate max_depth      objective
@@ -543,14 +543,14 @@ validator_w_weights$set_data(
 )
 
 validator_results <- validator_w_weights$execute()
-#> 
+#>
 #> CV fold: Fold1
-#> 
+#>
 #> CV fold: Fold2
-#> 
+#>
 #> CV fold: Fold3
 #> CV progress [========================================================================================================] 3/3 (100%)
-#>                                                                                                                                   
+#>
 
 head(validator_results)
 #>      fold performance nrounds subsample colsample_bytree min_child_weight learning_rate max_depth      objective eval_metric num_class

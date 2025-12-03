@@ -2,7 +2,7 @@
 
 # mllrnrs NEWS
 
-## Unreleased (2025-11-16)
+## Unreleased (2025-12-03)
 
 #### Bug fixes
 
@@ -23,8 +23,10 @@
 
 #### Other changes
 
+-   update to v0.0.7
+    ([70cf6db](https://github.com/kapsner/mllrnrs/tree/70cf6db4910f6ddbb2c334f4880c114f57eef87c))
 -   again pinned xgboost min-version in description
-    ([a4f6950](https://github.com/kapsner/mllrnrs/tree/a4f6950da0eb9a828e5d7f1c14ed6cc9a8917b6b))
+    ([4d9b393](https://github.com/kapsner/mllrnrs/tree/4d9b3933779d6a812eecb75f08c3cd25c69167f1))
 -   updated required min-version of mlexperiments
     ([1114760](https://github.com/kapsner/mllrnrs/tree/1114760d15f2300f6b7edd8332412b376038b2cd))
 -   updated description and news.md
@@ -53,7 +55,7 @@
     ([0b24c76](https://github.com/kapsner/mllrnrs/tree/0b24c762660896447ef8ee85991c54c510601078))
 
 Full set of changes:
-[`v0.0.5...a4f6950`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...a4f6950)
+[`v0.0.5...70cf6db`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...70cf6db)
 
 ## v0.0.5 (2025-03-05)
 

@@ -1,6 +1,6 @@
 Package: mllrnrs
 Title: R6-Based ML Learners for 'mlexperiments'
-Version: 0.0.6.9005
+Version: 0.0.7
 Authors@R:
     person("Lorenz A.", "Kapsner", , "lorenz.kapsner@gmail.com", role = c("cre", "aut", "cph"),
            comment = c(ORCID = "0000-0003-1866-860X"))
@@ -35,12 +35,12 @@ Suggests:
     ranger,
     splitTools,
     testthat (>= 3.0.1),
-    xgboost (>= 3.1.1.1)
+    xgboost (>= 3.1.2.1)
 VignetteBuilder:
     quarto
 Config/testthat/edition: 3
 Config/testthat/parallel: false
-Date/Publication: 2025-11-16 19:33:26.761556 UTC
+Date/Publication: 2025-12-03 19:38:19.649624 UTC
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 SystemRequirements: Quarto command line tools
