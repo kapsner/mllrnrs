@@ -180,13 +180,15 @@ tuner_results_grid <- tuner$execute(k = 3)
 
 head(tuner_results_grid)
 #>    setting_id metric_optim_mean nrounds subsample colsample_bytree min_child_weight learning_rate max_depth      objective
-#> 1:          1         1.0107788      27       0.6              0.8                5           0.2         1 multi:softprob
-#> 2:          2         0.9822161      35       1.0              0.8                5           0.1         5 multi:softprob
-#> 3:          3         1.0097847     100       0.8              0.8                5           0.1         1 multi:softprob
-#> 4:          4         0.9850296      20       0.6              0.8                5           0.2         5 multi:softprob
-#> 5:          5         0.9807356      34       1.0              0.8                1           0.1         5 multi:softprob
-#> 6:          6         0.9734746      46       0.8              0.8                5           0.1         5 multi:softprob
+#>         <int>             <num>   <int>     <num>            <num>            <num>         <num>     <num>         <char>
+#> 1:          1         1.0106675      38       0.6              0.8                5           0.2         1 multi:softprob
+#> 2:          2         0.9828797      37       1.0              0.8                5           0.1         5 multi:softprob
+#> 3:          3         1.0102800      76       0.8              0.8                5           0.1         1 multi:softprob
+#> 4:          4         0.9867769      20       0.6              0.8                5           0.2         5 multi:softprob
+#> 5:          5         0.9815158      32       1.0              0.8                1           0.1         5 multi:softprob
+#> 6:          6         0.9741743      50       0.8              0.8                5           0.1         5 multi:softprob
 #>    eval_metric num_class
+#>         <char>     <num>
 #> 1:    mlogloss         3
 #> 2:    mlogloss         3
 #> 3:    mlogloss         3
@@ -227,19 +229,21 @@ tuner_results_bayesian <- tuner$execute(k = 3)
 
 head(tuner_results_bayesian)
 #>    Epoch setting_id subsample colsample_bytree min_child_weight learning_rate max_depth gpUtility acqOptimum inBounds Elapsed
-#> 1:     0          1       0.6              0.8                5           0.2         1        NA      FALSE     TRUE   1.934
-#> 2:     0          2       1.0              0.8                5           0.1         5        NA      FALSE     TRUE   2.181
-#> 3:     0          3       0.8              0.8                5           0.1         1        NA      FALSE     TRUE   2.060
-#> 4:     0          4       0.6              0.8                5           0.2         5        NA      FALSE     TRUE   2.057
-#> 5:     0          5       1.0              0.8                1           0.1         5        NA      FALSE     TRUE   1.422
-#> 6:     0          6       0.8              0.8                5           0.1         5        NA      FALSE     TRUE   1.505
+#>    <num>      <int>     <num>            <num>            <num>         <num>     <num>     <num>     <lgcl>   <lgcl>   <num>
+#> 1:     0          1       0.6              0.8                5           0.2         1        NA      FALSE     TRUE   0.995
+#> 2:     0          2       1.0              0.8                5           0.1         5        NA      FALSE     TRUE   1.057
+#> 3:     0          3       0.8              0.8                5           0.1         1        NA      FALSE     TRUE   1.088
+#> 4:     0          4       0.6              0.8                5           0.2         5        NA      FALSE     TRUE   1.035
+#> 5:     0          5       1.0              0.8                1           0.1         5        NA      FALSE     TRUE   0.282
+#> 6:     0          6       0.8              0.8                5           0.1         5        NA      FALSE     TRUE   0.314
 #>         Score metric_optim_mean nrounds errorMessage      objective eval_metric num_class
-#> 1: -1.0093139         1.0093139      51           NA multi:softprob    mlogloss         3
-#> 2: -0.9842567         0.9842567      34           NA multi:softprob    mlogloss         3
-#> 3: -1.0097517         1.0097517      79           NA multi:softprob    mlogloss         3
-#> 4: -0.9766614         0.9766614      17           NA multi:softprob    mlogloss         3
-#> 5: -0.9851912         0.9851912      28           NA multi:softprob    mlogloss         3
-#> 6: -0.9755198         0.9755198      42           NA multi:softprob    mlogloss         3
+#>         <num>             <num>   <int>       <lgcl>         <char>      <char>     <num>
+#> 1: -1.0106675         1.0106675      38           NA multi:softprob    mlogloss         3
+#> 2: -0.9828797         0.9828797      37           NA multi:softprob    mlogloss         3
+#> 3: -1.0102800         1.0102800      76           NA multi:softprob    mlogloss         3
+#> 4: -0.9867769         0.9867769      20           NA multi:softprob    mlogloss         3
+#> 5: -0.9815158         0.9815158      32           NA multi:softprob    mlogloss         3
+#> 6: -0.9741743         0.9741743      50           NA multi:softprob    mlogloss         3
 ```
 
 ## k-Fold Cross Validation
@@ -277,11 +281,13 @@ validator_results <- validator$execute()
 #>
 
 head(validator_results)
-#>     fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds      objective eval_metric
-#> 1: Fold1   0.5645161 0.5356077        0.8312972                1     0.1099728        10      23 multi:softprob    mlogloss
-#> 2: Fold2   0.5195682 0.5356077        0.8312972                1     0.1099728        10      23 multi:softprob    mlogloss
-#> 3: Fold3   0.5618280 0.5356077        0.8312972                1     0.1099728        10      23 multi:softprob    mlogloss
+#>      fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds      objective eval_metric
+#>    <char>       <num>     <num>            <num>            <num>         <num>     <num>   <int>         <char>      <char>
+#> 1:  Fold1   0.5685484 0.7220588        0.8330246                1     0.1099728        10      19 multi:softprob    mlogloss
+#> 2:  Fold2   0.5587045 0.7220588        0.8330246                1     0.1099728        10      19 multi:softprob    mlogloss
+#> 3:  Fold3   0.5483871 0.7220588        0.8330246                1     0.1099728        10      19 multi:softprob    mlogloss
 #>    num_class
+#>        <num>
 #> 1:         3
 #> 2:         3
 #> 3:         3
@@ -354,11 +360,13 @@ validator_results <- validator$execute()
 #> Parameter settings [===============================================================================================] 10/10 (100%)
 
 head(validator_results)
-#>     fold performance nrounds subsample colsample_bytree min_child_weight learning_rate max_depth      objective eval_metric
-#> 1: Fold1   0.5658602      30       0.8              0.8                5           0.1         5 multi:softprob    mlogloss
-#> 2: Fold2   0.5276653      33       0.8              0.8                5           0.1         5 multi:softprob    mlogloss
-#> 3: Fold3   0.5470430      25       0.6              1.0                1           0.1         5 multi:softprob    mlogloss
+#>      fold performance nrounds subsample colsample_bytree min_child_weight learning_rate max_depth      objective eval_metric
+#>    <char>       <num>   <int>     <num>            <num>            <num>         <num>     <num>         <char>      <char>
+#> 1:  Fold1   0.5591398      32       0.6              1.0                1           0.1         5 multi:softprob    mlogloss
+#> 2:  Fold2   0.5344130      34       0.8              0.8                5           0.1         5 multi:softprob    mlogloss
+#> 3:  Fold3   0.5510753      24       0.6              1.0                1           0.1         5 multi:softprob    mlogloss
 #>    num_class
+#>        <num>
 #> 1:         3
 #> 2:         3
 #> 3:         3
@@ -414,11 +422,13 @@ validator_results <- validator$execute()
 #> Registering parallel backend using 4 cores.
 
 head(validator_results)
-#>     fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds      objective eval_metric
-#> 1: Fold1   0.5524194 0.7285277        0.8178568                1     0.1099728        10      18 multi:softprob    mlogloss
-#> 2: Fold2   0.5330634 0.5578915        0.7352097                1     0.1099728        10      24 multi:softprob    mlogloss
-#> 3: Fold3   0.5456989 0.5001911        0.8708509                1     0.1099728        10      19 multi:softprob    mlogloss
+#>      fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds      objective eval_metric
+#>    <char>       <num>     <num>            <num>            <num>         <num>     <num>   <int>         <char>      <char>
+#> 1:  Fold1   0.5591398 0.6000000        1.0000000                1     0.1000000         5      32 multi:softprob    mlogloss
+#> 2:  Fold2   0.5641026 0.6936177        0.7695365                1     0.1099728        10      20 multi:softprob    mlogloss
+#> 3:  Fold3   0.5537634 0.5955781        0.8688622                1     0.1099728        10      19 multi:softprob    mlogloss
 #>    num_class
+#>        <num>
 #> 1:         3
 #> 2:         3
 #> 3:         3
@@ -445,10 +455,11 @@ perf_xgboost <- mlexperiments::performance(
   y_ground_truth = test_y
 )
 perf_xgboost
-#>    model performance
-#> 1: Fold1   0.5621735
-#> 2: Fold2   0.5475444
-#> 3: Fold3   0.5464995
+#>     model performance
+#>    <char>       <num>
+#> 1:  Fold1   0.5590387
+#> 2:  Fold2   0.5579937
+#> 3:  Fold3   0.5611285
 ```
 
 
@@ -499,12 +510,12 @@ tuner_results_grid <- tuner_w_weights$execute(k = 3)
 head(tuner_results_grid)
 #>    setting_id metric_optim_mean nrounds subsample colsample_bytree min_child_weight learning_rate max_depth      objective
 #>         <int>             <num>   <int>     <num>            <num>            <num>         <num>     <num>         <char>
-#> 1:          1         0.9447465      27       0.6              0.8                5           0.2         1 multi:softprob
-#> 2:          2         0.9222842      33       1.0              0.8                5           0.1         5 multi:softprob
-#> 3:          3         0.9442046     100       0.8              0.8                5           0.1         1 multi:softprob
-#> 4:          4         0.9236826      20       0.6              0.8                5           0.2         5 multi:softprob
-#> 5:          5         0.9197338      35       1.0              0.8                1           0.1         5 multi:softprob
-#> 6:          6         0.9147754      46       0.8              0.8                5           0.1         5 multi:softprob
+#> 1:          1         0.9442324      50       0.6              0.8                5           0.2         1 multi:softprob
+#> 2:          2         0.9217258      35       1.0              0.8                5           0.1         5 multi:softprob
+#> 3:          3         0.9443002      93       0.8              0.8                5           0.1         1 multi:softprob
+#> 4:          4         0.9245540      20       0.6              0.8                5           0.2         5 multi:softprob
+#> 5:          5         0.9212009      26       1.0              0.8                1           0.1         5 multi:softprob
+#> 6:          6         0.9145242      39       0.8              0.8                5           0.1         5 multi:softprob
 #>    eval_metric num_class
 #>         <char>     <num>
 #> 1:    mlogloss         3
@@ -553,11 +564,16 @@ validator_results <- validator_w_weights$execute()
 #>
 
 head(validator_results)
-#>      fold performance nrounds subsample colsample_bytree min_child_weight learning_rate max_depth      objective eval_metric num_class
-#>    <char>       <num>   <int>     <num>            <num>            <num>         <num>     <num>         <char>      <char>     <num>
-#> 1:  Fold1   0.5631720      46       0.8              0.8                5           0.1         5 multi:softprob    mlogloss         3
-#> 2:  Fold2   0.5222672      46       0.8              0.8                5           0.1         5 multi:softprob    mlogloss         3
-#> 3:  Fold3   0.5510753      46       0.8              0.8                5           0.1         5 multi:softprob    mlogloss         3
+#>      fold performance nrounds subsample colsample_bytree min_child_weight learning_rate max_depth      objective eval_metric
+#>    <char>       <num>   <int>     <num>            <num>            <num>         <num>     <num>         <char>      <char>
+#> 1:  Fold1   0.5658602      39       0.8              0.8                5           0.1         5 multi:softprob    mlogloss
+#> 2:  Fold2   0.5222672      39       0.8              0.8                5           0.1         5 multi:softprob    mlogloss
+#> 3:  Fold3   0.5577957      39       0.8              0.8                5           0.1         5 multi:softprob    mlogloss
+#>    num_class
+#>        <num>
+#> 1:         3
+#> 2:         3
+#> 3:         3
 ```
 
 ```{r include=FALSE}
