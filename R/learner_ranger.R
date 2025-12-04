@@ -282,7 +282,7 @@ ranger_optimization <- function(
         list(
           "fold" = fold,
           "oob_metric" = 1 - cvfit$prediction.error,
-          "validation_metric" = perf
+          "metric" = perf
         )
       ),
       fill = TRUE
@@ -290,7 +290,7 @@ ranger_optimization <- function(
   }
 
   res <- list(
-    "metric_optim_mean" = mean(results_df$validation_metric)
+    "metric_optim_mean" = mean(results_df$metric)
   )
 
   return(res)

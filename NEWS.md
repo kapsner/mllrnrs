@@ -6,8 +6,10 @@
 
 #### Other changes
 
+-   renamed ranger validation_metric to metric
+    ([530da91](https://github.com/kapsner/mllrnrs/tree/530da914ea4f7522b1f770c1acba725569d86cc1))
 -   udpated news.md
-    ([609c406](https://github.com/kapsner/mllrnrs/tree/609c40609a03a61dfa5cc0d6f28452f596a0ef83))
+    ([1a384b7](https://github.com/kapsner/mllrnrs/tree/1a384b79ba8e0de2686310333c23ed756f4eea52))
 -   updated news.md
     ([1d57753](https://github.com/kapsner/mllrnrs/tree/1d57753e6135473d6c265b83ed2370e9633930b3))
 -   updated vignette outputs for xgb
@@ -16,7 +18,7 @@
     ([3ee2695](https://github.com/kapsner/mllrnrs/tree/3ee26950aeb149671ef68f885a1b835620e53263))
 
 Full set of changes:
-[`v0.0.7...609c406`](https://github.com/kapsner/mllrnrs/compare/v0.0.7...609c406)
+[`v0.0.7...530da91`](https://github.com/kapsner/mllrnrs/compare/v0.0.7...530da91)
 
 ## v0.0.7 (2025-12-03)
 
