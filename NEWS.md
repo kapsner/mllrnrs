@@ -23,8 +23,12 @@
 
 #### Other changes
 
+-   updated news.md
+    ([13268c4](https://github.com/kapsner/mllrnrs/tree/13268c4cdfe84f6ae1a6b8abd966b521f2df1dbb))
 -   updated vignette outputs for xgb
-    ([52970fa](https://github.com/kapsner/mllrnrs/tree/52970fa619a2d6179abdf006ad43e7dfaced2e91))
+    ([5dad1a5](https://github.com/kapsner/mllrnrs/tree/5dad1a5c1b49248331a366dd88acd7b52852ba67))
+-   updated vignette outputs for xgb
+    ([3ee2695](https://github.com/kapsner/mllrnrs/tree/3ee26950aeb149671ef68f885a1b835620e53263))
 -   update to v0.0.7
     ([6cc9c46](https://github.com/kapsner/mllrnrs/tree/6cc9c469cf8df4a6f98c7a69fc65d589462fc9c5))
 -   again pinned xgboost min-version in description
@@ -57,7 +61,7 @@
     ([0b24c76](https://github.com/kapsner/mllrnrs/tree/0b24c762660896447ef8ee85991c54c510601078))
 
 Full set of changes:
-[`v0.0.5...52970fa`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...52970fa)
+[`v0.0.5...13268c4`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...13268c4)
 
 ## v0.0.5 (2025-03-05)
 
