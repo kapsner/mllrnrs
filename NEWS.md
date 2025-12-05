@@ -2,12 +2,14 @@
 
 # mllrnrs NEWS
 
-## Unreleased (2025-12-04)
+## Unreleased (2025-12-05)
 
 #### Other changes
 
+-   cleaned cran-comments
+    ([05d4e83](https://github.com/kapsner/mllrnrs/tree/05d4e830f95ee06e78602e1fecb6269537111431))
 -   renamed ranger validation_metric to metric
-    ([530da91](https://github.com/kapsner/mllrnrs/tree/530da914ea4f7522b1f770c1acba725569d86cc1))
+    ([7a946e7](https://github.com/kapsner/mllrnrs/tree/7a946e7929f4f477c91216f1768174d356a99ed5))
 -   udpated news.md
     ([1a384b7](https://github.com/kapsner/mllrnrs/tree/1a384b79ba8e0de2686310333c23ed756f4eea52))
 -   updated news.md
@@ -18,7 +20,7 @@
     ([3ee2695](https://github.com/kapsner/mllrnrs/tree/3ee26950aeb149671ef68f885a1b835620e53263))
 
 Full set of changes:
-[`v0.0.7...530da91`](https://github.com/kapsner/mllrnrs/compare/v0.0.7...530da91)
+[`v0.0.7...05d4e83`](https://github.com/kapsner/mllrnrs/compare/v0.0.7...05d4e83)
 
 ## v0.0.7 (2025-12-03)
 
