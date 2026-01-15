@@ -154,7 +154,7 @@ LearnerGlmnet <- R6::R6Class( # nolint
 
 
 glmnet_ce <- function() {
-  c("glmnet_optimization", "glmnet_fit")
+  c("glmnet_optimization", "glmnet_fit", ".check_glmnet_params")
 }
 
 glmnet_bsF <- function(...) { # nolint
