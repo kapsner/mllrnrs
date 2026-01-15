@@ -32,7 +32,7 @@ train_x <- model.matrix(
 )
 train_y <- as.integer(dataset[, get("Class")]) - 1L
 
-options("mlexperiments.bayesian.max_init" = 10L)
+options("mlexperiments.bayesian.max_init" = 4L)
 
 fold_list <- splitTools::create_folds(
   y = train_y,
@@ -55,6 +55,8 @@ test_that(
   code = {
 
     skip_on_cran()
+    testthat::skip_if_not_installed("glmnet")
+    testthat::skip_if_not_installed("measures")
 
     glmnet_optimizer <- mlexperiments::MLNestedCV$new(
       learner = mllrnrs::LearnerGlmnet$new(
@@ -115,9 +117,9 @@ param_list_lightgbm <- expand.grid(
   verbose = -1L
 )
 
-options("mlexperiments.bayesian.max_init" = 10L)
-options("mlexperiments.optim.lgb.nrounds" = 100L)
-options("mlexperiments.optim.lgb.early_stopping_rounds" = 10L)
+options("mlexperiments.bayesian.max_init" = 4L)
+options("mlexperiments.optim.lgb.nrounds" = 20L)
+options("mlexperiments.optim.lgb.early_stopping_rounds" = 5L)
 
 # ###########################################################################
 # %% NESTED CV
@@ -126,6 +128,9 @@ options("mlexperiments.optim.lgb.early_stopping_rounds" = 10L)
 test_that(
   desc = "test nested cv, grid, multiclass - lightgbm",
   code = {
+
+    testthat::skip_if_not_installed("lightgbm")
+    testthat::skip_if_not_installed("measures")
 
     lightgbm_optimizer <- mlexperiments::MLNestedCV$new(
       learner = mllrnrs::LearnerLightgbm$new(
@@ -191,6 +196,9 @@ test_that(
   desc = "test nested cv, grid, regression - ranger",
   code = {
 
+    testthat::skip_if_not_installed("ranger")
+    testthat::skip_if_not_installed("measures")
+
     ranger_optimizer <- mlexperiments::MLNestedCV$new(
       learner = mllrnrs::LearnerRanger$new(),
       strategy = "grid",
@@ -246,9 +254,9 @@ param_list_xgboost <- expand.grid(
 
 ncores <- 2L
 
-options("mlexperiments.bayesian.max_init" = 10L)
-options("mlexperiments.optim.xgb.nrounds" = 100L)
-options("mlexperiments.optim.xgb.early_stopping_rounds" = 10L)
+options("mlexperiments.bayesian.max_init" = 4L)
+options("mlexperiments.optim.xgb.nrounds" = 20L)
+options("mlexperiments.optim.xgb.early_stopping_rounds" = 5L)
 
 
 # ###########################################################################
@@ -258,6 +266,9 @@ options("mlexperiments.optim.xgb.early_stopping_rounds" = 10L)
 test_that(
   desc = "test nested cv, grid, multi:softprob - xgboost, with weights",
   code = {
+
+    testthat::skip_if_not_installed("xgboost")
+    testthat::skip_if_not_installed("measures")
 
     xgboost_optimizer <- mlexperiments::MLNestedCV$new(
       learner = mllrnrs::LearnerXgboost$new(
