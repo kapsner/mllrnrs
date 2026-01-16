@@ -50,106 +50,98 @@ fold_list <- splitTools::create_folds(
 # %% NESTED CV
 # ###########################################################################
 
-test_that(
-  desc = "test nested cv, grid, binary - glmnet",
-  code = {
+test_that(desc = "test nested cv, grid, binary - glmnet", code = {
+  skip_on_cran()
 
-    skip_on_cran()
+  testthat::skip_if_not_installed("glmnet")
+  testthat::skip_if_not_installed("measures")
 
-    testthat::skip_if_not_installed("glmnet")
-    testthat::skip_if_not_installed("measures")
+  glmnet_optimizer <- mlexperiments::MLNestedCV$new(
+    learner = mllrnrs::LearnerGlmnet$new(
+      metric_optimization_higher_better = FALSE
+    ),
+    strategy = "grid",
+    fold_list = fold_list,
+    k_tuning = 3L,
+    ncores = ncores,
+    seed = seed
+  )
+  set.seed(seed)
+  random_grid <- sample(seq_len(nrow(param_list_glmnet)), 3)
+  glmnet_optimizer$parameter_grid <- kdry::mlh_subset(
+    param_list_glmnet,
+    random_grid
+  )
+  glmnet_optimizer$split_type <- "stratified"
 
-    glmnet_optimizer <- mlexperiments::MLNestedCV$new(
-      learner = mllrnrs::LearnerGlmnet$new(
-        metric_optimization_higher_better = FALSE
-      ),
-      strategy = "grid",
-      fold_list = fold_list,
-      k_tuning = 3L,
-      ncores = ncores,
-      seed = seed
-    )
-    set.seed(seed)
-    random_grid <- sample(seq_len(nrow(param_list_glmnet)), 3)
-    glmnet_optimizer$parameter_grid <- kdry::mlh_subset(
-      param_list_glmnet,
-      random_grid
-    )
-    glmnet_optimizer$split_type <- "stratified"
+  glmnet_optimizer$learner_args <- list(
+    family = "binomial",
+    type.measure = "class",
+    standardize = TRUE
+  )
+  glmnet_optimizer$predict_args <- list(type = "response")
+  glmnet_optimizer$performance_metric_args <- list(
+    positive = "1",
+    negative = "0"
+  )
+  glmnet_optimizer$performance_metric <- mlexperiments::metric("AUC")
 
-    glmnet_optimizer$learner_args <- list(
-      family = "binomial",
-      type.measure = "class",
-      standardize = TRUE
-    )
-    glmnet_optimizer$predict_args <- list(type = "response")
-    glmnet_optimizer$performance_metric_args <- list(
-      positive = "1",
-      negative = "0"
-    )
-    glmnet_optimizer$performance_metric <- mlexperiments::metric("AUC")
+  # set data
+  glmnet_optimizer$set_data(
+    x = train_x,
+    y = train_y
+  )
 
-    # set data
-    glmnet_optimizer$set_data(
-      x = train_x,
-      y = train_y
-    )
+  cv_results <- glmnet_optimizer$execute()
+  expect_type(cv_results, "list")
+  expect_equal(dim(cv_results), c(3, 7))
+  expect_true(inherits(
+    x = glmnet_optimizer$results,
+    what = "mlexCV"
+  ))
+})
 
-    cv_results <- glmnet_optimizer$execute()
-    expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 7))
-    expect_true(inherits(
-      x = glmnet_optimizer$results,
-      what = "mlexCV"
-    ))
-  }
-)
+test_that(desc = "test nested cv, grid - glmnet, errors", code = {
+  testthat::skip_if_not_installed("glmnet")
+  testthat::skip_if_not_installed("measures")
 
-test_that(
-  desc = "test nested cv, grid - glmnet, errors",
-  code = {
+  glmnet_optimizer <- mlexperiments::MLNestedCV$new(
+    learner = mllrnrs::LearnerGlmnet$new(
+      metric_optimization_higher_better = FALSE
+    ),
+    strategy = "grid",
+    fold_list = fold_list,
+    k_tuning = 3L,
+    ncores = ncores,
+    seed = seed
+  )
+  set.seed(seed)
+  random_grid <- sample(seq_len(nrow(param_list_glmnet)), 3)
+  glmnet_optimizer$parameter_grid <- kdry::mlh_subset(
+    param_list_glmnet,
+    random_grid
+  )
+  glmnet_optimizer$split_type <- "stratified"
 
-    testthat::skip_if_not_installed("glmnet")
-    testthat::skip_if_not_installed("measures")
+  glmnet_optimizer$learner_args <- list(
+    type.measure = "class",
+    standardize = TRUE
+  )
+  glmnet_optimizer$predict_args <- list(type = "response")
+  glmnet_optimizer$performance_metric_args <- list(
+    positive = "1",
+    negative = "0"
+  )
+  glmnet_optimizer$performance_metric <- mlexperiments::metric("AUC")
 
-    glmnet_optimizer <- mlexperiments::MLNestedCV$new(
-      learner = mllrnrs::LearnerGlmnet$new(
-        metric_optimization_higher_better = FALSE
-      ),
-      strategy = "grid",
-      fold_list = fold_list,
-      k_tuning = 3L,
-      ncores = ncores,
-      seed = seed
-    )
-    set.seed(seed)
-    random_grid <- sample(seq_len(nrow(param_list_glmnet)), 3)
-    glmnet_optimizer$parameter_grid <- kdry::mlh_subset(
-      param_list_glmnet,
-      random_grid
-    )
-    glmnet_optimizer$split_type <- "stratified"
+  # set data
+  glmnet_optimizer$set_data(
+    x = train_x,
+    y = train_y
+  )
 
-    glmnet_optimizer$learner_args <- list(
-      type.measure = "class",
-      standardize = TRUE
-    )
-    glmnet_optimizer$predict_args <- list(type = "response")
-    glmnet_optimizer$performance_metric_args <- list(
-      positive = "1",
-      negative = "0"
-    )
-    glmnet_optimizer$performance_metric <- mlexperiments::metric("AUC")
-
-    # set data
-    glmnet_optimizer$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    expect_error(glmnet_optimizer$execute())
-  }
-)
+  expect_error(glmnet_optimizer$execute())
+})
 
 
 # ###########################################################################
@@ -179,7 +171,7 @@ lightgbm_bounds <- list(
   feature_fraction = c(0.2, 1),
   min_data_in_leaf = c(2L, 12L),
   learning_rate = c(0.1, 0.2),
-  num_leaves =  c(2L, 20L)
+  num_leaves = c(2L, 20L)
 )
 optim_args <- list(
   n_iter = ncores,
@@ -191,62 +183,57 @@ optim_args <- list(
 # %% NESTED CV
 # ###########################################################################
 
-test_that(
-  desc = "test nested cv, bayesian, binary - lightgbm",
-  code = {
+test_that(desc = "test nested cv, bayesian, binary - lightgbm", code = {
+  testthat::skip_if_not_installed("rBayesianOptimization")
+  testthat::skip_if_not_installed("lightgbm")
+  testthat::skip_if_not_installed("measures")
 
-    testthat::skip_if_not_installed("rBayesianOptimization")
-    testthat::skip_if_not_installed("lightgbm")
-    testthat::skip_if_not_installed("measures")
+  lightgbm_optimizer <- mlexperiments::MLNestedCV$new(
+    learner = mllrnrs::LearnerLightgbm$new(
+      metric_optimization_higher_better = FALSE
+    ),
+    strategy = "bayesian",
+    fold_list = fold_list,
+    k_tuning = 3L,
+    ncores = ncores,
+    seed = seed
+  )
 
-    lightgbm_optimizer <- mlexperiments::MLNestedCV$new(
-      learner = mllrnrs::LearnerLightgbm$new(
-        metric_optimization_higher_better = FALSE
-      ),
-      strategy = "bayesian",
-      fold_list = fold_list,
-      k_tuning = 3L,
-      ncores = ncores,
-      seed = seed
-    )
+  lightgbm_optimizer$parameter_bounds <- lightgbm_bounds
+  lightgbm_optimizer$parameter_grid <- param_list_lightgbm
+  lightgbm_optimizer$split_type <- "stratified"
+  lightgbm_optimizer$optim_args <- optim_args
 
-    lightgbm_optimizer$parameter_bounds <- lightgbm_bounds
-    lightgbm_optimizer$parameter_grid <- param_list_lightgbm
-    lightgbm_optimizer$split_type <- "stratified"
-    lightgbm_optimizer$optim_args <- optim_args
+  lightgbm_optimizer$learner_args <- list(
+    objective = "binary",
+    metric = "binary_logloss",
+    cat_vars = c("pregnant", "pedigree")
+  )
+  lightgbm_optimizer$performance_metric_args <- list(
+    positive = "1",
+    negative = "0"
+  )
+  lightgbm_optimizer$performance_metric <- mlexperiments::metric("auc")
 
-    lightgbm_optimizer$learner_args <- list(
-      objective = "binary",
-      metric = "binary_logloss",
-      cat_vars = c("pregnant", "pedigree")
-    )
-    lightgbm_optimizer$performance_metric_args <- list(
-      positive = "1",
-      negative = "0"
-    )
-    lightgbm_optimizer$performance_metric <- mlexperiments::metric("auc")
+  # set data
+  lightgbm_optimizer$set_data(
+    x = train_x,
+    y = train_y
+  )
 
-    # set data
-    lightgbm_optimizer$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    cv_results <- lightgbm_optimizer$execute()
-    expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 12))
-    expect_true(inherits(
-      x = lightgbm_optimizer$results,
-      what = "mlexCV"
-    ))
-  }
-)
+  cv_results <- lightgbm_optimizer$execute()
+  expect_type(cv_results, "list")
+  expect_equal(dim(cv_results), c(3, 12))
+  expect_true(inherits(
+    x = lightgbm_optimizer$results,
+    what = "mlexCV"
+  ))
+})
 
 
 # ###########################################################################
 # %% Ranger
 # ###########################################################################
-
 
 param_list_ranger <- expand.grid(
   num.trees = seq(500, 1000, 500),
@@ -260,52 +247,50 @@ param_list_ranger <- expand.grid(
 # %% NESTED CV
 # ###########################################################################
 
-test_that(
-  desc = "test nested cv, grid, binary - ranger",
-  code = {
+test_that(desc = "test nested cv, grid, binary - ranger", code = {
+  testthat::skip_if_not_installed("ranger")
+  testthat::skip_if_not_installed("measures")
 
-    testthat::skip_if_not_installed("ranger")
-    testthat::skip_if_not_installed("measures")
+  ranger_optimizer <- mlexperiments::MLNestedCV$new(
+    learner = mllrnrs::LearnerRanger$new(),
+    strategy = "grid",
+    fold_list = fold_list,
+    k_tuning = 3L,
+    ncores = ncores,
+    seed = seed
+  )
+  set.seed(seed)
+  random_grid <- sample(seq_len(nrow(param_list_ranger)), 3)
+  ranger_optimizer$parameter_grid <-
+    param_list_ranger[random_grid, ]
+  ranger_optimizer$split_type <- "stratified"
 
-    ranger_optimizer <- mlexperiments::MLNestedCV$new(
-      learner = mllrnrs::LearnerRanger$new(),
-      strategy = "grid",
-      fold_list = fold_list,
-      k_tuning = 3L,
-      ncores = ncores,
-      seed = seed
-    )
-    set.seed(seed)
-    random_grid <- sample(seq_len(nrow(param_list_ranger)), 3)
-    ranger_optimizer$parameter_grid <-
-      param_list_ranger[random_grid, ]
-    ranger_optimizer$split_type <- "stratified"
+  ranger_optimizer$learner_args <- list(
+    probability = TRUE,
+    cat_vars = c("pregnant", "pedigree")
+  )
+  ranger_optimizer$predict_args <- list(prob = TRUE, positive = "1")
 
-    ranger_optimizer$learner_args <- list(probability = TRUE,
-                                          cat_vars = c("pregnant", "pedigree"))
-    ranger_optimizer$predict_args <- list(prob = TRUE, positive = "1")
+  ranger_optimizer$performance_metric_args <- list(
+    positive = "1",
+    negative = "0"
+  )
+  ranger_optimizer$performance_metric <- mlexperiments::metric("AUC")
 
-    ranger_optimizer$performance_metric_args <- list(
-      positive = "1",
-      negative = "0"
-    )
-    ranger_optimizer$performance_metric <- mlexperiments::metric("AUC")
+  # set data
+  ranger_optimizer$set_data(
+    x = train_x,
+    y = factor(train_y)
+  )
 
-    # set data
-    ranger_optimizer$set_data(
-      x = train_x,
-      y = factor(train_y)
-    )
-
-    cv_results <- ranger_optimizer$execute()
-    expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 8))
-    expect_true(inherits(
-      x = ranger_optimizer$results,
-      what = "mlexCV"
-    ))
-  }
-)
+  cv_results <- ranger_optimizer$execute()
+  expect_type(cv_results, "list")
+  expect_equal(dim(cv_results), c(3, 8))
+  expect_true(inherits(
+    x = ranger_optimizer$results,
+    what = "mlexCV"
+  ))
+})
 
 
 # ###########################################################################
@@ -322,7 +307,7 @@ param_list_xgboost <- expand.grid(
 
 ncores <- 2L
 
-options("mlexperiments.bayesian.max_init" = 4L)
+options("mlexperiments.bayesian.max_init" = 10L)
 options("mlexperiments.optim.xgb.nrounds" = 20L)
 options("mlexperiments.optim.xgb.early_stopping_rounds" = 5L)
 
@@ -330,51 +315,47 @@ options("mlexperiments.optim.xgb.early_stopping_rounds" = 5L)
 # %% NESTED CV
 # ###########################################################################
 
-test_that(
-  desc = "test nested cv, grid, binary:logistic - xgboost",
-  code = {
+test_that(desc = "test nested cv, grid, binary:logistic - xgboost", code = {
+  testthat::skip_if_not_installed("xgboost")
+  testthat::skip_if_not_installed("measures")
 
-    testthat::skip_if_not_installed("xgboost")
-    testthat::skip_if_not_installed("measures")
+  xgboost_optimizer <- mlexperiments::MLNestedCV$new(
+    learner = mllrnrs::LearnerXgboost$new(
+      metric_optimization_higher_better = FALSE
+    ),
+    strategy = "grid",
+    fold_list = fold_list,
+    k_tuning = 3L,
+    ncores = ncores,
+    seed = seed
+  )
+  set.seed(seed)
+  random_grid <- sample(seq_len(nrow(param_list_xgboost)), 3)
+  xgboost_optimizer$parameter_grid <-
+    param_list_xgboost[random_grid, ]
+  xgboost_optimizer$split_type <- "stratified"
 
-    xgboost_optimizer <- mlexperiments::MLNestedCV$new(
-      learner = mllrnrs::LearnerXgboost$new(
-        metric_optimization_higher_better = FALSE
-      ),
-      strategy = "grid",
-      fold_list = fold_list,
-      k_tuning = 3L,
-      ncores = ncores,
-      seed = seed
-    )
-    set.seed(seed)
-    random_grid <- sample(seq_len(nrow(param_list_xgboost)), 3)
-    xgboost_optimizer$parameter_grid <-
-      param_list_xgboost[random_grid, ]
-    xgboost_optimizer$split_type <- "stratified"
+  xgboost_optimizer$learner_args <- list(
+    objective = "binary:logistic",
+    eval_metric = "logloss"
+  )
+  xgboost_optimizer$performance_metric_args <- list(
+    positive = "1",
+    negative = "0"
+  )
+  xgboost_optimizer$performance_metric <- mlexperiments::metric("auc")
 
-    xgboost_optimizer$learner_args <- list(
-      objective = "binary:logistic",
-      eval_metric = "logloss"
-    )
-    xgboost_optimizer$performance_metric_args <- list(
-      positive = "1",
-      negative = "0"
-    )
-    xgboost_optimizer$performance_metric <- mlexperiments::metric("auc")
+  # set data
+  xgboost_optimizer$set_data(
+    x = train_x,
+    y = train_y
+  )
 
-    # set data
-    xgboost_optimizer$set_data(
-      x = train_x,
-      y = train_y
-    )
-
-    cv_results <- xgboost_optimizer$execute()
-    expect_type(cv_results, "list")
-    expect_equal(dim(cv_results), c(3, 10))
-    expect_true(inherits(
-      x = xgboost_optimizer$results,
-      what = "mlexCV"
-    ))
-  }
-)
+  cv_results <- xgboost_optimizer$execute()
+  expect_type(cv_results, "list")
+  expect_equal(dim(cv_results), c(3, 10))
+  expect_true(inherits(
+    x = xgboost_optimizer$results,
+    what = "mlexCV"
+  ))
+})

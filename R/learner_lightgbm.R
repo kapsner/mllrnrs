@@ -139,17 +139,14 @@ lightgbm_ce <- function() {
 }
 
 lightgbm_bsF <- function(...) {
-  # nolint
-
   params <- list(...)
-
   set.seed(seed) #, kind = "L'Ecuyer-CMRG")
   bayes_opt_lightgbm <- lightgbm_optimization(
     x = x,
     y = y,
     params = params,
     fold_list = method_helper$fold_list,
-    ncores = 1L, # important, as bayesian search is already parallelized
+    ncores = ncores,
     seed = seed
   )
 

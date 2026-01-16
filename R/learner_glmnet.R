@@ -66,11 +66,11 @@
 
 #' @export
 #'
-LearnerGlmnet <- R6::R6Class( # nolint
+LearnerGlmnet <- R6::R6Class(
+  # nolint
   classname = "LearnerGlmnet",
   inherit = mlexperiments::MLLearnerBase,
   public = list(
-
     #' @description
     #' Create a new `LearnerGlmnet` object.
     #'
@@ -83,7 +83,8 @@ LearnerGlmnet <- R6::R6Class( # nolint
     #' @examples
     #' LearnerGlmnet$new(metric_optimization_higher_better = FALSE)
     #'
-    initialize = function(metric_optimization_higher_better) { # nolint
+    initialize = function(metric_optimization_higher_better) {
+      # nolint
       if (!requireNamespace("glmnet", quietly = TRUE)) {
         stop(
           paste0(
@@ -113,8 +114,10 @@ LearnerGlmnet <- R6::R6Class( # nolint
               x %in% names(kwargs$params)
             }
           )),
-          .check_glmnet_params(kwargs$params,
-                               self$metric_optimization_higher_better)
+          .check_glmnet_params(
+            kwargs$params,
+            self$metric_optimization_higher_better
+          )
         )
         return(do.call(glmnet_optimization, kwargs))
       }
@@ -129,7 +132,7 @@ LearnerGlmnet <- R6::R6Class( # nolint
               x %in% names(kwargs)
             }
           )),
-          .check_glmnet_params(kwargs, self$metric_optimization_higher_better)
+          check_glmnet_params(kwargs, self$metric_optimization_higher_better)
         )
         return(do.call(glmnet_bsF, kwargs))
       }
@@ -137,10 +140,10 @@ LearnerGlmnet <- R6::R6Class( # nolint
   )
 )
 
-.check_glmnet_params <- function(params, higher_better) {
+check_glmnet_params <- function(params, higher_better) {
   stopifnot(
-    params$family %in% c("gaussian", "binomial", "poisson",
-                         "multinomial", "mgaussian"),
+    params$family %in%
+      c("gaussian", "binomial", "poisson", "multinomial", "mgaussian"),
     params$type.measure != "C",
     ifelse(
       test = params$family == "binomial" &&
@@ -154,21 +157,17 @@ LearnerGlmnet <- R6::R6Class( # nolint
 
 
 glmnet_ce <- function() {
-  c("glmnet_optimization", "glmnet_fit", ".check_glmnet_params")
+  c("glmnet_optimization", "glmnet_fit", "check_glmnet_params", "glmnet_bsF")
 }
 
-glmnet_bsF <- function(...) { # nolint
+glmnet_bsF <- function(...) {
   kwargs <- list(...)
-  # call to glmnet_optimization here with ncores = 1, since the
-  # Bayesian search is parallelized already / "FUN is fitted n times
-  # in m threads"
-  set.seed(seed)#, kind = "L'Ecuyer-CMRG")
   bayes_opt_glmnet <- glmnet_optimization(
     x = x,
     y = y,
     params = kwargs,
     fold_list = method_helper$fold_list,
-    ncores = 1L, # important, as bayesian search is already parallelized
+    ncores = ncores,
     seed = seed
   )
 
@@ -182,12 +181,12 @@ glmnet_bsF <- function(...) { # nolint
 
 # tune lambda
 glmnet_optimization <- function(
-    x,
-    y,
-    params,
-    fold_list,
-    ncores,
-    seed
+  x,
+  y,
+  params,
+  fold_list,
+  ncores,
+  seed
 ) {
   stopifnot(
     is.list(params),
@@ -205,7 +204,8 @@ glmnet_optimization <- function(
     ))
   )
 
-  FUN <- ifelse( # nolint
+  FUN <- ifelse(
+    # nolint
     test = params$family == "binomial" &&
       params$type.measure == "auc",
     yes = max,
@@ -250,8 +250,10 @@ glmnet_optimization <- function(
   # "weights"
   if ("case_weights" %in% names(cv_args)) {
     stopifnot(
-      "late fail: `case_weights` must be of same length as `y`" =
-        length(cv_args$case_weights) == length(y)
+      "late fail: `case_weights` must be of same length as `y`" = length(
+        cv_args$case_weights
+      ) ==
+        length(y)
     )
     names(cv_args)[which(names(cv_args) == "case_weights")] <-
       "weights"
@@ -271,18 +273,20 @@ glmnet_optimization <- function(
 
 glmnet_fit <- function(x, y, ncores, seed, ...) {
   kwargs <- list(...)
-  stopifnot((sapply(
-    X = c("lambda", "alpha", "family"),
-    FUN = function(x) {
-      x %in% names(kwargs)
-    }
-  )),
-  (!sapply(
-    X = c("x", "y"),
-    FUN = function(x) {
-      x %in% names(kwargs)
-    }
-  )))
+  stopifnot(
+    (sapply(
+      X = c("lambda", "alpha", "family"),
+      FUN = function(x) {
+        x %in% names(kwargs)
+      }
+    )),
+    (!sapply(
+      X = c("x", "y"),
+      FUN = function(x) {
+        x %in% names(kwargs)
+      }
+    ))
+  )
 
   fit_args <- kdry::list.append(
     list(
@@ -296,8 +300,10 @@ glmnet_fit <- function(x, y, ncores, seed, ...) {
   # "weights"
   if ("case_weights" %in% names(fit_args)) {
     stopifnot(
-      "late fail: `case_weights` must be of same length as `y`" =
-        length(fit_args$case_weights) == length(y)
+      "late fail: `case_weights` must be of same length as `y`" = length(
+        fit_args$case_weights
+      ) ==
+        length(y)
     )
     names(fit_args)[which(names(fit_args) == "case_weights")] <-
       "weights"
@@ -321,7 +327,7 @@ glmnet_predict <- function(model, newdata, ncores, ...) {
   preds <- do.call(stats::predict, pred_args)
   if (!is.null(kwargs$reshape)) {
     if (isTRUE(kwargs$reshape)) {
-      preds <-  preds[, , 1]
+      preds <- preds[,, 1]
       preds <- kdry::mlh_reshape(preds)
     }
   } else {

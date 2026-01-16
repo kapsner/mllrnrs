@@ -76,11 +76,11 @@
 #' ranger_cv$execute()
 #'
 #' @export
-LearnerRanger <- R6::R6Class( # nolint
+LearnerRanger <- R6::R6Class(
+  # nolint
   classname = "LearnerRanger",
   inherit = mlexperiments::MLLearnerBase,
   public = list(
-
     #' @description
     #' Create a new `LearnerRanger` object.
     #'
@@ -113,26 +113,30 @@ LearnerRanger <- R6::R6Class( # nolint
 
 
 ranger_ce <- function() {
-  c("ranger_optimization", "ranger_fit", "metric",
-    "ranger_predict", "ranger_predict_base", "ranger_cv")
+  c(
+    "ranger_optimization",
+    "ranger_fit",
+    "metric",
+    "ranger_predict",
+    "ranger_predict_base",
+    "ranger_cv"
+  )
 }
 
-ranger_bsF <- function(...) { # nolint
-
+ranger_bsF <- function(...) {
   params <- list(...)
-
   params <- kdry::list.append(
     main_list = params,
     append_list = method_helper$execute_params["cat_vars"]
   )
 
-  set.seed(seed)#, kind = "L'Ecuyer-CMRG")
+  set.seed(seed) #, kind = "L'Ecuyer-CMRG")
   bayes_opt_ranger <- ranger_optimization(
     x = x,
     y = y,
     params = params,
     fold_list = method_helper$fold_list,
-    ncores = 1L, # important, as bayesian search is already parallelized
+    ncores = ncores,
     seed = seed
   )
 
@@ -146,12 +150,12 @@ ranger_bsF <- function(...) { # nolint
 
 # ranger-cv is not implemented yet
 ranger_cv <- function(
-    x,
-    y,
-    params,
-    fold_list,
-    ncores,
-    seed
+  x,
+  y,
+  params,
+  fold_list,
+  ncores,
+  seed
 ) {
   stopifnot(
     is.list(params)
@@ -166,7 +170,6 @@ ranger_cv <- function(
 
   # loop over the folds
   for (fold in names(fold_list)) {
-
     # get row-ids of the current fold
     ranger_train_idx <- fold_list[[fold]]
 
@@ -183,7 +186,8 @@ ranger_cv <- function(
 
     if ("case_weights" %in% names(args)) {
       args$case_weights <- kdry::mlh_subset(
-        args$case_weights, ranger_train_idx
+        args$case_weights,
+        ranger_train_idx
       )
     }
 
@@ -192,20 +196,18 @@ ranger_cv <- function(
     set.seed(seed)
     outlist[[fold]][["cvfit"]] <- do.call(ranger_fit, args)
     outlist[[fold]][["train_idx"]] <- ranger_train_idx
-
   }
   return(outlist)
 }
 
 ranger_optimization <- function(
-    x,
-    y,
-    params,
-    fold_list,
-    ncores,
-    seed
-  ) {
-
+  x,
+  y,
+  params,
+  fold_list,
+  ncores,
+  seed
+) {
   # initialize a dataframe to store the results
   results_df <- data.table::data.table(
     "fold" = character(0),
@@ -238,7 +240,6 @@ ranger_optimization <- function(
 
   # loop over the folds
   for (fold in names(cvfit_list)) {
-
     # get row-ids of the current fold
     cvfit <- cvfit_list[[fold]][["cvfit"]]
     ranger_train_idx <- cvfit_list[[fold]][["train_idx"]]
@@ -255,7 +256,8 @@ ranger_optimization <- function(
     # the classification error metric
     if (isTRUE(params$probability)) {
       pred_args <- kdry::list.append(
-        pred_args, list(reshape = TRUE)
+        pred_args,
+        list(reshape = TRUE)
       )
     }
 
@@ -270,7 +272,6 @@ ranger_optimization <- function(
       y = y,
       perf_args = perf_args
     )
-
 
     # save the results of this fold into a dataframe
     # from help("ranger::ranger"):
@@ -310,8 +311,10 @@ ranger_fit <- function(x, y, ncores, seed, ...) {
   # "case.weights"
   if ("case_weights" %in% names(ranger_params)) {
     stopifnot(
-      "late fail: `case_weights` must be of same length as `y`" =
-        length(ranger_params$case_weights) == length(y)
+      "late fail: `case_weights` must be of same length as `y`" = length(
+        ranger_params$case_weights
+      ) ==
+        length(y)
     )
     names(ranger_params)[which(names(ranger_params) == "case_weights")] <-
       "case.weights"
@@ -334,7 +337,6 @@ ranger_fit <- function(x, y, ncores, seed, ...) {
 }
 
 ranger_predict_base <- function(model, newdata, ncores, ...) {
-
   kwargs <- list(...)
 
   var_handler <- mlexperiments::handle_cat_vars(kwargs)
