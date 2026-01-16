@@ -16,10 +16,12 @@
 #### Tests
 
 -   added conditional testing of examples
-    ([c09e960](https://github.com/kapsner/mllrnrs/tree/c09e9606856e1e9ca5683ff3e9aa0baaf5c41869))
+    ([5709633](https://github.com/kapsner/mllrnrs/tree/57096332b094a0e17ad04a6ab9ad48260f08e4d5))
 
 #### Other changes
 
+-   updated pre-commit-config
+    ([75e1b00](https://github.com/kapsner/mllrnrs/tree/75e1b0066197551e74a88265a380a16f4dfbd65d))
 -   add skipping of suggests to roxygen examples
     ([0a4e692](https://github.com/kapsner/mllrnrs/tree/0a4e692277731fa89781656fda8cd05bece76c1f))
 -   cleaned cran-comments
@@ -36,7 +38,7 @@
     ([3ee2695](https://github.com/kapsner/mllrnrs/tree/3ee26950aeb149671ef68f885a1b835620e53263))
 
 Full set of changes:
-[`v0.0.7...c09e960`](https://github.com/kapsner/mllrnrs/compare/v0.0.7...c09e960)
+[`v0.0.7...75e1b00`](https://github.com/kapsner/mllrnrs/compare/v0.0.7...75e1b00)
 
 ## v0.0.7 (2025-12-03)
 
