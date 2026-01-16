@@ -20,68 +20,72 @@ Can be used with
 }
 \examples{
 # binary classification
+if (requireNamespace("ranger", quietly = TRUE)) {
 
-library(mlbench)
-data("PimaIndiansDiabetes2")
-dataset <- PimaIndiansDiabetes2 |>
-  data.table::as.data.table() |>
-  na.omit()
+  library(mlbench)
+  data("PimaIndiansDiabetes2")
+  dataset <- PimaIndiansDiabetes2 |>
+    data.table::as.data.table() |>
+    na.omit()
 
-seed <- 123
-feature_cols <- colnames(dataset)[1:8]
+  seed <- 123
+  feature_cols <- colnames(dataset)[1:8]
 
-param_list_ranger <- expand.grid(
-  num.trees = seq(500, 1000, 500),
-  mtry = seq(2, 6, 2),
-  min.node.size = seq(1, 9, 4),
-  max.depth = seq(1, 9, 4),
-  sample.fraction = seq(0.5, 0.8, 0.3)
-)
+  param_list_ranger <- expand.grid(
+    num.trees = seq(500, 1000, 500),
+    mtry = seq(2, 6, 2),
+    min.node.size = seq(1, 9, 4),
+    max.depth = seq(1, 9, 4),
+    sample.fraction = seq(0.5, 0.8, 0.3)
+  )
 
-train_x <- model.matrix(
-  ~ -1 + .,
-  dataset[, .SD, .SDcols = feature_cols]
-)
-train_y <- as.integer(dataset[, get("diabetes")]) - 1L
+  train_x <- model.matrix(
+    ~ -1 + .,
+    dataset[, .SD, .SDcols = feature_cols]
+  )
+  train_y <- as.integer(dataset[, get("diabetes")]) - 1L
 
-fold_list <- splitTools::create_folds(
-  y = train_y,
-  k = 3,
-  type = "stratified",
-  seed = seed
-)
-ranger_cv <- mlexperiments::MLCrossValidation$new(
-  learner = mllrnrs::LearnerRanger$new(),
-  fold_list = fold_list,
-  ncores = 2,
-  seed = 123
-)
-ranger_cv$learner_args <- c(
-  as.list(
-    data.table::data.table(
-      param_list_ranger[37, ],
-      stringsAsFactors = FALSE
+  fold_list <- splitTools::create_folds(
+    y = train_y,
+    k = 3,
+    type = "stratified",
+    seed = seed
+  )
+  ranger_cv <- mlexperiments::MLCrossValidation$new(
+    learner = mllrnrs::LearnerRanger$new(),
+    fold_list = fold_list,
+    ncores = 2,
+    seed = 123
+  )
+  ranger_cv$learner_args <- c(
+    as.list(
+      data.table::data.table(
+        param_list_ranger[37, ],
+        stringsAsFactors = FALSE
+      ),
     ),
-  ),
-  list(classification = TRUE)
-)
-ranger_cv$performance_metric_args <- list(positive = "1", negative = "0")
-ranger_cv$performance_metric <- mlexperiments::metric("AUC")
+    list(classification = TRUE)
+  )
+  ranger_cv$performance_metric_args <- list(positive = "1", negative = "0")
+  ranger_cv$performance_metric <- mlexperiments::metric("AUC")
 
-# set data
-ranger_cv$set_data(
-  x = train_x,
-  y = train_y
-)
+  # set data
+  ranger_cv$set_data(
+    x = train_x,
+    y = train_y
+  )
 
-ranger_cv$execute()
+  ranger_cv$execute()
+}
 
 
 ## ------------------------------------------------
 ## Method `LearnerRanger$new`
 ## ------------------------------------------------
 
-LearnerRanger$new()
+if (requireNamespace("ranger", quietly = TRUE)) {
+  LearnerRanger$new()
+}
 
 }
 \seealso{
@@ -121,7 +125,9 @@ A new \code{LearnerRanger} R6 object.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{LearnerRanger$new()
+\preformatted{if (requireNamespace("ranger", quietly = TRUE)) {
+  LearnerRanger$new()
+}
 
 }
 \if{html}{\out{</div>}}

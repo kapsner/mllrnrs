@@ -2,12 +2,23 @@
 
 # mllrnrs NEWS
 
-## Unreleased (2025-12-05)
+## Unreleased (2026-01-16)
+
+#### Bug fixes
+
+-   alignment to upstream api changes
+    ([7f27835](https://github.com/kapsner/mllrnrs/tree/7f27835f12aa4a900a0373e5b9986950727b74e2))
+-   add .check_glmnet_params to cluster-export
+    ([763ee2a](https://github.com/kapsner/mllrnrs/tree/763ee2a27d5b3395171c42102c73190d761c9140))
+-   adaptions to new mlexperiments api
+    ([52138de](https://github.com/kapsner/mllrnrs/tree/52138de32319c554fe3a3466d48f5f2a7f45976f))
 
 #### Other changes
 
+-   add skipping of suggests to roxygen examples
+    ([df64113](https://github.com/kapsner/mllrnrs/tree/df6411330c4cd7cdc0e30c53319201e3d7a79ee1))
 -   cleaned cran-comments
-    ([05d4e83](https://github.com/kapsner/mllrnrs/tree/05d4e830f95ee06e78602e1fecb6269537111431))
+    ([d50e4a4](https://github.com/kapsner/mllrnrs/tree/d50e4a4881f49d59a940340e587ab1730345c288))
 -   renamed ranger validation_metric to metric
     ([7a946e7](https://github.com/kapsner/mllrnrs/tree/7a946e7929f4f477c91216f1768174d356a99ed5))
 -   udpated news.md
@@ -20,7 +31,7 @@
     ([3ee2695](https://github.com/kapsner/mllrnrs/tree/3ee26950aeb149671ef68f885a1b835620e53263))
 
 Full set of changes:
-[`v0.0.7...05d4e83`](https://github.com/kapsner/mllrnrs/compare/v0.0.7...05d4e83)
+[`v0.0.7...df64113`](https://github.com/kapsner/mllrnrs/compare/v0.0.7...df64113)
 
 ## v0.0.7 (2025-12-03)
 
@@ -30,11 +41,6 @@ Full set of changes:
     ([c66876c](https://github.com/kapsner/mllrnrs/tree/c66876c36dddace69247ef64114998647d27a03b))
 -   adaptions to new xgboost interface
     ([a360851](https://github.com/kapsner/mllrnrs/tree/a3608515f84a3fabc8bf839457c853fc3cabb0d2))
-
-#### Tests
-
--   shrinking test-pipeline to reduce overall test-time on cran
-    ([4ed71f1](https://github.com/kapsner/mllrnrs/tree/4ed71f18f82f5f9ab04d4e177d39761df0e892a1))
 
 #### CI
 
@@ -55,6 +61,19 @@ Full set of changes:
     ([e17e5ab](https://github.com/kapsner/mllrnrs/tree/e17e5abcd326f1d24cb44ace7fea6873486b4b10))
 -   udpated news.md
     ([fb25780](https://github.com/kapsner/mllrnrs/tree/fb25780366b519de8259b644037eae20b558160d))
+
+Full set of changes:
+[`v0.0.6...v0.0.7`](https://github.com/kapsner/mllrnrs/compare/v0.0.6...v0.0.7)
+
+## v0.0.6 (2025-09-08)
+
+#### Tests
+
+-   shrinking test-pipeline to reduce overall test-time on cran
+    ([4ed71f1](https://github.com/kapsner/mllrnrs/tree/4ed71f18f82f5f9ab04d4e177d39761df0e892a1))
+
+#### Other changes
+
 -   updated description and news.md
     ([b58bb74](https://github.com/kapsner/mllrnrs/tree/b58bb74dca7b3d84f7e1d38cf7f252103a172459))
 -   updated pkg metadata
@@ -75,7 +94,7 @@ Full set of changes:
     ([0b24c76](https://github.com/kapsner/mllrnrs/tree/0b24c762660896447ef8ee85991c54c510601078))
 
 Full set of changes:
-[`v0.0.5...v0.0.7`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...v0.0.7)
+[`v0.0.5...v0.0.6`](https://github.com/kapsner/mllrnrs/compare/v0.0.5...v0.0.6)
 
 ## v0.0.5 (2025-03-05)
 

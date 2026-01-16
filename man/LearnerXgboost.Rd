@@ -25,77 +25,81 @@ Optimization metric: needs to be specified with the learner parameter
 }
 }
 \examples{
-# binary classification
-Sys.setenv("OMP_THREAD_LIMIT" = 2)
+if (requireNamespace("xgboost", quietly = TRUE)) {
+  # binary classification
+  Sys.setenv("OMP_THREAD_LIMIT" = 2)
 
-library(mlbench)
-data("PimaIndiansDiabetes2")
-dataset <- PimaIndiansDiabetes2 |>
-  data.table::as.data.table() |>
-  na.omit()
+  library(mlbench)
+  data("PimaIndiansDiabetes2")
+  dataset <- PimaIndiansDiabetes2 |>
+    data.table::as.data.table() |>
+    na.omit()
 
-seed <- 123
-feature_cols <- colnames(dataset)[1:8]
+  seed <- 123
+  feature_cols <- colnames(dataset)[1:8]
 
-param_list_xgboost <- expand.grid(
-   subsample = seq(0.6, 1, .2),
-   colsample_bytree = seq(0.6, 1, .2),
-   min_child_weight = seq(1, 5, 4),
-   learning_rate = seq(0.1, 0.2, 0.1),
-   max_depth = seq(1, 5, 4),
-   nthread = 2
-)
+  param_list_xgboost <- expand.grid(
+     subsample = seq(0.6, 1, .2),
+     colsample_bytree = seq(0.6, 1, .2),
+     min_child_weight = seq(1, 5, 4),
+     learning_rate = seq(0.1, 0.2, 0.1),
+     max_depth = seq(1, 5, 4),
+     nthread = 2
+  )
 
-train_x <- model.matrix(
-  ~ -1 + .,
-  dataset[, .SD, .SDcols = feature_cols]
-)
-train_y <- as.integer(dataset[, get("diabetes")]) - 1L
+  train_x <- model.matrix(
+    ~ -1 + .,
+    dataset[, .SD, .SDcols = feature_cols]
+  )
+  train_y <- as.integer(dataset[, get("diabetes")]) - 1L
 
-fold_list <- splitTools::create_folds(
-  y = train_y,
-  k = 3,
-  type = "stratified",
-  seed = seed
-)
-xgboost_cv <- mlexperiments::MLCrossValidation$new(
-  learner = mllrnrs::LearnerXgboost$new(
-    metric_optimization_higher_better = FALSE
-  ),
-  fold_list = fold_list,
-  ncores = 2L,
-  seed = 123
-)
-xgboost_cv$learner_args <- c(
-  as.list(
-    data.table::data.table(
-      param_list_xgboost[37, ],
-      stringsAsFactors = FALSE
+  fold_list <- splitTools::create_folds(
+    y = train_y,
+    k = 3,
+    type = "stratified",
+    seed = seed
+  )
+  xgboost_cv <- mlexperiments::MLCrossValidation$new(
+    learner = mllrnrs::LearnerXgboost$new(
+      metric_optimization_higher_better = FALSE
     ),
-  ),
-  list(
-    objective = "binary:logistic",
-    eval_metric = "logloss"
-  ),
-  nrounds = 45L
-)
-xgboost_cv$performance_metric_args <- list(positive = "1", negative = "0")
-xgboost_cv$performance_metric <- mlexperiments::metric("AUC")
+    fold_list = fold_list,
+    ncores = 2L,
+    seed = 123
+  )
+  xgboost_cv$learner_args <- c(
+    as.list(
+      data.table::data.table(
+        param_list_xgboost[37, ],
+        stringsAsFactors = FALSE
+      ),
+    ),
+    list(
+      objective = "binary:logistic",
+      eval_metric = "logloss"
+    ),
+    nrounds = 45L
+  )
+  xgboost_cv$performance_metric_args <- list(positive = "1", negative = "0")
+  xgboost_cv$performance_metric <- mlexperiments::metric("AUC")
 
-# set data
-xgboost_cv$set_data(
-  x = train_x,
-  y = train_y
-)
+  # set data
+  xgboost_cv$set_data(
+    x = train_x,
+    y = train_y
+  )
 
-xgboost_cv$execute()
+  xgboost_cv$execute()
+}
 
 
 ## ------------------------------------------------
 ## Method `LearnerXgboost$new`
 ## ------------------------------------------------
 
-LearnerXgboost$new(metric_optimization_higher_better = FALSE)
+if (requireNamespace("xgboost", quietly = TRUE)) {
+  LearnerXgboost$new(metric_optimization_higher_better = FALSE)
+}
 
 }
 \seealso{
@@ -144,7 +148,9 @@ A new \code{LearnerXgboost} R6 object.
 }
 \subsection{Examples}{
 \if{html}{\out{<div class="r example copy">}}
-\preformatted{LearnerXgboost$new(metric_optimization_higher_better = FALSE)
+\preformatted{if (requireNamespace("xgboost", quietly = TRUE)) {
+  LearnerXgboost$new(metric_optimization_higher_better = FALSE)
+}
 
 }
 \if{html}{\out{</div>}}
