@@ -18,7 +18,10 @@ Can be used with
 }
 \examples{
 # binary classification
-if (requireNamespace("glmnet", quietly = TRUE)) {
+if (requireNamespace("glmnet", quietly = TRUE) &&
+requireNamespace("mlbench", quietly = TRUE) &&
+requireNamespace("measures", quietly = TRUE)) {
+
   library(mlbench)
   data("PimaIndiansDiabetes2")
   dataset <- PimaIndiansDiabetes2 |>

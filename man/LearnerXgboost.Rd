@@ -25,7 +25,10 @@ Optimization metric: needs to be specified with the learner parameter
 }
 }
 \examples{
-if (requireNamespace("xgboost", quietly = TRUE)) {
+if (requireNamespace("xgboost", quietly = TRUE) &&
+requireNamespace("mlbench", quietly = TRUE) &&
+requireNamespace("measures", quietly = TRUE)) {
+
   # binary classification
   Sys.setenv("OMP_THREAD_LIMIT" = 2)
 

@@ -19,7 +19,9 @@
 #'
 #' @examples
 #' # binary classification
-#' if (requireNamespace("ranger", quietly = TRUE)) {
+#' if (requireNamespace("ranger", quietly = TRUE) &&
+#' requireNamespace("mlbench", quietly = TRUE) &&
+#' requireNamespace("measures", quietly = TRUE)) {
 #'
 #'   library(mlbench)
 #'   data("PimaIndiansDiabetes2")

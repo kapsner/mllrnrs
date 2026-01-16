@@ -21,7 +21,9 @@
 #'
 #' @examples
 #' # binary classification
-#' if (requireNamespace("lightgbm", quietly = TRUE)) {
+#' if (requireNamespace("lightgbm", quietly = TRUE) &&
+#' requireNamespace("mlbench", quietly = TRUE) &&
+#' requireNamespace("measures", quietly = TRUE)) {
 #'
 #'   library(mlbench)
 #'   data("PimaIndiansDiabetes2")

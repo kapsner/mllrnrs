@@ -13,10 +13,15 @@
 -   adaptions to new mlexperiments api
     ([52138de](https://github.com/kapsner/mllrnrs/tree/52138de32319c554fe3a3466d48f5f2a7f45976f))
 
+#### Tests
+
+-   added conditional testing of examples
+    ([c09e960](https://github.com/kapsner/mllrnrs/tree/c09e9606856e1e9ca5683ff3e9aa0baaf5c41869))
+
 #### Other changes
 
 -   add skipping of suggests to roxygen examples
-    ([df64113](https://github.com/kapsner/mllrnrs/tree/df6411330c4cd7cdc0e30c53319201e3d7a79ee1))
+    ([0a4e692](https://github.com/kapsner/mllrnrs/tree/0a4e692277731fa89781656fda8cd05bece76c1f))
 -   cleaned cran-comments
     ([d50e4a4](https://github.com/kapsner/mllrnrs/tree/d50e4a4881f49d59a940340e587ab1730345c288))
 -   renamed ranger validation_metric to metric
@@ -31,7 +36,7 @@
     ([3ee2695](https://github.com/kapsner/mllrnrs/tree/3ee26950aeb149671ef68f885a1b835620e53263))
 
 Full set of changes:
-[`v0.0.7...df64113`](https://github.com/kapsner/mllrnrs/compare/v0.0.7...df64113)
+[`v0.0.7...c09e960`](https://github.com/kapsner/mllrnrs/compare/v0.0.7...c09e960)
 
 ## v0.0.7 (2025-12-03)
 
