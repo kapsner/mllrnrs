@@ -4,10 +4,18 @@
 
 ## Unreleased (2026-01-17)
 
+#### Tests
+
+-   setting omp_thread_limit again in test-files
+    ([87afacd](https://github.com/kapsner/mllrnrs/tree/87afacdb7eb1176fb0d6b46fca9b7190b7cffe7a))
+
 #### Other changes
 
 -   updated dev-version
-    ([f6c8387](https://github.com/kapsner/mllrnrs/tree/f6c8387610ceb85ee38303d0bc67fdb23633cb9f))
+    ([3fecd18](https://github.com/kapsner/mllrnrs/tree/3fecd187f38aa50e93ed50f47b2c28646dd23efb))
+
+Full set of changes:
+[`v0.0.8...87afacd`](https://github.com/kapsner/mllrnrs/compare/v0.0.8...87afacd)
 
 ## v0.0.8 (2026-01-16)
 

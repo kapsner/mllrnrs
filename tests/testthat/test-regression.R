@@ -15,6 +15,7 @@ param_list_glmnet <- expand.grid(
 if (isTRUE(as.logical(Sys.getenv("_R_CHECK_LIMIT_CORES_")))) {
   # on cran
   ncores <- 2L
+  Sys.setenv("OMP_THREAD_LIMIT" = 2)
 } else {
   ncores <- ifelse(
     test = parallel::detectCores() > 4,
