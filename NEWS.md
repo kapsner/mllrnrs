@@ -2,7 +2,14 @@
 
 # mllrnrs NEWS
 
-## Unreleased (2026-01-16)
+## Unreleased (2026-01-17)
+
+#### Other changes
+
+-   updated dev-version
+    ([f6c8387](https://github.com/kapsner/mllrnrs/tree/f6c8387610ceb85ee38303d0bc67fdb23633cb9f))
+
+## v0.0.8 (2026-01-16)
 
 #### Bug fixes
 
@@ -21,7 +28,7 @@
 #### Other changes
 
 -   updated pre-commit-config
-    ([1dee22f](https://github.com/kapsner/mllrnrs/tree/1dee22fa836be496ad14e2328f9cec580a7219e1))
+    ([fee2c9d](https://github.com/kapsner/mllrnrs/tree/fee2c9d9eb9b60e76c7cc93ad27becacf17a924d))
 -   updated cran-comments
     ([134ad42](https://github.com/kapsner/mllrnrs/tree/134ad42d2c89391cd6a0cdc06e683b49550cddc2))
 -   updated pre-commit-config
@@ -42,7 +49,7 @@
     ([3ee2695](https://github.com/kapsner/mllrnrs/tree/3ee26950aeb149671ef68f885a1b835620e53263))
 
 Full set of changes:
-[`v0.0.7...1dee22f`](https://github.com/kapsner/mllrnrs/compare/v0.0.7...1dee22f)
+[`v0.0.7...v0.0.8`](https://github.com/kapsner/mllrnrs/compare/v0.0.7...v0.0.8)
 
 ## v0.0.7 (2025-12-03)
 
