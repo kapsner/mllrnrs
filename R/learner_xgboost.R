@@ -28,13 +28,12 @@
 #'   Sys.setenv("OMP_THREAD_LIMIT" = 2)
 #'
 #'   library(mlbench)
-#'   data("PimaIndiansDiabetes2")
-#'   dataset <- PimaIndiansDiabetes2 |>
+#'   data("BreastCancer")
+#'   dataset <- BreastCancer |>
 #'     data.table::as.data.table() |>
 #'     na.omit()
-#'
+#'   feature_cols <- colnames(dataset)[2:10]
 #'   seed <- 123
-#'   feature_cols <- colnames(dataset)[1:8]
 #'
 #'   param_list_xgboost <- expand.grid(
 #'      subsample = seq(0.6, 1, .2),
@@ -49,7 +48,7 @@
 #'     ~ -1 + .,
 #'     dataset[, .SD, .SDcols = feature_cols]
 #'   )
-#'   train_y <- as.integer(dataset[, get("diabetes")]) - 1L
+#'   train_y <- as.integer(dataset[, get("Class")]) - 1L
 #'
 #'   fold_list <- splitTools::create_folds(
 #'     y = train_y,

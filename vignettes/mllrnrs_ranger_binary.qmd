@@ -26,13 +26,12 @@ See [https://github.com/kapsner/mllrnrs/blob/main/R/learner_ranger.R](https://gi
 
 ```{r}
 library(mlbench)
-data("PimaIndiansDiabetes2")
-dataset <- PimaIndiansDiabetes2 |>
+data("BreastCancer")
+dataset <- BreastCancer |>
   data.table::as.data.table() |>
   na.omit()
-
-feature_cols <- colnames(dataset)[1:8]
-target_col <- "diabetes"
+feature_cols <- colnames(dataset)[2:10]
+target_col <- "Class"
 ```
 
 ## General Configurations
@@ -102,16 +101,16 @@ learner_args <- list(probability = TRUE)
 # set arguments for predict function and performance metric,
 # required for mlexperiments::MLCrossValidation and
 # mlexperiments::MLNestedCV
-predict_args <- list(prob = TRUE, positive = "pos")
+predict_args <- list(prob = TRUE, positive = "malignant")
 performance_metric <- mlexperiments::metric("AUC")
-performance_metric_args <- list(positive = "pos", negative = "neg")
+performance_metric_args <- list(positive = "malignant", negative = "benign")
 return_models <- FALSE
 
 # required for grid search and initialization of bayesian optimization
 parameter_grid <- expand.grid(
   num.trees = seq(500, 1000, 500),
   mtry = seq(2, 6, 2),
-  min.node.size = seq(1, 9, 4),
+  min.node.size = seq(2, 9, 4),
   max.depth = seq(1, 9, 4),
   sample.fraction = seq(0.5, 0.8, 0.3)
 )
@@ -126,7 +125,7 @@ if (nrow(parameter_grid) > 10) {
 parameter_bounds <- list(
   num.trees = c(100L, 1000L),
   mtry = c(2L, 9L),
-  min.node.size = c(1L, 20L),
+  min.node.size = c(2L, 20L),
   max.depth = c(1L, 40L),
   sample.fraction = c(0.3, 1.)
 )
@@ -160,41 +159,44 @@ tuner$set_data(
 )
 
 tuner_results_grid <- tuner$execute(k = 3)
-#> 
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
-#>  Classification: using 'classification error rate' as optimization metric.
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [================================>------------------------------------------------------------------------------] 3/10 ( 30%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [===========================================>-------------------------------------------------------------------] 4/10 ( 40%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [=======================================================>-------------------------------------------------------] 5/10 ( 50%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [==================================================================>--------------------------------------------] 6/10 ( 60%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [=============================================================================>---------------------------------] 7/10 ( 70%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [========================================================================================>----------------------] 8/10 ( 80%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [===================================================================================================>-----------] 9/10 ( 90%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [==============================================================================================================] 10/10 (100%)
+#>  Classification: using 'mean classification error' as optimization metric.
 
 head(tuner_results_grid)
-#>    setting_id metric_optim_mean num.trees mtry min.node.size max.depth sample.fraction probability
-#> 1:          1         0.1750403       500    2             9         5             0.5        TRUE
-#> 2:          2         0.1712560       500    2             5         5             0.8        TRUE
-#> 3:          3         0.1712560       500    4             9         9             0.5        TRUE
-#> 4:          4         0.2335749      1000    2             9         1             0.5        TRUE
-#> 5:          5         0.2479871       500    2             9         1             0.8        TRUE
-#> 6:          6         0.1859098      1000    6             1         9             0.5        TRUE
+#>    setting_id metric_optim_mean num.trees  mtry min.node.size max.depth sample.fraction probability
+#>         <int>             <num>     <num> <num>         <num>     <num>           <num>      <lgcl>
+#> 1:          1        0.04398668       500     2             6         9             0.5        TRUE
+#> 2:          2        0.04189024       500     4             2         5             0.8        TRUE
+#> 3:          3        0.04398668      1000     2             2         5             0.5        TRUE
+#> 4:          4        0.04189024       500     2             6         9             0.8        TRUE
+#> 5:          5        0.04613602      1000     6             2         1             0.8        TRUE
+#> 6:          6        0.04398668      1000     2             2         5             0.8        TRUE
 ```
 
 
@@ -222,24 +224,46 @@ tuner$set_data(
 )
 
 tuner_results_bayesian <- tuner$execute(k = 3)
-#> 
-#> Registering parallel backend using 4 cores.
+#>
+#> Number of rows of initialization grid > than 'options("mlexperiments.bayesian.max_init")'...
+#> ... reducing initialization grid to 4 rows.
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.169  Round = 1   num.trees = 1000.0000   mtry = 2.0000   min.node.size = 2.0000  max.depth = 5.0000  sample.fraction = 0.5000    Value = -0.04398668
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.116  Round = 2   num.trees = 500.0000    mtry = 2.0000   min.node.size = 2.0000  max.depth = 9.0000  sample.fraction = 0.5000    Value = -0.04189024
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.107  Round = 3   num.trees = 500.0000    mtry = 4.0000   min.node.size = 2.0000  max.depth = 5.0000  sample.fraction = 0.8000    Value = -0.04189024
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.169  Round = 4   num.trees = 1000.0000   mtry = 4.0000   min.node.size = 6.0000  max.depth = 9.0000  sample.fraction = 0.8000    Value = -0.04189024
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.17   Round = 5   num.trees = 952.0000    mtry = 7.0000   min.node.size = 5.0000  max.depth = 21.0000 sample.fraction = 0.8216647 Value = -0.04817972
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.174  Round = 6   num.trees = 952.0000    mtry = 7.0000   min.node.size = 5.0000  max.depth = 21.0000 sample.fraction = 0.8216647 Value = -0.04817972
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.18   Round = 7   num.trees = 952.0000    mtry = 7.0000   min.node.size = 5.0000  max.depth = 21.0000 sample.fraction = 0.8216647 Value = -0.04817972
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.183  Round = 8   num.trees = 952.0000    mtry = 7.0000   min.node.size = 5.0000  max.depth = 21.0000 sample.fraction = 0.8216647 Value = -0.04817972
+#>
+#>  Best Parameters Found:
+#> Round = 2    num.trees = 500.0000    mtry = 2.0000   min.node.size = 2.0000  max.depth = 9.0000  sample.fraction = 0.5000    Value = -0.04189024
 
 head(tuner_results_bayesian)
-#>    Epoch setting_id num.trees mtry min.node.size max.depth sample.fraction gpUtility acqOptimum inBounds Elapsed      Score
-#> 1:     0          1       500    2             9         5             0.5        NA      FALSE     TRUE   1.005 -0.1749597
-#> 2:     0          2       500    2             5         5             0.8        NA      FALSE     TRUE   1.008 -0.1748792
-#> 3:     0          3       500    4             9         9             0.5        NA      FALSE     TRUE   0.995 -0.1786634
-#> 4:     0          4      1000    2             9         1             0.5        NA      FALSE     TRUE   0.987 -0.2407407
-#> 5:     0          5       500    2             9         1             0.8        NA      FALSE     TRUE   0.090 -0.2335749
-#> 6:     0          6      1000    6             1         9             0.5        NA      FALSE     TRUE   0.332 -0.1785829
-#>    metric_optim_mean errorMessage probability
-#> 1:         0.1749597         <NA>        TRUE
-#> 2:         0.1748792         <NA>        TRUE
-#> 3:         0.1786634         <NA>        TRUE
-#> 4:         0.2407407         <NA>        TRUE
-#> 5:         0.2335749         <NA>        TRUE
-#> 6:         0.1785829         <NA>        TRUE
+#>    setting_id num.trees  mtry min.node.size max.depth sample.fraction       Value probability metric_optim_mean
+#>         <int>     <num> <num>         <num>     <num>           <num>       <num>      <lgcl>             <num>
+#> 1:          1      1000     2             2         5       0.5000000 -0.04398668        TRUE        0.04398668
+#> 2:          2       500     2             2         9       0.5000000 -0.04189024        TRUE        0.04189024
+#> 3:          3       500     4             2         5       0.8000000 -0.04189024        TRUE        0.04189024
+#> 4:          4      1000     4             6         9       0.8000000 -0.04189024        TRUE        0.04189024
+#> 5:          5       952     7             5        21       0.8216647 -0.04817972        TRUE        0.04817972
+#> 6:          6       952     7             5        21       0.8216647 -0.04817972        TRUE        0.04817972
 ```
 
 ## k-Fold Cross Validation
@@ -265,18 +289,19 @@ validator$set_data(
 )
 
 validator_results <- validator$execute()
-#> 
+#>
 #> CV fold: Fold1
-#> 
+#>
 #> CV fold: Fold2
-#> 
+#>
 #> CV fold: Fold3
 
 head(validator_results)
-#>     fold performance num.trees mtry min.node.size max.depth sample.fraction probability
-#> 1: Fold1   0.8730830      1000    2             9         9             0.5        TRUE
-#> 2: Fold2   0.8836594      1000    2             9         9             0.5        TRUE
-#> 3: Fold3   0.8937253      1000    2             9         9             0.5        TRUE
+#>      fold performance  mtry min.node.size max.depth sample.fraction probability
+#>    <char>       <num> <num>         <num>     <num>           <num>      <lgcl>
+#> 1:  Fold1   0.9925861     2             2         9             0.5        TRUE
+#> 2:  Fold2   0.9935853     2             2         9             0.5        TRUE
+#> 3:  Fold3   0.9888393     2             2         9             0.5        TRUE
 ```
 
 
@@ -309,99 +334,102 @@ validator$set_data(
 )
 
 validator_results <- validator$execute()
-#> 
+#>
 #> CV fold: Fold1
-#> 
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [===========================================>-------------------------------------------------------------------] 4/10 ( 40%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [=======================================================>-------------------------------------------------------] 5/10 ( 50%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [==================================================================>--------------------------------------------] 6/10 ( 60%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [=============================================================================>---------------------------------] 7/10 ( 70%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [========================================================================================>----------------------] 8/10 ( 80%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [===================================================================================================>-----------] 9/10 ( 90%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [==============================================================================================================] 10/10 (100%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
 #> CV fold: Fold2
-#> CV progress [====================================================================>-----------------------------------] 2/3 ( 67%)
-#> 
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
+#> CV progress [==============================================================================>----------------------------------------] 2/3 ( 67%)
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [===========================================>-------------------------------------------------------------------] 4/10 ( 40%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [=======================================================>-------------------------------------------------------] 5/10 ( 50%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [==================================================================>--------------------------------------------] 6/10 ( 60%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [=============================================================================>---------------------------------] 7/10 ( 70%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [========================================================================================>----------------------] 8/10 ( 80%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [===================================================================================================>-----------] 9/10 ( 90%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [==============================================================================================================] 10/10 (100%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
 #> CV fold: Fold3
-#> CV progress [========================================================================================================] 3/3 (100%)
-#>                                                                                                                                   
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [=====================================>----------------------------------------------------------] 4/10 ( 40%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#>  Classification: using 'classification error rate' as optimization metric.
-#> 
-#> Parameter settings [===============================================================================================] 10/10 (100%)                                                                                                                                  
-#>  Classification: using 'classification error rate' as optimization metric.
+#> CV progress [=======================================================================================================================] 3/3 (100%)
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [===========================================>-------------------------------------------------------------------] 4/10 ( 40%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [=======================================================>-------------------------------------------------------] 5/10 ( 50%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [==================================================================>--------------------------------------------] 6/10 ( 60%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [=============================================================================>---------------------------------] 7/10 ( 70%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [========================================================================================>----------------------] 8/10 ( 80%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [===================================================================================================>-----------] 9/10 ( 90%)
+#>  Classification: using 'mean classification error' as optimization metric.
+#>
+#> Parameter settings [==============================================================================================================] 10/10 (100%)
+#>  Classification: using 'mean classification error' as optimization metric.
 
 head(validator_results)
-#>     fold performance num.trees mtry min.node.size max.depth sample.fraction probability
-#> 1: Fold1   0.8714966      1000    6             1         9             0.5        TRUE
-#> 2: Fold2   0.8725542       500    4             9         9             0.8        TRUE
-#> 3: Fold3   0.8886376       500    2             9         5             0.5        TRUE
+#>      fold performance num.trees  mtry min.node.size max.depth sample.fraction probability
+#>    <char>       <num>     <num> <num>         <num>     <num>           <num>      <lgcl>
+#> 1:  Fold1   0.9931156       500     2             6         9             0.8        TRUE
+#> 2:  Fold2   0.9935853      1000     2             2         5             0.5        TRUE
+#> 3:  Fold3   0.9886676       500     2             6         9             0.5        TRUE
 ```
 
 
@@ -436,26 +464,111 @@ validator$set_data(
 )
 
 validator_results <- validator$execute()
-#> 
+#>
 #> CV fold: Fold1
-#> 
-#> Registering parallel backend using 4 cores.
-#> 
+#>
+#> Number of rows of initialization grid > than 'options("mlexperiments.bayesian.max_init")'...
+#> ... reducing initialization grid to 4 rows.
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.086  Round = 1   num.trees = 500.0000    mtry = 2.0000   min.node.size = 2.0000  max.depth = 9.0000  sample.fraction = 0.5000    Value = -0.05331217
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.14   Round = 2   num.trees = 1000.0000   mtry = 4.0000   min.node.size = 6.0000  max.depth = 9.0000  sample.fraction = 0.8000    Value = -0.05645683
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.096  Round = 3   num.trees = 500.0000    mtry = 2.0000   min.node.size = 6.0000  max.depth = 9.0000  sample.fraction = 0.8000    Value = -0.05645683
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.104  Round = 4   num.trees = 1000.0000   mtry = 6.0000   min.node.size = 2.0000  max.depth = 1.0000  sample.fraction = 0.8000    Value = -0.05960148
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.116  Round = 5   num.trees = 807.0000    mtry = 9.0000   min.node.size = 2.0000  max.depth = 10.0000 sample.fraction = 0.4920744 Value = -0.05645683
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.105  Round = 6   num.trees = 767.0000    mtry = 3.0000   min.node.size = 16.0000 max.depth = 23.0000 sample.fraction = 0.3697985 Value = -0.05960148
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.095  Round = 7   num.trees = 767.0000    mtry = 3.0000   min.node.size = 16.0000 max.depth = 23.0000 sample.fraction = 0.3697985 Value = -0.05960148
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.099  Round = 8   num.trees = 767.0000    mtry = 3.0000   min.node.size = 16.0000 max.depth = 23.0000 sample.fraction = 0.3697985 Value = -0.05960148
+#>
+#>  Best Parameters Found:
+#> Round = 1    num.trees = 500.0000    mtry = 2.0000   min.node.size = 2.0000  max.depth = 9.0000  sample.fraction = 0.5000    Value = -0.05331217
+#>
 #> CV fold: Fold2
-#> CV progress [====================================================================>-----------------------------------] 2/3 ( 67%)
-#> 
-#> Registering parallel backend using 4 cores.
-#> 
+#> CV progress [==============================================================================>----------------------------------------] 2/3 ( 67%)
+#>
+#> Number of rows of initialization grid > than 'options("mlexperiments.bayesian.max_init")'...
+#> ... reducing initialization grid to 4 rows.
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.081  Round = 1   num.trees = 500.0000    mtry = 2.0000   min.node.size = 2.0000  max.depth = 9.0000  sample.fraction = 0.5000    Value = -0.05031447
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.133  Round = 2   num.trees = 1000.0000   mtry = 4.0000   min.node.size = 6.0000  max.depth = 9.0000  sample.fraction = 0.8000    Value = -0.05031447
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.083  Round = 3   num.trees = 500.0000    mtry = 2.0000   min.node.size = 6.0000  max.depth = 9.0000  sample.fraction = 0.8000    Value = -0.05345912
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.095  Round = 4   num.trees = 1000.0000   mtry = 6.0000   min.node.size = 2.0000  max.depth = 1.0000  sample.fraction = 0.8000    Value = -0.04716981
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.116  Round = 5   num.trees = 826.0000    mtry = 9.0000   min.node.size = 15.0000 max.depth = 40.0000 sample.fraction = 1.0000    Value = -0.05660377
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.118  Round = 6   num.trees = 1000.0000   mtry = 9.0000   min.node.size = 2.0000  max.depth = 25.0000 sample.fraction = 0.3404917 Value = -0.05660377
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.102  Round = 7   num.trees = 767.0000    mtry = 3.0000   min.node.size = 16.0000 max.depth = 23.0000 sample.fraction = 0.3697985 Value = -0.04716981
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.096  Round = 8   num.trees = 913.0000    mtry = 5.0000   min.node.size = 16.0000 max.depth = 1.0000  sample.fraction = 0.3000    Value = -0.04716981
+#>
+#>  Best Parameters Found:
+#> Round = 4    num.trees = 1000.0000   mtry = 6.0000   min.node.size = 2.0000  max.depth = 1.0000  sample.fraction = 0.8000    Value = -0.04716981
+#>
 #> CV fold: Fold3
-#> CV progress [========================================================================================================] 3/3 (100%)
-#>                                                                                                                                   
-#> Registering parallel backend using 4 cores.
+#> CV progress [=======================================================================================================================] 3/3 (100%)
+#>
+#> Number of rows of initialization grid > than 'options("mlexperiments.bayesian.max_init")'...
+#> ... reducing initialization grid to 4 rows.
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.091  Round = 1   num.trees = 500.0000    mtry = 2.0000   min.node.size = 2.0000  max.depth = 9.0000  sample.fraction = 0.5000    Value = -0.04414495
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.13   Round = 2   num.trees = 1000.0000   mtry = 4.0000   min.node.size = 6.0000  max.depth = 9.0000  sample.fraction = 0.8000    Value = -0.04731956
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.098  Round = 3   num.trees = 500.0000    mtry = 2.0000   min.node.size = 6.0000  max.depth = 9.0000  sample.fraction = 0.8000    Value = -0.04414495
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.096  Round = 4   num.trees = 1000.0000   mtry = 6.0000   min.node.size = 2.0000  max.depth = 1.0000  sample.fraction = 0.8000    Value = -0.04103025
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.096  Round = 5   num.trees = 767.0000    mtry = 3.0000   min.node.size = 16.0000 max.depth = 23.0000 sample.fraction = 0.3697985 Value = -0.04731956
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.065  Round = 6   num.trees = 253.0000    mtry = 8.0000   min.node.size = 12.0000 max.depth = 15.0000 sample.fraction = 0.4823285 Value = -0.0441749
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.064  Round = 7   num.trees = 245.0000    mtry = 7.0000   min.node.size = 18.0000 max.depth = 14.0000 sample.fraction = 0.3033942 Value = -0.04103025
+#>
+#>  Classification: using 'mean classification error' as optimization metric.
+#> elapsed = 0.131  Round = 8   num.trees = 994.0000    mtry = 6.0000   min.node.size = 15.0000 max.depth = 15.0000 sample.fraction = 0.5716413 Value = -0.0441749
+#>
+#>  Best Parameters Found:
+#> Round = 4    num.trees = 1000.0000   mtry = 6.0000   min.node.size = 2.0000  max.depth = 1.0000  sample.fraction = 0.8000    Value = -0.04103025
 
 head(validator_results)
-#>     fold performance num.trees mtry min.node.size max.depth sample.fraction probability
-#> 1: Fold1   0.8754627      1000    6             1         9             0.5        TRUE
-#> 2: Fold2   0.8767848       500    4             9         9             0.8        TRUE
-#> 3: Fold3   0.8971170       500    2             5         9             0.5        TRUE
+#>      fold performance num.trees  mtry min.node.size max.depth sample.fraction probability
+#>    <char>       <num>     <num> <num>         <num>     <num>           <num>      <lgcl>
+#> 1:  Fold1   0.9932921       500     2             2         9             0.5        TRUE
+#> 2:  Fold2   0.9913315      1000     6             2         1             0.8        TRUE
+#> 3:  Fold3   0.9876374      1000     6             2         1             0.8        TRUE
 ```
 
 
@@ -480,16 +593,16 @@ perf_ranger <- mlexperiments::performance(
   type = "binary"
 )
 perf_ranger
-#>     model performance       AUC     Brier BrierScaled       BAC    TP    TN    FP    FN       TPR       TNR       FPR       FNR       PPV
-#>    <char>       <num>     <num>     <num>       <num>     <num> <int> <int> <int> <int>     <num>     <num>     <num>     <num>     <num>
-#> 1:  Fold1   0.7874067 0.7874067 0.1735079   0.2158639 0.6548199    18    67    12    21 0.4615385 0.8481013 0.1518987 0.5384615 0.6000000
-#> 2:  Fold2   0.7802661 0.7802661 0.1838647   0.1690580 0.6738072    18    70     9    21 0.4615385 0.8860759 0.1139241 0.5384615 0.6666667
-#> 3:  Fold3   0.7831873 0.7831873 0.1754549   0.2070644 0.6484907    18    66    13    21 0.4615385 0.8354430 0.1645570 0.5384615 0.5806452
-#>          NPV       FDR       MCC        F1     GMEAN       GPR       ACC      MMCE       BER
-#>        <num>     <num>     <num>     <num>     <num>     <num>     <num>     <num>     <num>
-#> 1: 0.7613636 0.4000000 0.3345034 0.5217391 0.6256448 0.5262348 0.7203390 0.2796610 0.3451801
-#> 2: 0.7692308 0.3333333 0.3892611 0.5454545 0.6394983 0.5547002 0.7457627 0.2542373 0.3261928
-#> 3: 0.7586207 0.4193548 0.3174204 0.5142857 0.6209582 0.5176776 0.7118644 0.2881356 0.3515093
+#>     model performance       AUC      Brier BrierScaled       BAC    TP    TN    FP    FN       TPR       TNR        FPR        FNR       PPV
+#>    <char>       <num>     <num>      <num>       <num>     <num> <int> <int> <int> <int>     <num>     <num>      <num>      <num>     <num>
+#> 1:  Fold1   0.9888060 0.9888060 0.04307263   0.8105483 0.9508706    66   132     2     6 0.9166667 0.9850746 0.01492537 0.08333333 0.9705882
+#> 2:  Fold2   0.9795813 0.9795813 0.07807664   0.6565858 0.9257877    64   129     5     8 0.8888889 0.9626866 0.03731343 0.11111111 0.9275362
+#> 3:  Fold3   0.9795813 0.9795813 0.07868587   0.6539061 0.9220564    64   128     6     8 0.8888889 0.9552239 0.04477612 0.11111111 0.9142857
+#>          NPV        FDR       MCC        F1     GMEAN       GPR       ACC       MMCE        BER
+#>        <num>      <num>     <num>     <num>     <num>     <num>     <num>      <num>      <num>
+#> 1: 0.9565217 0.02941176 0.9143377 0.9428571 0.9502553 0.9432422 0.9611650 0.03883495 0.04912935
+#> 2: 0.9416058 0.07246377 0.8603139 0.9078014 0.9250521 0.9080070 0.9368932 0.06310680 0.07421227
+#> 3: 0.9411765 0.08571429 0.8497685 0.9014085 0.9214597 0.9014979 0.9320388 0.06796117 0.07794362
 ```
 
 ```{r include=FALSE}

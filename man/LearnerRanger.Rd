@@ -25,13 +25,12 @@ requireNamespace("mlbench", quietly = TRUE) &&
 requireNamespace("measures", quietly = TRUE)) {
 
   library(mlbench)
-  data("PimaIndiansDiabetes2")
-  dataset <- PimaIndiansDiabetes2 |>
+  data("BreastCancer")
+  dataset <- BreastCancer |>
     data.table::as.data.table() |>
     na.omit()
-
+  feature_cols <- colnames(dataset)[2:10]
   seed <- 123
-  feature_cols <- colnames(dataset)[1:8]
 
   param_list_ranger <- expand.grid(
     num.trees = seq(500, 1000, 500),
@@ -45,7 +44,7 @@ requireNamespace("measures", quietly = TRUE)) {
     ~ -1 + .,
     dataset[, .SD, .SDcols = feature_cols]
   )
-  train_y <- as.integer(dataset[, get("diabetes")]) - 1L
+  train_y <- as.integer(dataset[, get("Class")]) - 1L
 
   fold_list <- splitTools::create_folds(
     y = train_y,
@@ -82,7 +81,7 @@ requireNamespace("measures", quietly = TRUE)) {
 
 
 ## ------------------------------------------------
-## Method `LearnerRanger$new`
+## Method `LearnerRanger$new()`
 ## ------------------------------------------------
 
 if (requireNamespace("ranger", quietly = TRUE)) {
@@ -98,60 +97,59 @@ if (requireNamespace("ranger", quietly = TRUE)) {
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-LearnerRanger-new}{\code{LearnerRanger$new()}}
-\item \href{#method-LearnerRanger-clone}{\code{LearnerRanger$clone()}}
+  \itemize{
+    \item \href{#method-LearnerRanger-initialize}{\code{LearnerRanger$new()}}
+    \item \href{#method-LearnerRanger-clone}{\code{LearnerRanger$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details open><summary>Inherited methods</summary>
+\if{html}{\out{<details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="bayesian_scoring_function"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-bayesian_scoring_function'><code>mlexperiments::MLLearnerBase$bayesian_scoring_function()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="cross_validation"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-cross_validation'><code>mlexperiments::MLLearnerBase$cross_validation()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="fit"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-fit'><code>mlexperiments::MLLearnerBase$fit()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="predict"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-predict'><code>mlexperiments::MLLearnerBase$predict()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="bayesian_scoring_function"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-bayesian_scoring_function'><code>mlexperiments::MLLearnerBase$bayesian_scoring_function()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="cross_validation"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-cross_validation'><code>mlexperiments::MLLearnerBase$cross_validation()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="fit"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-fit'><code>mlexperiments::MLLearnerBase$fit()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="predict"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-predict'><code>mlexperiments::MLLearnerBase$predict()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-LearnerRanger-new"></a>}}
-\if{latex}{\out{\hypertarget{method-LearnerRanger-new}{}}}
-\subsection{Method \code{new()}}{
-Create a new \code{LearnerRanger} object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{LearnerRanger$new()}\if{html}{\out{</div>}}
-}
-
-\subsection{Returns}{
-A new \code{LearnerRanger} R6 object.
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{if (requireNamespace("ranger", quietly = TRUE)) {
+\if{html}{\out{<a id="method-LearnerRanger-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-LearnerRanger-initialize}{}}}
+\subsection{\code{LearnerRanger$new()}}{
+  Create a new \code{LearnerRanger} object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{LearnerRanger$new()}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A new \code{LearnerRanger} R6 object.
+  }
+  \subsection{Examples}{
+    \if{html}{\out{<div class="r example copy">}}
+    \preformatted{if (requireNamespace("ranger", quietly = TRUE)) {
   LearnerRanger$new()
 }
-
 }
-\if{html}{\out{</div>}}
-
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-LearnerRanger-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-LearnerRanger-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{LearnerRanger$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{LearnerRanger$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{LearnerRanger$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

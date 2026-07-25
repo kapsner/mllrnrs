@@ -26,13 +26,12 @@ See [https://github.com/kapsner/mllrnrs/blob/main/R/learner_xgboost.R](https://g
 
 ```{r}
 library(mlbench)
-data("PimaIndiansDiabetes2")
-dataset <- PimaIndiansDiabetes2 |>
+data("BreastCancer")
+dataset <- BreastCancer |>
   data.table::as.data.table() |>
   na.omit()
-
-feature_cols <- colnames(dataset)[1:8]
-target_col <- "diabetes"
+feature_cols <- colnames(dataset)[2:10]
+target_col <- "Class"
 ```
 
 ## General Configurations
@@ -168,25 +167,21 @@ tuner$set_data(
 
 tuner_results_grid <- tuner$execute(k = 3)
 #>
-#> Parameter settings [==================>-----------------------------------------------------------------------------] 2/10 ( 20%)
-#> Parameter settings [============================>-------------------------------------------------------------------] 3/10 ( 30%)
-#> Parameter settings [=====================================>----------------------------------------------------------] 4/10 ( 40%)
-#> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
-#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
-#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
-#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
-#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#> Parameter settings [===============================================================================================] 10/10 (100%)
+#> Parameter settings [==================================================================>--------------------------------------------] 6/10 ( 60%)
+#> Parameter settings [=============================================================================>---------------------------------] 7/10 ( 70%)
+#> Parameter settings [========================================================================================>----------------------] 8/10 ( 80%)
+#> Parameter settings [===================================================================================================>-----------] 9/10 ( 90%)
+#> Parameter settings [==============================================================================================================] 10/10 (100%)
 
 head(tuner_results_grid)
 #>    setting_id metric_optim_mean nrounds subsample colsample_bytree min_child_weight learning_rate max_depth       objective eval_metric
 #>         <int>             <num>   <int>     <num>            <num>            <num>         <num>     <num>          <char>      <char>
-#> 1:          1         0.3977489      62       0.6              0.8                5           0.2         1 binary:logistic     logloss
-#> 2:          2         0.3915203      67       1.0              0.8                5           0.1         5 binary:logistic     logloss
-#> 3:          3         0.3972711      96       0.8              0.8                5           0.1         1 binary:logistic     logloss
-#> 4:          4         0.3951791      62       0.6              0.8                5           0.2         5 binary:logistic     logloss
-#> 5:          5         0.3786375      44       1.0              0.8                1           0.1         5 binary:logistic     logloss
-#> 6:          6         0.3956902      75       0.8              0.8                5           0.1         5 binary:logistic     logloss
+#> 1:          1         0.1473724      20       0.6              0.8                5           0.2         1 binary:logistic     logloss
+#> 2:          2         0.1836365      20       1.0              0.8                5           0.1         5 binary:logistic     logloss
+#> 3:          3         0.2004256      20       0.8              0.8                5           0.1         1 binary:logistic     logloss
+#> 4:          4         0.1431941      20       0.6              0.8                5           0.2         5 binary:logistic     logloss
+#> 5:          5         0.1766953      20       1.0              0.8                1           0.1         5 binary:logistic     logloss
+#> 6:          6         0.1866896      20       0.8              0.8                5           0.1         5 binary:logistic     logloss
 ```
 
 
@@ -217,25 +212,29 @@ tuner$set_data(
 
 tuner_results_bayesian <- tuner$execute(k = 3)
 #>
-#> Registering parallel backend using 4 cores.
+#> Number of rows of initialization grid > than 'options("mlexperiments.bayesian.max_init")'...
+#> ... reducing initialization grid to 4 rows.
+#> elapsed = 0.045  Round = 1   subsample = 0.8000  colsample_bytree = 0.8000   min_child_weight = 5.0000   learning_rate = 0.1000  max_depth = 1.0000  Value = -0.2004256
+#> elapsed = 0.037  Round = 2   subsample = 0.6000  colsample_bytree = 1.0000   min_child_weight = 1.0000   learning_rate = 0.2000  max_depth = 1.0000  Value = -0.146329
+#> elapsed = 0.033  Round = 3   subsample = 1.0000  colsample_bytree = 0.8000   min_child_weight = 5.0000   learning_rate = 0.1000  max_depth = 5.0000  Value = -0.1836365
+#> elapsed = 0.033  Round = 4   subsample = 0.6000  colsample_bytree = 1.0000   min_child_weight = 5.0000   learning_rate = 0.2000  max_depth = 5.0000  Value = -0.143957
+#> elapsed = 0.026  Round = 5   subsample = 0.2000  colsample_bytree = 0.2253119    min_child_weight = 6.0000   learning_rate = 0.1478213   max_depth = 9.0000  Value = -0.2851956
+#> elapsed = 0.048  Round = 6   subsample = 1.0000  colsample_bytree = 0.6428195    min_child_weight = 7.0000   learning_rate = 0.2000  max_depth = 10.0000 Value = -0.1407496
+#> elapsed = 0.029  Round = 7   subsample = 0.6370911   colsample_bytree = 0.8772461    min_child_weight = 3.0000   learning_rate = 0.1746002   max_depth = 4.0000  Value = -0.1423412
+#> elapsed = 0.034  Round = 8   subsample = 1.0000  colsample_bytree = 1.0000   min_child_weight = 1.0000   learning_rate = 0.1753007   max_depth = 10.0000 Value = -0.1424366
+#>
+#>  Best Parameters Found:
+#> Round = 6    subsample = 1.0000  colsample_bytree = 0.6428195    min_child_weight = 7.0000   learning_rate = 0.2000  max_depth = 10.0000 Value = -0.1407496
 
 head(tuner_results_bayesian)
-#>    Epoch setting_id subsample colsample_bytree min_child_weight learning_rate max_depth gpUtility acqOptimum inBounds Elapsed
-#>    <num>      <int>     <num>            <num>            <num>         <num>     <num>     <num>     <lgcl>   <lgcl>   <num>
-#> 1:     0          1       0.6              0.8                5           0.2         1        NA      FALSE     TRUE   0.890
-#> 2:     0          2       1.0              0.8                5           0.1         5        NA      FALSE     TRUE   0.892
-#> 3:     0          3       0.8              0.8                5           0.1         1        NA      FALSE     TRUE   0.991
-#> 4:     0          4       0.6              0.8                5           0.2         5        NA      FALSE     TRUE   0.911
-#> 5:     0          5       1.0              0.8                1           0.1         5        NA      FALSE     TRUE   0.173
-#> 6:     0          6       0.8              0.8                5           0.1         5        NA      FALSE     TRUE   0.183
-#>         Score metric_optim_mean nrounds errorMessage       objective eval_metric
-#>         <num>             <num>   <int>       <lgcl>          <char>      <char>
-#> 1: -0.3977489         0.3977489      62           NA binary:logistic     logloss
-#> 2: -0.3915203         0.3915203      67           NA binary:logistic     logloss
-#> 3: -0.3972711         0.3972711      96           NA binary:logistic     logloss
-#> 4: -0.3951791         0.3951791      62           NA binary:logistic     logloss
-#> 5: -0.3786375         0.3786375      44           NA binary:logistic     logloss
-#> 6: -0.3956902         0.3956902      75           NA binary:logistic     logloss
+#>    setting_id subsample colsample_bytree min_child_weight learning_rate max_depth      Value       objective eval_metric metric_optim_mean
+#>         <int>     <num>            <num>            <num>         <num>     <num>      <num>          <char>      <char>             <num>
+#> 1:          1       0.8        0.8000000                5     0.1000000         1 -0.2004256 binary:logistic     logloss         0.2004256
+#> 2:          2       0.6        1.0000000                1     0.2000000         1 -0.1463290 binary:logistic     logloss         0.1463290
+#> 3:          3       1.0        0.8000000                5     0.1000000         5 -0.1836365 binary:logistic     logloss         0.1836365
+#> 4:          4       0.6        1.0000000                5     0.2000000         5 -0.1439570 binary:logistic     logloss         0.1439570
+#> 5:          5       0.2        0.2253119                6     0.1478213         9 -0.2851956 binary:logistic     logloss         0.2851956
+#> 6:          6       1.0        0.6428195                7     0.2000000        10 -0.1407496 binary:logistic     logloss         0.1407496
 ```
 
 ## k-Fold Cross Validation
@@ -271,11 +270,11 @@ validator_results <- validator$execute()
 #> CV fold: Fold3
 
 head(validator_results)
-#>      fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds       objective eval_metric
-#>    <char>       <num>     <num>            <num>            <num>         <num>     <num>   <int>          <char>      <char>
-#> 1:  Fold1   0.8947647         1              0.8                1           0.1         5      44 binary:logistic     logloss
-#> 2:  Fold2   0.8720254         1              0.8                1           0.1         5      44 binary:logistic     logloss
-#> 3:  Fold3   0.9010741         1              0.8                1           0.1         5      44 binary:logistic     logloss
+#>      fold performance colsample_bytree min_child_weight learning_rate max_depth       objective eval_metric nrounds
+#>    <char>       <num>            <num>            <num>         <num>     <num>          <char>      <char>   <int>
+#> 1:  Fold1   0.9920565        0.6428195                7           0.2        10 binary:logistic     logloss      20
+#> 2:  Fold2   0.9928918        0.6428195                7           0.2        10 binary:logistic     logloss      20
+#> 3:  Fold3   0.9818853        0.6428195                7           0.2        10 binary:logistic     logloss      20
 ```
 
 
@@ -313,33 +312,33 @@ validator_results <- validator$execute()
 #>
 #> CV fold: Fold1
 #>
-#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
-#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
-#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#> Parameter settings [===============================================================================================] 10/10 (100%)
+#> Parameter settings [=======================================================>-------------------------------------------------------] 5/10 ( 50%)
+#> Parameter settings [==================================================================>--------------------------------------------] 6/10 ( 60%)
+#> Parameter settings [=============================================================================>---------------------------------] 7/10 ( 70%)
+#> Parameter settings [========================================================================================>----------------------] 8/10 ( 80%)
+#> Parameter settings [===================================================================================================>-----------] 9/10 ( 90%)
+#> Parameter settings [==============================================================================================================] 10/10 (100%)
 #> CV fold: Fold2
-#> CV progress [====================================================================>-----------------------------------] 2/3 ( 67%)
+#> CV progress [==============================================================================>----------------------------------------] 2/3 ( 67%)
 #>
-#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
-#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
-#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#> Parameter settings [===============================================================================================] 10/10 (100%)
+#> Parameter settings [==================================================================>--------------------------------------------] 6/10 ( 60%)
+#> Parameter settings [=============================================================================>---------------------------------] 7/10 ( 70%)
+#> Parameter settings [========================================================================================>----------------------] 8/10 ( 80%)
+#> Parameter settings [===================================================================================================>-----------] 9/10 ( 90%)
+#> Parameter settings [==============================================================================================================] 10/10 (100%)
 #> CV fold: Fold3
-#> CV progress [========================================================================================================] 3/3 (100%)
+#> CV progress [=======================================================================================================================] 3/3 (100%)
 #>
-#> Parameter settings [===============================================>------------------------------------------------] 5/10 ( 50%)
-#> Parameter settings [=========================================================>--------------------------------------] 6/10 ( 60%)
-#> Parameter settings [==================================================================>-----------------------------] 7/10 ( 70%)
-#> Parameter settings [============================================================================>-------------------] 8/10 ( 80%)
-#> Parameter settings [=====================================================================================>----------] 9/10 ( 90%)
-#> Parameter settings [===============================================================================================] 10/10 (100%)
+#> Parameter settings [========================================================================================>----------------------] 8/10 ( 80%)
+#> Parameter settings [===================================================================================================>-----------] 9/10 ( 90%)
+#> Parameter settings [==============================================================================================================] 10/10 (100%)
 
 head(validator_results)
 #>      fold performance nrounds subsample colsample_bytree min_child_weight learning_rate max_depth       objective eval_metric
 #>    <char>       <num>   <int>     <num>            <num>            <num>         <num>     <num>          <char>      <char>
-#> 1:  Fold1   0.8714966      40       0.6              1.0                1           0.2         1 binary:logistic     logloss
-#> 2:  Fold2   0.8754627      35       1.0              1.0                5           0.1         5 binary:logistic     logloss
-#> 3:  Fold3   0.8883550      41       0.8              0.8                5           0.1         1 binary:logistic     logloss
+#> 1:  Fold1   0.9876434      20       0.6                1                1           0.2         1 binary:logistic     logloss
+#> 2:  Fold2   0.9905513      20       0.6                1                1           0.2         1 binary:logistic     logloss
+#> 3:  Fold3   0.9843750      20       0.6                1                1           0.2         1 binary:logistic     logloss
 ```
 
 
@@ -379,24 +378,60 @@ validator_results <- validator$execute()
 #>
 #> CV fold: Fold1
 #>
-#> Registering parallel backend using 4 cores.
+#> Number of rows of initialization grid > than 'options("mlexperiments.bayesian.max_init")'...
+#> ... reducing initialization grid to 4 rows.
+#> elapsed = 0.045  Round = 1   subsample = 0.8000  colsample_bytree = 0.8000   min_child_weight = 5.0000   learning_rate = 0.1000  max_depth = 1.0000  Value = -0.2144507
+#> elapsed = 0.025  Round = 2   subsample = 0.6000  colsample_bytree = 1.0000   min_child_weight = 1.0000   learning_rate = 0.2000  max_depth = 1.0000  Value = -0.1632438
+#> elapsed = 0.028  Round = 3   subsample = 1.0000  colsample_bytree = 0.8000   min_child_weight = 5.0000   learning_rate = 0.1000  max_depth = 5.0000  Value = -0.1995263
+#> elapsed = 0.037  Round = 4   subsample = 0.6000  colsample_bytree = 1.0000   min_child_weight = 5.0000   learning_rate = 0.2000  max_depth = 5.0000  Value = -0.1765465
+#> elapsed = 0.052  Round = 5   subsample = 0.6587262   colsample_bytree = 0.2441275    min_child_weight = 4.0000   learning_rate = 0.1583349   max_depth = 8.0000  Value = -0.1751771
+#> elapsed = 0.032  Round = 6   subsample = 0.2000  colsample_bytree = 0.7380485    min_child_weight = 1.0000   learning_rate = 0.1221712   max_depth = 6.0000  Value = -0.2001825
+#> elapsed = 0.026  Round = 7   subsample = 0.4372448   colsample_bytree = 0.304417 min_child_weight = 1.0000   learning_rate = 0.1949787   max_depth = 8.0000  Value = -0.1653602
+#> elapsed = 0.029  Round = 8   subsample = 1.0000  colsample_bytree = 0.3752773    min_child_weight = 1.0000   learning_rate = 0.176386    max_depth = 9.0000  Value = -0.151424
+#>
+#>  Best Parameters Found:
+#> Round = 8    subsample = 1.0000  colsample_bytree = 0.3752773    min_child_weight = 1.0000   learning_rate = 0.176386    max_depth = 9.0000  Value = -0.151424
 #>
 #> CV fold: Fold2
-#> CV progress [====================================================================>-----------------------------------] 2/3 ( 67%)
+#> CV progress [==============================================================================>----------------------------------------] 2/3 ( 67%)
 #>
-#> Registering parallel backend using 4 cores.
+#> Number of rows of initialization grid > than 'options("mlexperiments.bayesian.max_init")'...
+#> ... reducing initialization grid to 4 rows.
+#> elapsed = 0.024  Round = 1   subsample = 0.8000  colsample_bytree = 0.8000   min_child_weight = 5.0000   learning_rate = 0.1000  max_depth = 1.0000  Value = -0.2016618
+#> elapsed = 0.024  Round = 2   subsample = 0.6000  colsample_bytree = 1.0000   min_child_weight = 1.0000   learning_rate = 0.2000  max_depth = 1.0000  Value = -0.1358879
+#> elapsed = 0.036  Round = 3   subsample = 1.0000  colsample_bytree = 0.8000   min_child_weight = 5.0000   learning_rate = 0.1000  max_depth = 5.0000  Value = -0.1937136
+#> elapsed = 0.025  Round = 4   subsample = 0.6000  colsample_bytree = 1.0000   min_child_weight = 5.0000   learning_rate = 0.2000  max_depth = 5.0000  Value = -0.1629105
+#> elapsed = 0.026  Round = 5   subsample = 0.9597928   colsample_bytree = 0.2087203    min_child_weight = 1.0000   learning_rate = 0.1807996   max_depth = 3.0000  Value = -0.1409365
+#> elapsed = 0.026  Round = 6   subsample = 0.9648661   colsample_bytree = 0.2000   min_child_weight = 10.0000  learning_rate = 0.2000  max_depth = 10.0000 Value = -0.1876724
+#> elapsed = 0.027  Round = 7   subsample = 0.2232804   colsample_bytree = 0.89331  min_child_weight = 1.0000   learning_rate = 0.2000  max_depth = 10.0000 Value = -0.147581
+#> elapsed = 0.051  Round = 8   subsample = 0.2000  colsample_bytree = 0.8707313    min_child_weight = 1.0000   learning_rate = 0.1000  max_depth = 10.0000 Value = -0.2066387
+#>
+#>  Best Parameters Found:
+#> Round = 2    subsample = 0.6000  colsample_bytree = 1.0000   min_child_weight = 1.0000   learning_rate = 0.2000  max_depth = 1.0000  Value = -0.1358879
 #>
 #> CV fold: Fold3
-#> CV progress [========================================================================================================] 3/3 (100%)
+#> CV progress [=======================================================================================================================] 3/3 (100%)
 #>
-#> Registering parallel backend using 4 cores.
+#> Number of rows of initialization grid > than 'options("mlexperiments.bayesian.max_init")'...
+#> ... reducing initialization grid to 4 rows.
+#> elapsed = 0.042  Round = 1   subsample = 0.8000  colsample_bytree = 0.8000   min_child_weight = 5.0000   learning_rate = 0.1000  max_depth = 1.0000  Value = -0.1996737
+#> elapsed = 0.023  Round = 2   subsample = 0.6000  colsample_bytree = 1.0000   min_child_weight = 1.0000   learning_rate = 0.2000  max_depth = 1.0000  Value = -0.1550507
+#> elapsed = 0.03   Round = 3   subsample = 1.0000  colsample_bytree = 0.8000   min_child_weight = 5.0000   learning_rate = 0.1000  max_depth = 5.0000  Value = -0.1921469
+#> elapsed = 0.024  Round = 4   subsample = 0.6000  colsample_bytree = 1.0000   min_child_weight = 5.0000   learning_rate = 0.2000  max_depth = 5.0000  Value = -0.1630041
+#> elapsed = 0.028  Round = 5   subsample = 0.8696134   colsample_bytree = 0.5493993    min_child_weight = 2.0000   learning_rate = 0.1541663   max_depth = 4.0000  Value = -0.156581
+#> elapsed = 0.012  Round = 6   subsample = 0.2000  colsample_bytree = 0.4853539    min_child_weight = 10.0000  learning_rate = 0.1531602   max_depth = 10.0000 Value = -0.6478907
+#> elapsed = 0.05   Round = 7   subsample = 0.2232806   colsample_bytree = 1.0000   min_child_weight = 3.0000   learning_rate = 0.1040753   max_depth = 10.0000 Value = -0.2244361
+#> elapsed = 0.024  Round = 8   subsample = 0.5157127   colsample_bytree = 0.9291875    min_child_weight = 7.0000   learning_rate = 0.1998166   max_depth = 3.0000  Value = -0.2151049
+#>
+#>  Best Parameters Found:
+#> Round = 2    subsample = 0.6000  colsample_bytree = 1.0000   min_child_weight = 1.0000   learning_rate = 0.2000  max_depth = 1.0000  Value = -0.1550507
 
 head(validator_results)
-#>      fold performance subsample colsample_bytree min_child_weight learning_rate max_depth nrounds       objective eval_metric
-#>    <char>       <num>     <num>            <num>            <num>         <num>     <num>   <int>          <char>      <char>
-#> 1:  Fold1   0.8714966       0.6        1.0000000                1     0.2000000         1      40 binary:logistic     logloss
-#> 2:  Fold2   0.8754627       1.0        1.0000000                5     0.1000000         5      35 binary:logistic     logloss
-#> 3:  Fold3   0.8810062       1.0        0.6293304                1     0.1034034         1      56 binary:logistic     logloss
+#>      fold performance subsample colsample_bytree min_child_weight learning_rate max_depth       objective eval_metric nrounds
+#>    <char>       <num>     <num>            <num>            <num>         <num>     <num>          <char>      <char>   <int>
+#> 1:  Fold1   0.9955869       1.0        0.3752773                1      0.176386         9 binary:logistic     logloss      20
+#> 2:  Fold2   0.9905513       0.6        1.0000000                1      0.200000         1 binary:logistic     logloss      20
+#> 3:  Fold3   0.9843750       0.6        1.0000000                1      0.200000         1 binary:logistic     logloss      20
 ```
 
 
@@ -421,16 +456,16 @@ perf_xgboost <- mlexperiments::performance(
   type = "binary"
 )
 perf_xgboost
-#>     model performance       AUC     Brier BrierScaled       BAC    TP    TN    FP    FN       TPR       TNR       FPR       FNR
-#>    <char>       <num>     <num>     <num>       <num>     <num> <int> <int> <int> <int>     <num>     <num>     <num>     <num>
-#> 1:  Fold1   0.7913015 0.7913015 0.1743251   0.2121706 0.6994482    20    70     9    19 0.5128205 0.8860759 0.1139241 0.4871795
-#> 2:  Fold2   0.7745862 0.7745862 0.1856610   0.1609401 0.6481662    16    70     9    23 0.4102564 0.8860759 0.1139241 0.5897436
-#> 3:  Fold3   0.7917884 0.7917884 0.1739823   0.2137198 0.6609867    17    70     9    22 0.4358974 0.8860759 0.1139241 0.5641026
-#>          PPV       NPV       FDR       MCC        F1     GMEAN       GPR       ACC      MMCE       BER
-#>        <num>     <num>     <num>     <num>     <num>     <num>     <num>     <num>     <num>     <num>
-#> 1: 0.6896552 0.7865169 0.3103448 0.4358249 0.5882353 0.6740904 0.5947010 0.7627119 0.2372881 0.3005518
-#> 2: 0.6400000 0.7526882 0.3600000 0.3411249 0.5000000 0.6029248 0.5124101 0.7288136 0.2711864 0.3518338
-#> 3: 0.6538462 0.7608696 0.3461538 0.3654140 0.5230769 0.6214807 0.5338631 0.7372881 0.2627119 0.3390133
+#>     model performance       AUC      Brier BrierScaled       BAC    TP    TN    FP    FN       TPR       TNR         FPR       FNR       PPV
+#>    <char>       <num>     <num>      <num>       <num>     <num> <int> <int> <int> <int>     <num>     <num>       <num>     <num>     <num>
+#> 1:  Fold1   0.9839863 0.9839863 0.04247381   0.8131821 0.9369818    64   132     2     8 0.8888889 0.9850746 0.014925373 0.1111111 0.9696970
+#> 2:  Fold2   0.9812915 0.9812915 0.04675659   0.7943447 0.9059909    59   133     1    13 0.8194444 0.9925373 0.007462687 0.1805556 0.9833333
+#> 3:  Fold3   0.9830535 0.9830535 0.04884222   0.7851712 0.9161484    61   132     2    11 0.8472222 0.9850746 0.014925373 0.1527778 0.9682540
+#>          NPV        FDR       MCC        F1     GMEAN       GPR       ACC       MMCE        BER
+#>        <num>      <num>     <num>     <num>     <num>     <num>     <num>      <num>      <num>
+#> 1: 0.9428571 0.03030303 0.8930504 0.9275362 0.9357467 0.9284142 0.9514563 0.04854369 0.06301824
+#> 2: 0.9109589 0.01666667 0.8521438 0.8939394 0.9018477 0.8976564 0.9320388 0.06796117 0.09400912
+#> 3: 0.9230769 0.03174603 0.8613082 0.9037037 0.9135519 0.9057187 0.9368932 0.06310680 0.08385158
 ```
 
 ```{r include=FALSE}

@@ -23,19 +23,18 @@ requireNamespace("mlbench", quietly = TRUE) &&
 requireNamespace("measures", quietly = TRUE)) {
 
   library(mlbench)
-  data("PimaIndiansDiabetes2")
-  dataset <- PimaIndiansDiabetes2 |>
+  data("BreastCancer")
+  dataset <- BreastCancer |>
     data.table::as.data.table() |>
     na.omit()
-
+  feature_cols <- colnames(dataset)[2:10]
   seed <- 123
-  feature_cols <- colnames(dataset)[1:8]
 
   train_x <- model.matrix(
     ~ -1 + .,
     dataset[, .SD, .SDcols = feature_cols]
   )
-  train_y <- as.integer(dataset[, get("diabetes")]) - 1L
+  train_y <- as.integer(dataset[, get("Class")]) - 1L
 
   fold_list <- splitTools::create_folds(
     y = train_y,
@@ -72,7 +71,7 @@ requireNamespace("measures", quietly = TRUE)) {
 }
 
 ## ------------------------------------------------
-## Method `LearnerGlmnet$new`
+## Method `LearnerGlmnet$new()`
 ## ------------------------------------------------
 
 if (requireNamespace("glmnet", quietly = TRUE)) {
@@ -88,69 +87,68 @@ if (requireNamespace("glmnet", quietly = TRUE)) {
 }
 \section{Methods}{
 \subsection{Public methods}{
-\itemize{
-\item \href{#method-LearnerGlmnet-new}{\code{LearnerGlmnet$new()}}
-\item \href{#method-LearnerGlmnet-clone}{\code{LearnerGlmnet$clone()}}
+  \itemize{
+    \item \href{#method-LearnerGlmnet-initialize}{\code{LearnerGlmnet$new()}}
+    \item \href{#method-LearnerGlmnet-clone}{\code{LearnerGlmnet$clone()}}
+  }
 }
-}
-\if{html}{\out{
-<details open><summary>Inherited methods</summary>
+\if{html}{\out{<details open><summary>Inherited methods</summary>
 <ul>
-<li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="bayesian_scoring_function"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-bayesian_scoring_function'><code>mlexperiments::MLLearnerBase$bayesian_scoring_function()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="cross_validation"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-cross_validation'><code>mlexperiments::MLLearnerBase$cross_validation()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="fit"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-fit'><code>mlexperiments::MLLearnerBase$fit()</code></a></span></li>
-<li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="predict"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-predict'><code>mlexperiments::MLLearnerBase$predict()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="bayesian_scoring_function"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-bayesian_scoring_function'><code>mlexperiments::MLLearnerBase$bayesian_scoring_function()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="cross_validation"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-cross_validation'><code>mlexperiments::MLLearnerBase$cross_validation()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="fit"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-fit'><code>mlexperiments::MLLearnerBase$fit()</code></a></span></li>
+  <li><span class="pkg-link" data-pkg="mlexperiments" data-topic="MLLearnerBase" data-id="predict"><a href='../../mlexperiments/html/MLLearnerBase.html#method-MLLearnerBase-predict'><code>mlexperiments::MLLearnerBase$predict()</code></a></span></li>
 </ul>
-</details>
-}}
+</details>}}
 \if{html}{\out{<hr>}}
-\if{html}{\out{<a id="method-LearnerGlmnet-new"></a>}}
-\if{latex}{\out{\hypertarget{method-LearnerGlmnet-new}{}}}
-\subsection{Method \code{new()}}{
-Create a new \code{LearnerGlmnet} object.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{LearnerGlmnet$new(metric_optimization_higher_better)}\if{html}{\out{</div>}}
-}
-
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{metric_optimization_higher_better}}{A logical. Defines the direction
+\if{html}{\out{<a id="method-LearnerGlmnet-initialize"></a>}}
+\if{latex}{\out{\hypertarget{method-LearnerGlmnet-initialize}{}}}
+\subsection{\code{LearnerGlmnet$new()}}{
+  Create a new \code{LearnerGlmnet} object.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{LearnerGlmnet$new(metric_optimization_higher_better)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{metric_optimization_higher_better}}{A logical. Defines the direction
 of the optimization metric used throughout the hyperparameter
 optimization.}
-}
-\if{html}{\out{</div>}}
-}
-\subsection{Returns}{
-A new \code{LearnerGlmnet} R6 object.
-}
-\subsection{Examples}{
-\if{html}{\out{<div class="r example copy">}}
-\preformatted{if (requireNamespace("glmnet", quietly = TRUE)) {
+    }
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Returns}{
+    A new \code{LearnerGlmnet} R6 object.
+  }
+  \subsection{Examples}{
+    \if{html}{\out{<div class="r example copy">}}
+    \preformatted{if (requireNamespace("glmnet", quietly = TRUE)) {
   LearnerGlmnet$new(metric_optimization_higher_better = FALSE)
 }
-
 }
-\if{html}{\out{</div>}}
-
+    \if{html}{\out{</div>}}
+  }
 }
 
-}
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-LearnerGlmnet-clone"></a>}}
 \if{latex}{\out{\hypertarget{method-LearnerGlmnet-clone}{}}}
-\subsection{Method \code{clone()}}{
-The objects of this class are cloneable with this method.
-\subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{LearnerGlmnet$clone(deep = FALSE)}\if{html}{\out{</div>}}
+\subsection{\code{LearnerGlmnet$clone()}}{
+  The objects of this class are cloneable with this method.
+  \subsection{Usage}{
+    \if{html}{\out{<div class="r">}}
+    \preformatted{LearnerGlmnet$clone(deep = FALSE)}
+    \if{html}{\out{</div>}}
+  }
+  \subsection{Arguments}{
+    \if{html}{\out{<div class="arguments">}}
+    \describe{
+      \item{\code{deep}}{Whether to make a deep clone.}
+    }
+    \if{html}{\out{</div>}}
+  }
 }
 
-\subsection{Arguments}{
-\if{html}{\out{<div class="arguments">}}
-\describe{
-\item{\code{deep}}{Whether to make a deep clone.}
-}
-\if{html}{\out{</div>}}
-}
-}
 }

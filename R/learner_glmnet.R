@@ -20,19 +20,18 @@
 #' requireNamespace("measures", quietly = TRUE)) {
 #'
 #'   library(mlbench)
-#'   data("PimaIndiansDiabetes2")
-#'   dataset <- PimaIndiansDiabetes2 |>
+#'   data("BreastCancer")
+#'   dataset <- BreastCancer |>
 #'     data.table::as.data.table() |>
 #'     na.omit()
-#'
+#'   feature_cols <- colnames(dataset)[2:10]
 #'   seed <- 123
-#'   feature_cols <- colnames(dataset)[1:8]
 #'
 #'   train_x <- model.matrix(
 #'     ~ -1 + .,
 #'     dataset[, .SD, .SDcols = feature_cols]
 #'   )
-#'   train_y <- as.integer(dataset[, get("diabetes")]) - 1L
+#'   train_y <- as.integer(dataset[, get("Class")]) - 1L
 #'
 #'   fold_list <- splitTools::create_folds(
 #'     y = train_y,
@@ -120,7 +119,7 @@ LearnerGlmnet <- R6::R6Class(
               x %in% names(kwargs$params)
             }
           )),
-          .check_glmnet_params(
+          check_glmnet_params(
             kwargs$params,
             self$metric_optimization_higher_better
           )
