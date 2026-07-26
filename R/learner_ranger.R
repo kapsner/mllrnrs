@@ -22,6 +22,8 @@
 #' if (requireNamespace("ranger", quietly = TRUE) &&
 #' requireNamespace("mlbench", quietly = TRUE) &&
 #' requireNamespace("measures", quietly = TRUE)) {
+#' 
+#'   Sys.setenv("OMP_THREAD_LIMIT" = 2)
 #'
 #'   library(mlbench)
 #'   data("BreastCancer")
