@@ -26,6 +26,7 @@
 #'
 #'   # binary classification
 #'   Sys.setenv("OMP_THREAD_LIMIT" = 2)
+#'   Sys.setenv("Ncpu" = 2)
 #'
 #'   library(mlbench)
 #'   data("BreastCancer")
