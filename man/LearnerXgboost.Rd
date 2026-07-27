@@ -92,7 +92,8 @@ requireNamespace("measures", quietly = TRUE)) {
     y = train_y
   )
 
-  xgboost_cv$execute()
+  # for some reason, this uses more than 2 cores on cran checks
+  #xgboost_cv$execute()
 }
 
 

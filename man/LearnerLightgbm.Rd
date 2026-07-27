@@ -90,8 +90,8 @@ requireNamespace("measures", quietly = TRUE)) {
     x = train_x,
     y = train_y
   )
-
-  lightgbm_cv$execute()
+  # for some reason, this uses more than 2 cores on cran checks
+  #lightgbm_cv$execute()
 }
 
 
