@@ -2,12 +2,12 @@
 
 # mllrnrs NEWS
 
-## Unreleased (2026-07-25)
+## v0.0.9 (2026-07-27)
 
 #### Bug fixes
 
 - replaced pimaindiandiabetes2 dataset with breast-cancer from mlbench
-  ([25f3841](https://github.com/kapsner/mllrnrs/tree/25f3841a9709844dcc2e8ccfd3ba0707fb73138d))
+  ([dc76768](https://github.com/kapsner/mllrnrs/tree/dc76768d34278812fa220ff4222e65e18f9c2770))
 
 #### Tests
 
@@ -16,11 +16,19 @@
 
 #### Other changes
 
+- comment execution for cran examples
+  ([446625e](https://github.com/kapsner/mllrnrs/tree/446625ee44ff939f980417f3c96ec66a57ccfd35))
+- updated man-page
+  ([d855ee8](https://github.com/kapsner/mllrnrs/tree/d855ee8ce22559f5ae92adbe7ca82646ff7d0d08))
+- another try to limit cpu elapsed time for xgboost
+  ([3846d0b](https://github.com/kapsner/mllrnrs/tree/3846d0b97e44db29908958bcf873a4069f441977))
+- set omp-thread-limit for ranger and lightgbm
+  ([367d275](https://github.com/kapsner/mllrnrs/tree/367d27569ffc929c19121924bb2af1d47040d7b8))
 - updated dev-version
   ([3fecd18](https://github.com/kapsner/mllrnrs/tree/3fecd187f38aa50e93ed50f47b2c28646dd23efb))
 
 Full set of changes:
-[`v0.0.8...25f3841`](https://github.com/kapsner/mllrnrs/compare/v0.0.8...25f3841)
+[`v0.0.8...v0.0.9`](https://github.com/kapsner/mllrnrs/compare/v0.0.8...v0.0.9)
 
 ## v0.0.8 (2026-01-16)
 
